@@ -1,0 +1,128 @@
+Nella valutazione del tuo progetto finale guarderò in particolare la presenza e l'uso corretto delle seguenti tecniche e tecnologie:
+
+Controllo e sanificazione input : Html5, JS, PHP (filter_var,...)
+Front end responsive
+
+
+Tecnica PostBack: unione della pagina html e dell'elaborazione php: uso $_SERVER['PHP_SELF'] o analoghi 
+https://www.docsity.com/it/docs/linguaggio-php-il-postback/9458752/
+
+Uso delle SESSIONI sia per mantenimento stato dell'applicazione sia per protezione delle pagine interne, Uso dei cookie, Uso delle prepared statement per interrogazione DB, Uso delle transazioni per l'accesso condiviso al DB, Uso delle  select ... LOCK IN SHARE MODE o FOR UPDATE per accesso condiviso, Uso di ajax o di websocket
+
+DB: ER (tabelle e relazioni)
+
+Tecnologie per invio email, pagamenti, ...
+
+Certificazione a più fattori (php ed email, oauth,...)
+
+Pattern M(odel)V(iew)C(ontroller)
+
+Uso di API (Possibili API: sendgrid, postmarkapp per invio email, stripe per simulaz pagamenti, google maps per poi su mappa)
+Ricordo che puoi proporti per la presentazione di una di queste voci "stile esami di maturità"
+
+le informazion riguardo al mio progetto intanto sono:
+N.,COGNOME,NOME,TITOLO PROGETTO,"Analisi, DB diagramma ER",PRIMA CONSEGNA PUNTUALE (% AI),FRONT END (tecnologie),BACK END (tecnologie),POSTBACK,SESSIONI,COOKIE,PREPARED STATEMENT,TRANSAZIONI su   DB,SELECT in share mode,AJAX/WEBSOCKET,CERTIFICAZIONE A PIU' FATTORI,MVC,API,LINK GITHUB,TECNOLOGIE AGGIUNTIVE
+1,AGLIATI,FEDERICO,AgarthaRead,,,VUE | TailwindCss,Socket IO | NUXT 4,,,dati di accesso | preferenze dispositivo,,,,,,,google API per gli accesssi,,
+
+e sono anche la tabella delle valutazioni (per questo alcune cose sono vuote)
+
+questo programma lo sviluppo sul mio computer a casa e su github codespace a scuola (i computer hanno node non aggiornato)
+node aggiornato mi serve per NUXT 4
+
+il mio progetto consiste in un sito, simile a kindle unlimited, dove gli utenti possono registrari e leggere, comprare, salvare, commentare libri (che possono essere presi sia tramite un API che salvati su un database o un opzione migliore), fumetti e manga (cosi integro anche una parte per le immagini), giornali ...
+
+linguaggi: HTML/VUE TailwindCss, JS/TP, SQL, 
+tecnologie: NUXT 4, Socket IO
+
+struttura:
+
+AgarthaRead/
+├─ apps/
+│  ├─ web/                                  # Nuxt 4 (frontend + server routes)
+│  │  ├─ app/
+│  │  │  ├─ pages/
+│  │  │  │  ├─ index.vue                    # home
+│  │  │  │  ├─ auth/
+│  │  │  │  │  ├─ login.vue
+│  │  │  │  │  └─ register.vue
+│  │  │  │  ├─ books/
+│  │  │  │  │  ├─ index.vue                 # catalogo
+│  │  │  │  │  └─ [id].vue                  # dettaglio/lettura
+│  │  │  │  ├─ library/index.vue            # libri salvati/acquistati
+│  │  │  │  ├─ comics/index.vue             # fumetti e manga
+│  │  │  │  ├─ newspapers/index.vue         # giornali
+│  │  │  │  └─ profile/index.vue
+│  │  │  ├─ components/
+│  │  │  ├─ layouts/
+│  │  │  ├─ middleware/
+│  │  │  │  └─ auth.ts                      # protezione pagine interne
+│  │  │  ├─ composables/
+│  │  │  ├─ plugins/
+│  │  │  └─ assets/
+│  │  ├─ server/
+│  │  │  ├─ api/                            # controller (MVC)
+│  │  │  │  ├─ auth/
+│  │  │  │  │  ├─ login.post.ts
+│  │  │  │  │  ├─ register.post.ts
+│  │  │  │  │  ├─ logout.post.ts
+│  │  │  │  │  └─ mfa-verify.post.ts
+│  │  │  │  ├─ books/
+│  │  │  │  │  ├─ index.get.ts
+│  │  │  │  │  ├─ [id].get.ts
+│  │  │  │  │  └─ [id]/comments.post.ts
+│  │  │  │  ├─ library/
+│  │  │  │  │  ├─ index.get.ts
+│  │  │  │  │  └─ save.post.ts
+│  │  │  │  └─ purchases/
+│  │  │  │     └─ checkout.post.ts          # transazione + lock
+│  │  │  ├─ services/                       # logica applicativa
+│  │  │  ├─ repositories/                   # query DB prepared statement
+│  │  │  ├─ utils/
+│  │  │  │  ├─ validation.ts                # sanitizzazione input
+│  │  │  │  └─ session.ts                   # cookie/sessioni
+│  │  │  └─ db/
+│  │  │     └─ client.ts
+│  │  ├─ nuxt.config.ts
+│  │  ├─ tailwind.config.ts
+│  │  └─ package.json
+│  │
+│  └─ realtime/                             # Socket.IO server separato
+│     ├─ src/
+│     │  ├─ index.ts
+│     │  ├─ events/
+│     │  │  ├─ comments.ts
+│     │  │  └─ notifications.ts
+│     │  └─ middleware/
+│     │     └─ auth-socket.ts
+│     └─ package.json
+│
+├─ packages/
+│  └─ shared/
+│     ├─ types/
+│     ├─ constants/
+│     └─ validators/
+│
+├─ database/
+│  ├─ er/
+│  │  └─ er-diagram.png                     # diagramma ER da consegnare
+│  ├─ schema/
+│  │  └─ schema.sql
+│  ├─ migrations/
+│  └─ seed/
+│
+├─ docs/
+│  ├─ requisiti-checklist.md                # mappa voci prof -> implementazione
+│  ├─ api-integrations.md                   # Google API / email / pagamenti
+│  └─ presentazione.md
+│
+├─ .nvmrc                                   # versione Node uguale casa/scuola
+├─ package.json
+└─ README.md
+
+Note operative (MVP):
+- PostBack (richiesta prof): endpoint login/register in server routes con validazione e risposta sulla stessa rotta.
+- Sessioni/Cookie: cookie HttpOnly + SameSite, salvataggio sessione in tabella sessions.
+- Prepared statement: tutte le query passano da repositories.
+- Transazioni + FOR UPDATE: in checkout acquisto libro.
+- AJAX/WebSocket: CRUD via fetch/AJAX, commenti live via Socket.IO.
+- MFA: codice OTP via email in login.
