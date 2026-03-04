@@ -126,3 +126,6 @@ Note operative (MVP):
 - Transazioni + FOR UPDATE: in checkout acquisto libro.
 - AJAX/WebSocket: CRUD via fetch/AJAX, commenti live via Socket.IO.
 - MFA: codice OTP via email in login.
+
+struttura database
+Users 
