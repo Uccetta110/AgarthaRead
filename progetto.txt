@@ -158,6 +158,7 @@ users
 - role (enum: user, admin, author, editor)
 - country_code (string)
 - birth_date (date)
+- avatar (string)
 - created_at (datetime)
 - updated_at (datetime)
 

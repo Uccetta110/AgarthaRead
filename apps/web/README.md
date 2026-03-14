@@ -73,3 +73,23 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Database setup
+
+Create `apps/web/.env` with:
+
+```bash
+DATABASE_URL=mysql://USER:PASSWORD@HOST:3306/DB_NAME
+```
+
+Then start Nuxt and verify DB connection with:
+
+```bash
+GET /api/hello
+```
+
+Expected response:
+
+```json
+{ "ok": true, "database": "connected" }
+```

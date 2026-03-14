@@ -3,5 +3,11 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['~~/assets/css/main.css'],
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/eslint']
+  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/eslint'],
+  runtimeConfig: {
+    db: {
+      driver: 'mysql2',
+      url: process.env.DATABASE_URL ?? ''
+    }
+  }
 })
