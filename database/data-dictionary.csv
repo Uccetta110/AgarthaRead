@@ -1,0 +1,144 @@
+Tabella;Attributo;Tipo;Chiave;Nullable;Default / Valori;Descrizione
+users;id;INT;PK;NO;;Identificatore univoco dell'utente
+users;email;VARCHAR;UNIQUE;NO;;Email dell'utente, usata per login e OTP
+users;username;VARCHAR;UNIQUE;NO;;Nome utente visibile sulla piattaforma
+users;password_hash;VARCHAR;;SI;;Hash della password (NULL se si usa solo OTP)
+users;full_name;VARCHAR;;NO;;Nome e cognome dell'utente
+users;role;ENUM;;NO;"user, admin, author, editor";Ruolo dell'utente nel sistema
+users;country_code;VARCHAR;;NO;;Codice paese di residenza (es. IT, US)
+users;birth_date;DATE;;NO;;Data di nascita (usata per restrizioni età)
+users;created_at;DATETIME;;NO;;Data di creazione account
+users;updated_at;DATETIME;;NO;;Data ultima modifica account
+user_languages;user_id;INT;"PK composita, FK -> users.id";NO;;Riferimento all'utente
+user_languages;language_code;VARCHAR;PK composita;NO;;Codice lingua conosciuta dall'utente (es. it, en)
+user_preferences;id;INT;PK;NO;;Identificatore preferenze
+user_preferences;user_id;INT;"FK -> users.id, UNIQUE";NO;;Riferimento all'utente (1:1)
+user_preferences;theme;VARCHAR;;SI;;Tema UI scelto dall'utente (es. dark, light)
+user_preferences;font_size;INT;;SI;;Dimensione font preferita per la lettura
+user_preferences;ui_language;VARCHAR;;SI;;Lingua dell'interfaccia utente
+user_preferences;updated_at;DATETIME;;NO;;Data ultima modifica preferenze
+user_sessions;id;INT;PK;NO;;Identificatore sessione
+user_sessions;user_id;INT;FK -> users.id;NO;;Riferimento all'utente
+user_sessions;session_token;VARCHAR;UNIQUE;NO;;Token di sessione (cookie HttpOnly)
+user_sessions;ip;VARCHAR;;NO;;Indirizzo IP al momento del login
+user_sessions;user_agent;VARCHAR;;NO;;Browser / dispositivo dell'utente
+user_sessions;device_label;VARCHAR;;SI;;Etichetta opzionale del dispositivo
+user_sessions;expires_at;DATETIME;;NO;;Scadenza della sessione
+user_sessions;created_at;DATETIME;;NO;;Data creazione sessione
+auth_challenges;id;INT;PK;NO;;Identificatore challenge
+auth_challenges;user_id;INT;FK -> users.id;NO;;Riferimento all'utente
+auth_challenges;purpose;ENUM;;NO;"login, password_reset";Scopo del challenge (login o reset password)
+auth_challenges;channel;ENUM;;NO;email;Canale di invio (attualmente solo email)
+auth_challenges;challenge_token_hash;VARCHAR;UNIQUE;NO;;Hash del token firmato (OTP non viene salvato)
+auth_challenges;expires_at;DATETIME;;NO;;Scadenza del challenge
+auth_challenges;consumed_at;DATETIME;;SI;;Data e ora di utilizzo (NULL se non ancora usato)
+auth_challenges;created_at;DATETIME;;NO;;Data creazione challenge
+publishers;id;INT;PK;NO;;Identificatore casa editrice
+publishers;name;VARCHAR;UNIQUE;NO;;Nome della casa editrice
+catalog_items;id;INT;PK;NO;;Identificatore univoco del contenuto
+catalog_items;type;ENUM;;NO;"book, comic, manga, newspaper";Tipo di contenuto
+catalog_items;fulfillment_type;ENUM;;NO;"digital, physical";Modalità di erogazione
+catalog_items;publisher_id;INT;FK -> publishers.id;SI;;Casa editrice (NULL se sconosciuta)
+catalog_items;age_rating_min;INT;;NO;0;Età minima consigliata
+catalog_items;release_date;DATE;;SI;;Data di pubblicazione
+catalog_items;price;DECIMAL;;NO;;Prezzo del contenuto
+catalog_items;currency;VARCHAR;;NO;;Valuta del prezzo (es. EUR)
+catalog_items;isbn;VARCHAR;;SI;;Codice ISBN (NULL per manga/fumetti/giornali)
+catalog_items;source;ENUM;;NO;"internal, api";Provenienza del contenuto
+catalog_items;external_provider;VARCHAR;;SI;;Nome del provider esterno (es. Google Books)
+catalog_items;external_id;VARCHAR;;SI;;ID del contenuto nel sistema esterno
+catalog_items;avg_rating;DECIMAL;;SI;;Valutazione media calcolata dai commenti
+catalog_items;views_count;INT;;NO;0;Numero di visualizzazioni
+catalog_items;created_at;DATETIME;;NO;;Data inserimento nel catalogo
+catalog_items;updated_at;DATETIME;;NO;;Data ultima modifica
+catalog_item_translations;id;INT;PK;NO;;Identificatore traduzione
+catalog_item_translations;item_id;INT;"FK -> catalog_items.id, UNIQUE(item_id+lang)";NO;;Riferimento al contenuto
+catalog_item_translations;language_code;VARCHAR;"UNIQUE(item_id+lang)";NO;;Lingua della traduzione (es. it, en)
+catalog_item_translations;title;VARCHAR;;NO;;Titolo nella lingua specificata
+catalog_item_translations;description;TEXT;;SI;;Descrizione/sinossi nella lingua specificata
+catalog_item_translations;content_path;VARCHAR;;SI;;Percorso al file di testo/markup (NULL per image_sequence)
+catalog_item_translations;content_format;ENUM;;NO;"txt, html_like, markdown, image_sequence";Formato del contenuto
+series;id;INT;PK;NO;;Identificatore serie
+series;name;VARCHAR;;NO;;Nome della serie (es. Batman)
+series;type;ENUM;;NO;"comic, manga";Tipo di serie
+series_entries;id;INT;PK;NO;;Identificatore voce nella serie
+series_entries;series_id;INT;"FK -> series.id, UNIQUE(series_id+item_id)";NO;;Riferimento alla serie
+series_entries;item_id;INT;"FK -> catalog_items.id, UNIQUE(series_id+item_id)";NO;;Riferimento al contenuto
+series_entries;volume_no;DECIMAL;;SI;;Numero volume (es. 1, 2.5)
+series_entries;chapter_no;INT;;SI;;Numero capitolo (usato principalmente per manga)
+series_entries;entry_order;INT;;NO;;Ordine di lettura nella serie
+item_media;id;INT;PK;NO;;Identificatore file media
+item_media;item_id;INT;FK -> catalog_items.id;NO;;Riferimento al contenuto
+item_media;language_code;VARCHAR;;SI;;Lingua del media (NULL se universale)
+item_media;media_type;ENUM;;NO;"cover, page, image";Tipo di file media
+item_media;storage_path;VARCHAR;;NO;;Percorso del file nel server/storage
+item_media;mime_type;VARCHAR;;NO;;Tipo MIME del file (es. image/jpeg, image/png)
+item_media;sort_order;INT;;NO;;Ordine del file (es. numero pagina)
+authors;id;INT;PK;NO;;Identificatore autore
+authors;full_name;VARCHAR;;NO;;Nome e cognome dell'autore
+authors;role;VARCHAR;;NO;;Ruolo (es. scrittore, illustratore, sceneggiatore)
+item_authors;item_id;INT;"PK composita, FK -> catalog_items.id";NO;;Riferimento al contenuto
+item_authors;author_id;INT;"PK composita, FK -> authors.id";NO;;Riferimento all'autore
+categories;id;INT;PK;NO;;Identificatore categoria/genere
+categories;name;VARCHAR;UNIQUE;NO;;Nome categoria (es. thriller, fantasy, horror)
+item_categories;item_id;INT;"PK composita, FK -> catalog_items.id";NO;;Riferimento al contenuto
+item_categories;category_id;INT;"PK composita, FK -> categories.id";NO;;Riferimento alla categoria
+user_lists;id;INT;PK;NO;;Identificatore lista
+user_lists;user_id;INT;"FK -> users.id, UNIQUE(user_id+name)";NO;;Riferimento all'utente
+user_lists;name;VARCHAR;"UNIQUE(user_id+name)";NO;;Nome lista (es. Preferiti, Da leggere)
+user_lists;is_system;BOOLEAN;;NO;;TRUE se lista predefinita del sistema
+user_lists;created_at;DATETIME;;NO;;Data creazione lista
+user_list_items;id;INT;PK;NO;;Identificatore elemento lista
+user_list_items;list_id;INT;"FK -> user_lists.id, UNIQUE(list_id+item_id)";NO;;Riferimento alla lista
+user_list_items;item_id;INT;"FK -> catalog_items.id, UNIQUE(list_id+item_id)";NO;;Riferimento al contenuto
+user_list_items;added_at;DATETIME;;NO;;Data aggiunta alla lista
+library_items;id;INT;PK;NO;;Identificatore elemento libreria
+library_items;user_id;INT;"FK -> users.id, UNIQUE(user+item+source)";NO;;Riferimento all'utente
+library_items;item_id;INT;"FK -> catalog_items.id, UNIQUE(user+item+source)";NO;;Riferimento al contenuto
+library_items;source;ENUM;"UNIQUE(user+item+source)";NO;"saved, purchased";Come è stato aggiunto (salvato o acquistato)
+library_items;added_at;DATETIME;;NO;;Data aggiunta alla libreria
+orders;id;INT;PK;NO;;Identificatore ordine
+orders;user_id;INT;FK -> users.id;NO;;Riferimento all'utente
+orders;status;ENUM;;NO;"pending, paid, failed, cancelled";Stato dell'ordine
+orders;total_amount;DECIMAL;;NO;;Importo totale dell'ordine
+orders;created_at;DATETIME;;NO;;Data creazione ordine
+order_items;id;INT;PK;NO;;Identificatore riga ordine
+order_items;order_id;INT;FK -> orders.id;NO;;Riferimento all'ordine
+order_items;item_id;INT;FK -> catalog_items.id;NO;;Riferimento al contenuto acquistato
+order_items;unit_price;DECIMAL;;NO;;Prezzo unitario al momento dell'acquisto
+order_items;quantity;INT;;NO;;Quantità (di norma 1 per digitale)
+payments;id;INT;PK;NO;;Identificatore pagamento
+payments;order_id;INT;FK -> orders.id;NO;;Riferimento all'ordine
+payments;provider;ENUM;;NO;"stripe, simulated";Provider di pagamento
+payments;provider_tx_id;VARCHAR;;SI;;ID transazione lato provider (NULL se simulato)
+payments;status;ENUM;;NO;"pending, succeeded, failed";Stato del pagamento
+payments;paid_at;DATETIME;;SI;;Data e ora completamento pagamento (NULL se non pagato)
+item_licenses;item_id;INT;"PK, FK -> catalog_items.id";NO;;Riferimento al contenuto (1:1)
+item_licenses;available_copies;INT;;NO;;Copie disponibili (usato solo per item fisici)
+item_licenses;updated_at;DATETIME;;NO;;Data ultima modifica disponibilità
+comments;id;INT;PK;NO;;Identificatore commento
+comments;user_id;INT;FK -> users.id;NO;;Riferimento all'utente autore del commento
+comments;item_id;INT;FK -> catalog_items.id;NO;;Riferimento al contenuto commentato
+comments;body;TEXT;;NO;;Testo del commento
+comments;rating;INT;;SI;;Valutazione da 1 a 5 (opzionale)
+comments;created_at;DATETIME;;NO;;Data pubblicazione commento
+comments;updated_at;DATETIME;;NO;;Data ultima modifica commento
+item_likes;user_id;INT;"PK composita, FK -> users.id";NO;;Riferimento all'utente
+item_likes;item_id;INT;"PK composita, FK -> catalog_items.id";NO;;Riferimento al contenuto
+item_likes;created_at;DATETIME;;NO;;Data del like (salva anche nei Preferiti)
+highlights;id;INT;PK;NO;;Identificatore sottolineatura
+highlights;user_id;INT;FK -> users.id;NO;;Riferimento all'utente
+highlights;item_id;INT;FK -> catalog_items.id;NO;;Riferimento al contenuto
+highlights;language_code;VARCHAR;;NO;;Lingua del testo sottolineato
+highlights;locator_start;VARCHAR;;NO;;Posizione inizio selezione nel testo
+highlights;locator_end;VARCHAR;;NO;;Posizione fine selezione nel testo
+highlights;selected_text;TEXT;;NO;;Testo selezionato dall'utente
+highlights;note;TEXT;;SI;;Nota personale allegata alla sottolineatura
+highlights;created_at;DATETIME;;NO;;Data creazione sottolineatura
+reading_progress;id;INT;PK;NO;;Identificatore progresso lettura
+reading_progress;user_id;INT;"FK -> users.id, UNIQUE(user_id+item_id)";NO;;Riferimento all'utente
+reading_progress;item_id;INT;"FK -> catalog_items.id, UNIQUE(user_id+item_id)";NO;;Riferimento al contenuto
+reading_progress;language_code;VARCHAR;;NO;;Lingua in cui si sta leggendo
+reading_progress;locator;VARCHAR;;NO;;Posizione corrente (es. pagina, capitolo, offset)
+reading_progress;percentage;DECIMAL;;NO;;Percentuale di lettura completata (0-100)
+reading_progress;last_read_at;DATETIME;;NO;;Data e ora ultima sessione di lettura

@@ -1,0 +1,84 @@
+MODELLO LOGICO RELAZIONALE - AgarthaRead
+
+Convenzioni: [PK] = chiave primaria  |  [FK] = chiave esterna
+(in Word: sottolinea le PK, metti in corsivo le FK)
+
+========================================================
+UTENTI E AUTENTICAZIONE
+========================================================
+
+users (id [PK], email, username, password_hash, full_name, role, country_code, birth_date, created_at, updated_at)
+
+user_languages (user_id [PK][FK -> users], language_code [PK])
+
+user_preferences (id [PK], user_id [FK -> users], theme, font_size, ui_language, updated_at)
+
+user_sessions (id [PK], user_id [FK -> users], session_token, ip, user_agent, device_label, expires_at, created_at)
+
+auth_challenges (id [PK], user_id [FK -> users], purpose, channel, challenge_token_hash, expires_at, consumed_at, created_at)
+
+========================================================
+CATALOGO CONTENUTI
+========================================================
+
+publishers (id [PK], name)
+
+catalog_items (id [PK], type, fulfillment_type, publisher_id [FK -> publishers], age_rating_min, release_date, price, currency, isbn, source, external_provider, external_id, avg_rating, views_count, created_at, updated_at)
+
+catalog_item_translations (id [PK], item_id [FK -> catalog_items], language_code, title, description, content_path, content_format)
+
+authors (id [PK], full_name, role)
+
+item_authors (item_id [PK][FK -> catalog_items], author_id [PK][FK -> authors])
+
+categories (id [PK], name)
+
+item_categories (item_id [PK][FK -> catalog_items], category_id [PK][FK -> categories])
+
+========================================================
+SERIE (FUMETTI E MANGA)
+========================================================
+
+series (id [PK], name, type)
+
+series_entries (id [PK], series_id [FK -> series], item_id [FK -> catalog_items], volume_no, chapter_no, entry_order)
+
+========================================================
+MEDIA
+========================================================
+
+item_media (id [PK], item_id [FK -> catalog_items], language_code, media_type, storage_path, mime_type, sort_order)
+
+========================================================
+LIBRERIA E LISTE UTENTE
+========================================================
+
+user_lists (id [PK], user_id [FK -> users], name, is_system, created_at)
+
+user_list_items (id [PK], list_id [FK -> user_lists], item_id [FK -> catalog_items], added_at)
+
+library_items (id [PK], user_id [FK -> users], item_id [FK -> catalog_items], source, added_at)
+
+========================================================
+ORDINI E PAGAMENTI
+========================================================
+
+orders (id [PK], user_id [FK -> users], status, total_amount, created_at)
+
+order_items (id [PK], order_id [FK -> orders], item_id [FK -> catalog_items], unit_price, quantity)
+
+payments (id [PK], order_id [FK -> orders], provider, provider_tx_id, status, paid_at)
+
+item_licenses (item_id [PK][FK -> catalog_items], available_copies, updated_at)
+
+========================================================
+INTERAZIONE UTENTE
+========================================================
+
+comments (id [PK], user_id [FK -> users], item_id [FK -> catalog_items], body, rating, created_at, updated_at)
+
+item_likes (user_id [PK][FK -> users], item_id [PK][FK -> catalog_items], created_at)
+
+highlights (id [PK], user_id [FK -> users], item_id [FK -> catalog_items], language_code, locator_start, locator_end, selected_text, note, created_at)
+
+reading_progress (id [PK], user_id [FK -> users], item_id [FK -> catalog_items], language_code, locator, percentage, last_read_at)
