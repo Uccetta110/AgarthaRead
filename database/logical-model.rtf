@@ -1,0 +1,88 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Calibri;}}
+\fs22
+MODELLO LOGICO RELAZIONALE - AgarthaRead\par
+\par
+Convenzioni: [PK] = chiave primaria  |  [FK] = chiave esterna\par
+(in Word: sottolinea le PK, metti in corsivo le FK)\par
+\par
+========================================================\par
+UTENTI E AUTENTICAZIONE\par
+========================================================\par
+\par
+users ({\\ul id\\ulnone}, email, username, password_hash, full_name, role, country_code, birth_date, created_at, updated_at)\par
+\par
+user_languages ({\\ul user_id\\ulnone}, {\\ul language_code\\ulnone})\par
+\par
+user_preferences ({\\ul id\\ulnone}, {\\uldash user_id\\ulnone}, theme, font_size, ui_language, updated_at)\par
+\par
+user_sessions ({\\ul id\\ulnone}, {\\uldash user_id\\ulnone}, session_token, ip, user_agent, device_label, expires_at, created_at)\par
+\par
+auth_challenges ({\\ul id\\ulnone}, {\\uldash user_id\\ulnone}, purpose, channel, challenge_token_hash, expires_at, consumed_at, created_at)\par
+\par
+========================================================\par
+CATALOGO CONTENUTI\par
+========================================================\par
+\par
+publishers ({\\ul id\\ulnone}, name)\par
+\par
+catalog_items ({\\ul id\\ulnone}, type, fulfillment_type, {\\uldash publisher_id\\ulnone}, age_rating_min, release_date, price, currency, isbn, source, external_provider, external_id, avg_rating, views_count, created_at, updated_at)\par
+\par
+catalog_item_translations ({\\ul id\\ulnone}, {\\uldash item_id\\ulnone}, language_code, title, description, content_path, content_format)\par
+\par
+authors ({\\ul id\\ulnone}, full_name, role)\par
+\par
+item_authors ({\\ul item_id\\ulnone}, {\\ul author_id\\ulnone})\par
+\par
+categories ({\\ul id\\ulnone}, name)\par
+\par
+item_categories ({\\ul item_id\\ulnone}, {\\ul category_id\\ulnone})\par
+\par
+========================================================\par
+SERIE (FUMETTI E MANGA)\par
+========================================================\par
+\par
+series ({\\ul id\\ulnone}, name, type)\par
+\par
+series_entries ({\\ul id\\ulnone}, {\\uldash series_id\\ulnone}, {\\uldash item_id\\ulnone}, volume_no, chapter_no, entry_order)\par
+\par
+========================================================\par
+MEDIA\par
+========================================================\par
+\par
+item_media ({\\ul id\\ulnone}, {\\uldash item_id\\ulnone}, language_code, media_type, storage_path, mime_type, sort_order)\par
+\par
+========================================================\par
+LIBRERIA E LISTE UTENTE\par
+========================================================\par
+\par
+user_lists ({\\ul id\\ulnone}, {\\uldash user_id\\ulnone}, name, is_system, created_at)\par
+\par
+user_list_items ({\\ul id\\ulnone}, {\\uldash list_id\\ulnone}, {\\uldash item_id\\ulnone}, added_at)\par
+\par
+library_items ({\\ul id\\ulnone}, {\\uldash user_id\\ulnone}, {\\uldash item_id\\ulnone}, source, added_at)\par
+\par
+========================================================\par
+ORDINI E PAGAMENTI\par
+========================================================\par
+\par
+orders ({\\ul id\\ulnone}, {\\uldash user_id\\ulnone}, status, total_amount, created_at)\par
+\par
+order_items ({\\ul id\\ulnone}, {\\uldash order_id\\ulnone}, {\\uldash item_id\\ulnone}, unit_price, quantity)\par
+\par
+payments ({\\ul id\\ulnone}, {\\uldash order_id\\ulnone}, provider, provider_tx_id, status, paid_at)\par
+\par
+item_licenses ({\\ul item_id\\ulnone}, available_copies, updated_at)\par
+\par
+========================================================\par
+INTERAZIONE UTENTE\par
+========================================================\par
+\par
+comments ({\\ul id\\ulnone}, {\\uldash user_id\\ulnone}, {\\uldash item_id\\ulnone}, body, rating, created_at, updated_at)\par
+\par
+item_likes ({\\ul user_id\\ulnone}, {\\ul item_id\\ulnone}, created_at)\par
+\par
+highlights ({\\ul id\\ulnone}, {\\uldash user_id\\ulnone}, {\\uldash item_id\\ulnone}, language_code, locator_start, locator_end, selected_text, note, created_at)\par
+\par
+reading_progress ({\\ul id\\ulnone}, {\\uldash user_id\\ulnone}, {\\uldash item_id\\ulnone}, language_code, locator, percentage, last_read_at)\par
+}
