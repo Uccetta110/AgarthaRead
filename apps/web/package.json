@@ -32,5 +32,8 @@
     "@esbuild-kit/core-utils": {
       "esbuild": "^0.25.12"
     }
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6"
   }
 }

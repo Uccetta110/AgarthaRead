@@ -5,9 +5,11 @@ export default defineNuxtConfig({
   css: ['~~/assets/css/main.css'],
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/eslint'],
   runtimeConfig: {
-    db: {
-      driver: 'mysql2',
-      url: process.env.DATABASE_URL ?? ''
-    }
+    databaseUrl: process.env.DATABASE_URL ?? ''
+  },
+  nitro: {
+    middlewares: [
+      'server/middleware/log.ts'
+    ]
   }
 })

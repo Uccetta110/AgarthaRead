@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs'
+import crypto from 'node:crypto'
+import { eq, or } from 'drizzle-orm'
 import { getDb } from '../../db/client'
-import { users } from '../../db/schema'
+import { users, userSessions } from '../../db/schema'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{ email: string, username: string, password: string, fullName: string }>(event)

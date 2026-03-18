@@ -1,13 +1,20 @@
+import { config } from 'dotenv';
+import { resolve } from 'path';
 import mysql from "mysql2/promise";
 import { drizzle } from "drizzle-orm/mysql2";
 import * as schema from "./schema";
+
+// Carica manualmente il file .env.local
+config({ path: resolve(process.cwd(), '.env.local') });
 
 const globalForDb = globalThis as typeof globalThis & {
   __agarthaMysqlPool?: mysql.Pool;
 };
 
 function getDatabaseUrl() {
-  return process.env.DATABASE_URL?.trim() ?? "";
+  // A questo punto, process.env.DATABASE_URL dovrebbe essere caricato da dotenv
+  const url = process.env.DATABASE_URL?.trim();
+  return url || "";
 }
 
 function getPool() {
