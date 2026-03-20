@@ -26,11 +26,13 @@
           >Home</NuxtLink
         >
         <NuxtLink
+          id="login-link"
           to="/auth/login"
           class="text-sm text-gray-200 hover:text-white"
           >Login</NuxtLink
         >
         <NuxtLink
+        id="register-link"
           to="/auth/register"
           class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100"
         >
@@ -73,5 +75,14 @@ function handleKeyDown(event: KeyboardEvent) {
   if (query) {
     window.location.href = `search?q=${encodeURIComponent(query)}`;
   }
+}
+
+if (sessionStorage.getItem('username')) {
+  const username = sessionStorage.getItem('username');
+  console.log("Username in session:", username);
+  const loginLink = document.getElementById('login-link');
+  const registerLink = document.getElementById('register-link');
+  if (loginLink) loginLink.classList.add('hidden');
+  if (registerLink) registerLink.classList.add('hidden');
 }
 </script>

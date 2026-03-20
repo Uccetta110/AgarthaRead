@@ -13,6 +13,7 @@ import { users, userSessions } from '../../db/schema'
 type LoginBody = {
   identifier: string // Email o username dell'utente
   password: string   // Password in chiaro (sarà verificata con bcrypt)
+  type: 'email' | 'username' // Tipo di identificatore utilizzato
 }
 
 // Handler principale della rotta POST /api/auth/login
@@ -22,7 +23,7 @@ export default defineEventHandler(async (event) => {
 
   // Validazione: controlla che sia identifier che password siano forniti
   // Se mancano, restituisce errore 400 (Bad Request)
-  if (!body?.identifier || !body?.password) {
+  if (!body?.identifier || !body?.password || !body?.type) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Credenziali mancanti'
