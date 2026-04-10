@@ -1,11 +1,6 @@
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtPage />
   <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-    <h1 class="text-2xl font-bold text-slate-900">Libri</h1>
+    <h1 class="text-2xl font-bold text-slate-900">Giornali</h1>
     <p class="mt-2 text-slate-600">Sezione in preparazione.</p>
   </section>
-  </div>
-
-</template>     
+</template>
