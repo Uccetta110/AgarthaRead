@@ -45,6 +45,8 @@ nvm use 22.14.0
 2. Avvia il database MySQL con Docker dalla root del repository:
 
 ```bash
+docker compose cp apps\web\server\db\schema\schema.sql mysql:/tmp/schema.sql
+docker compose exec mysql mysql -u root -proot_dev agartharead `< /tmp/schema.sql
 docker compose up -d mysql
 ```
 

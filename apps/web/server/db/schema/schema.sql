@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
   role ENUM('user', 'admin', 'author', 'editor') NOT NULL DEFAULT 'user',
   country_code CHAR(2) NOT NULL,
   birth_date DATE NOT NULL,
+  avatar_dir VARCHAR(255) DEFAULT 'default.png',
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
