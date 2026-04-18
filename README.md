@@ -71,3 +71,19 @@ npm run dev
 
 - Il comando `npm install` in `apps/web` esegue `nuxt prepare` come postinstall, quindi fallisce se stai usando Node 18.
 - Se Docker non è ancora avviato, il frontend può partire ma le API che dipendono dal database non funzioneranno correttamente.
+
+## comandi utili 
+comando di docker per vedere le tabelle 
+```bash
+docker compose exec mysql mysql -u dev_user -p -e "SHOW TABLES IN agartharead;"
+```
+
+comando docker per vedere i log del database
+```bash
+docker compose logs mysql
+```
+
+comando docker per vedere i dati all'interno di una tabella
+```bash
+docker compose exec mysql mysql -u dev_user -p -e "SELECT * FROM agartharead.nome_tabella;"
+```
