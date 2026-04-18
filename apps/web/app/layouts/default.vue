@@ -1,5 +1,42 @@
 <script setup lang="ts">
 const isSidebarOpen = ref(false)
+const authUser = useAuthUser()
+//const errorMessage = ref('')
+
+type SessionResponse = {
+  ok: true
+  user: {
+    id: number
+    username: string
+    email: string
+    avatar_dir: string
+  }
+}
+
+const publicRoutes = ['/auth/login', '/auth/register']
+const route = useRoute()
+const isPublicRoute = publicRoutes.includes(route.path)
+
+const { data: sessionData } = await useFetch<SessionResponse>('/api/auth/me', {
+  method: 'POST',
+  credentials: 'include'
+})
+
+const isAuthenticated = !!sessionData.value?.ok
+
+if (sessionData.value?.ok) {
+  authUser.value = sessionData.value.user
+}
+
+if (isPublicRoute) {
+  if (isAuthenticated) {
+    await navigateTo('/')
+  }
+} else {
+  if (!isAuthenticated) {
+    await navigateTo('/auth/login')
+  }
+}
 
 function openSidebar() {
   isSidebarOpen.value = true

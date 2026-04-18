@@ -49,4 +49,5 @@ export function getDb() {
   return drizzle(getPool(), { schema, mode: "default" });
 }
 
+export type Db = ReturnType<typeof getDb>
 export { schema };

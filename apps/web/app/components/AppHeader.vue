@@ -1,20 +1,59 @@
 <template>
   <header class="bg-gray-800 text-white">
-    <div class="grid w-full grid-cols-[1fr_minmax(320px,560px)_1fr] items-center gap-6 px-2 py-4">
-      <NuxtLink to="/" class="justify-self-start pl-2 text-2xl font-bold tracking-tight">AgarthaRead</NuxtLink>
+    <div
+      class="grid w-full grid-cols-[1fr_minmax(320px,560px)_1fr] items-center gap-6 px-2 py-4"
+    >
+      <NuxtLink
+        to="/"
+        class="justify-self-start pl-2 text-2xl font-bold tracking-tight"
+        >AgarthaRead</NuxtLink
+      >
 
       <div class="w-full justify-self-center">
         <label for="header-search" class="sr-only">Cerca</label>
-        <input id="header-search" type="text" placeholder="Cerca libri, manga, giornali..." @input="handleInput"
+        <input
+          id="header-search"
+          type="text"
+          placeholder="Cerca libri, manga, giornali..."
+          @input="handleInput"
           @keydown="handleKeyDown"
-          class="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none" />
+          class="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+        />
       </div>
 
       <nav class="flex justify-self-end items-center gap-4 pr-2">
-        <NuxtLink to="/" class="text-sm text-gray-200 hover:text-white">Home</NuxtLink>
-        <NuxtLink id="login-link" to="/auth/login" class="text-sm text-gray-200 hover:text-white">Login</NuxtLink>
-        <NuxtLink id="register-link" to="/auth/register"
-          class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100">
+        <!-- Avatar -->
+        <img
+          :src="avatarSrc"
+          alt="Avatar"
+          width="80"
+          height="80"
+          @error="onAvatarError"
+          class="rounded-full"
+        />
+        <!-- UserName-->
+        <NuxtLink
+          to="/profile"
+          v-if="username"
+          class="text-sm text-gray-200 hover:text-white"
+        >
+          {{ username }}
+        </NuxtLink>
+
+        <NuxtLink to="/" class="text-sm text-gray-200 hover:text-white"
+          >Home</NuxtLink
+        >
+        <NuxtLink
+          id="login-link"
+          to="/auth/login"
+          class="text-sm text-gray-200 hover:text-white"
+          >Login</NuxtLink
+        >
+        <NuxtLink
+          id="register-link"
+          to="/auth/register"
+          class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100"
+        >
           Sign Up
         </NuxtLink>
       </nav>
@@ -22,10 +61,28 @@
   </header>
 </template>
 <script setup lang="ts">
+import defaultAvatar from '~/assets/images/avatars/default.png'
+import { ref, watch, computed } from 'vue'
+
+const authUser = useAuthUser()
+const username = computed(() => authUser.value?.username)
+const avatarDir = computed<string>(() => {
+  const avatar = authUser.value?.avatar_dir
+  return avatar ? `/images/avatars/${avatar}` : defaultAvatar
+})
+const avatarSrc = ref<string>(avatarDir.value)
+
+watch(avatarDir, (value) => {
+  avatarSrc.value = value
+})
+
+function onAvatarError() {
+  avatarSrc.value = defaultAvatar
+}
+
 function sanitizeInput(input: string): string {
   // Rimuove caratteri speciali indesiderati, ma consente lettere, numeri, spazi e accenti
   return input.replace(/[^a-zA-Z0-9òèàùì',.~\s]/g, "");
-
 }
 
 function handleInput(event: Event) {
@@ -55,6 +112,7 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 }
 onMounted(() => {
+  
   if (sessionStorage.getItem('username')) {
     const username = sessionStorage.getItem('username');
     console.log("Username in session:", username);
@@ -65,5 +123,6 @@ onMounted(() => {
   } else {
     console.log("No username in session");
   }
+  // prova a prendere l'avatarImg da assets/images/avatar/+avatarDir
 });
 </script>

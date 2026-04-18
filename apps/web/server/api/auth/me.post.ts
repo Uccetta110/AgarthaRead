@@ -1,21 +1,12 @@
-// Importa la libreria bcryptjs per verificare le password hashate
-import bcrypt from 'bcryptjs'
-// Importa il modulo crypto per generare token di sessione casuale e sicuro
-import crypto from 'node:crypto'
-// Importa i comparatori di Drizzle ORM per costruire query WHERE
-import { eq, or } from 'drizzle-orm'
+// Importa il comparatore di Drizzle ORM per costruire query WHERE
+import { eq } from 'drizzle-orm'
 // Importa la funzione per ottenere l'istanza del database connesso
 import { getDb } from '../../db/client'
 // Importa le definizioni delle tabelle 'users' e 'userSessions' dallo schema
 import { users, userSessions } from '../../db/schema'
 
-type sessionBody = {
-    session_token: string | null
-}
-
 export default defineEventHandler(async (event) => {
-    const body = await readBody<sessionBody>(event);
-    const { session_token } = body;
+    const session_token = getCookie(event, 'session_token')
 
     if (!session_token) {
         return null;
@@ -62,7 +53,8 @@ export default defineEventHandler(async (event) => {
         user: {
             id: user.id,
             username: user.username,
-            email: user.email
-        }
+            email: user.email,
+            avatar_dir: user.avatarDir,
+        }   
     }
 });
