@@ -30,7 +30,7 @@ async function getUserById(id: number) {
     return user || null;
 
 }
-//async function getUserByEmail(email: string) { /* ...  }
+//async function getUserByEmail(email: string) {  }
 
 export async function getCurrentUser(event: H3Event) {
   const token = getCookie(event, 'access_token')
