@@ -53,6 +53,13 @@ export default defineEventHandler(async (event) => {
   // Valida che l'utente esista e abbia un passwordHash memorizzato
   // Se l'utente non esiste o non ha password, restituisce errore 401 (Unauthorized)
   // Nota: non specifichiamo se è email/username sbagliato per motivi di sicurezza
+    if (!user) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Credenziali non valide || user non esiste'
+    })
+  }
+
   if (!user?.passwordHash) {
     throw createError({
       statusCode: 401,

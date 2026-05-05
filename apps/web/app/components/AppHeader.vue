@@ -24,6 +24,7 @@
       <nav class="flex justify-self-end items-center gap-4 pr-2">
         <!-- Avatar -->
         <img
+                  v-if="username"
           :src="avatarSrc"
           alt="Avatar"
           width="80"
