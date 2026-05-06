@@ -160,3 +160,5 @@ progetto DEV/TEST, va bene anche google books senza il testo completo
 
 API per i manga
 documentazione: https://api.mangadex.org/docs/02-authentication/personal-clients/
+mangadex non disponibile
+Jikan è meglio
