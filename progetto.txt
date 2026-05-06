@@ -1,3 +1,5 @@
+### PROGETTO SCOLASTICO, DEV/TEST
+
 Nella valutazione del tuo progetto finale guarderò in particolare la presenza e l'uso corretto delle seguenti tecniche e tecnologie:
 
 Controllo e sanificazione input : Html5, JS, PHP (filter_var,...)
@@ -138,3 +140,23 @@ Note operative (MVP):
 - AJAX/WebSocket: CRUD via fetch/AJAX, commenti live via Socket.IO.
 - MFA: codice OTP via email in login.
 
+API
+Categoria	API	                                Costo                       Serve per	                                        Attenzione
+Libri	    Open Library	                    Gratis	                    ricerca, autori, ISBN, copertine	                rate limit, non pensata come backend ad alto traffico
+Libri	    Gutendex	                        Gratis	                    testo completo dei libri di Project Gutenberg	    solo pubblico dominio; per uso lungo meglio self-host
+Libri	    Google Books	                    Gratis con API key	        catalogo più ampio, preview, copertine	            non dà il testo completo
+Manga	    MangaDex	                        Gratis e pubblica	        manga, capitoli, cover	                            policy molto restrittiva: no ads e no servizi a pagamento
+News	    GDELT	                            Gratis e open data	        news globali, ricerca multilingua, aggregazione	    meglio per aggregare che per avere il testo completo di una testata
+News	    The Guardian Open Platform	        Gratis con developer key	article text, tag, sezioni	                        non commerciale, 500 richieste al giorno
+News	    NewsAPI	                            Gratis solo per dev/test	headline e ricerca rapida articoli	                100 richieste al giorno, ritardo di 24 ore, niente full article content
+
+
+API per i libri: 
+documentazione: 
+    Open Library: https://openlibrary.org/swagger/docs#/
+    Gutendex: https://gutendex.com/
+    Google Books: https://googleapis.dev/dotnet/Google.Apis.Books.v1/latest/api/Google.Apis.Books.v1.html
+progetto DEV/TEST, va bene anche google books senza il testo completo 
+
+API per i manga
+documentazione: https://api.mangadex.org/docs/02-authentication/personal-clients/

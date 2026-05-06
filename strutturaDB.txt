@@ -28,7 +28,8 @@ users
 - role (enum: user, admin, author, editor)
 - country_code (string)
 - birth_date (date)
-- avatar_dir (string)
+ - avatar (string) # filename o identificatore dell'avatar selezionato (es. "avatar1.png").
+ # Alternativa normalizzata: usare `avatar_id` (FK -> avatars.id) se si aggiunge la tabella `avatars`.
 - created_at (datetime)
 - updated_at (datetime)
 
@@ -228,6 +229,19 @@ reading_progress
 - percentage (decimal)
 - last_read_at (datetime)
 - (user_id, item_id) (UNIQUE)
+
+avatars
+- id (PK, int)
+- filename (string, UNIQUE) # es. "avatar1.png"
+- storage (enum: assets, uploaded) # dove si trova (assets predefiniti o upload utente)
+- display_name (string, NULL)
+- is_active (bool, default true)
+- created_at (datetime)
+
+-- Nota di design:
+-- 1) Se gli avatar sono solo quelli in `assets/images/avatars`, è sufficiente salvare in `users.avatar` il nome/file.
+-- 2) Se vuoi gestire avatar dinamici o upload utente, aggiungi `avatars` e salva `users.avatar_id` come FK verso `avatars.id`.
+-- 3) L'API frontend dovrà inviare il valore corrispondente (filename o avatar_id) quando si salva la scelta.
 
 Relazioni principali
 - users 1 -> N user_sessions
