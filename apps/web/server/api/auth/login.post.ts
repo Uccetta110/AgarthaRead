@@ -13,7 +13,7 @@ import { users, userSessions } from '../../db/schema'
 type LoginBody = {
   identifier: string // Email o username dell'utente
   password: string   // Password in chiaro (sarà verificata con bcrypt)
-  type: 'email' | 'username' // Tipo di identificatore utilizzato
+  type?: 'email' | 'username' // Tipo di identificatore utilizzato (opzionale)
 }
 
 // Handler principale della rotta POST /api/auth/login
@@ -21,9 +21,10 @@ export default defineEventHandler(async (event) => {
   // Legge il corpo della richiesta e lo tipizza come LoginBody
   const body = await readBody<LoginBody>(event)
 
-  // Validazione: controlla che sia identifier che password siano forniti
-  // Se mancano, restituisce errore 400 (Bad Request)
-  if (!body?.identifier || !body?.password || !body?.type) {
+  const identifier = String(body?.identifier ?? '').trim()
+  const password = String(body?.password ?? '')
+
+  if (!identifier || !password) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Credenziali mancanti'
@@ -33,16 +34,15 @@ export default defineEventHandler(async (event) => {
   // Ottiene l'istanza del database con la connessione MySQL e Drizzle ORM
   const db = getDb()
 
-  // Cerca l'utente nel database per email O username
-  // Utilizza 'or()' per accettare entrambi i campi come identifier
-  // limit(1) ottimizza la query limitando a un solo risultato
+  // Cerca l'utente nel database per email o username
+  // questo evita di fallire se il client usa un tipo diverso da quello inviato
   const result = await db
     .select()
     .from(users)
     .where(
       or(
-        eq(users.email, body.identifier),
-        eq(users.username, body.identifier)
+        eq(users.email, identifier),
+        eq(users.username, identifier)
       )
     )
     .limit(1)
@@ -53,14 +53,14 @@ export default defineEventHandler(async (event) => {
   // Valida che l'utente esista e abbia un passwordHash memorizzato
   // Se l'utente non esiste o non ha password, restituisce errore 401 (Unauthorized)
   // Nota: non specifichiamo se è email/username sbagliato per motivi di sicurezza
-    if (!user) {
+  if (!user) {
     throw createError({
       statusCode: 401,
       statusMessage: 'Credenziali non valide || user non esiste'
     })
   }
 
-  if (!user?.passwordHash) {
+  if (!user.passwordHash) {
     throw createError({
       statusCode: 401,
       statusMessage: 'Credenziali non valide'
@@ -70,7 +70,7 @@ export default defineEventHandler(async (event) => {
   // Verifica che la password fornita corrisponda all'hash memorizzato
   // bcrypt.compare() effettua un confronto crittografico sicuro
   // Ritorna true se le password corrispondono, false altrimenti
-  const okPassword = await bcrypt.compare(body.password, user.passwordHash)
+  const okPassword = await bcrypt.compare(password, user.passwordHash)
 
   // Se la password non corrisponde, restituisce errore 401 (Unauthorized)
   if (!okPassword) {
@@ -106,7 +106,8 @@ export default defineEventHandler(async (event) => {
     sameSite: 'lax',       // Inviato solo per richieste same-site (protegge da CSRF)
     secure: process.env.NODE_ENV === 'production', // HTTPS only in produzione
     path: '/',             // Disponibile per tutti i percorsi del sito
-    expires: expiresAt     // Scade insieme alla sessione nel database
+    expires: expiresAt,    // Scade insieme alla sessione nel database
+    maxAge: 7 * 24 * 60 * 60
   })
 
   // Restituisce una risposta di successo con i dati dell'utente

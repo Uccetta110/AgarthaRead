@@ -11,6 +11,10 @@ export default defineEventHandler(async (event) => {
     if (!session_token) {
         return null;
     } else if (typeof session_token !== 'string') {
+        setCookie(event, 'session_token', '', {
+            path: '/',
+            expires: new Date(0)
+        });
         throw createError({
             statusCode: 400,
             statusMessage: 'Token di sessione non valido'
@@ -27,12 +31,20 @@ export default defineEventHandler(async (event) => {
     const session = result[0];
 
     if (!session) {
+        setCookie(event, 'session_token', '', {
+            path: '/',
+            expires: new Date(0)
+        });
         return null;
     }
 
     if (session.expiresAt < new Date()) {
-        // Sessione scaduta, elimina dal database
+        // Sessione scaduta, elimina dal database e cancella il cookie
         await db.delete(userSessions).where(eq(userSessions.sessionToken, session_token));
+        setCookie(event, 'session_token', '', {
+            path: '/',
+            expires: new Date(0)
+        });
         return null;
     }
 
