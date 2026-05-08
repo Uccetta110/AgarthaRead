@@ -151,14 +151,79 @@ News	    The Guardian Open Platform	        Gratis con developer key	article tex
 News	    NewsAPI	                            Gratis solo per dev/test	headline e ricerca rapida articoli	                100 richieste al giorno, ritardo di 24 ore, niente full article content
 
 
-API per i libri: 
-documentazione: 
-    Open Library: https://openlibrary.org/swagger/docs#/
-    Gutendex: https://gutendex.com/
-    Google Books: https://googleapis.dev/dotnet/Google.Apis.Books.v1/latest/api/Google.Apis.Books.v1.html
-progetto DEV/TEST, va bene anche google books senza il testo completo 
+API per i libri:
+documentazione:
+        Open Library: https://openlibrary.org/swagger/docs#/
+        Gutendex: https://gutendex.com/
+        Google Books: https://developers.google.com/books/docs/v1/using
+progetto DEV/TEST — Google Books va bene anche senza testo completo
 
-API per i manga
-documentazione: https://api.mangadex.org/docs/02-authentication/personal-clients/
-mangadex non disponibile
-Jikan è meglio
+API per i manga:
+documentazione:
+        Jikan (consigliato): https://docs.api.jikan.moe/
+        MangaDex (potenziale, ma soggetto a blocchi): https://api.mangadex.org/docs/
+
+API per news/giornali:
+documentazione:
+        The Guardian Open Platform: https://open-platform.theguardian.com/
+        GDELT (analytics, big data): https://www.gdeltproject.org/data.html
+
+---
+Dettagli pratici per integrazione (richiami, formato risposta, errori)
+
+- Jikan (Manga)
+    - Base URL: https://api.jikan.moe/v4
+    - Come chiamare: GET /manga?q=<term>&page=<n>&limit=<n>
+        Esempio: GET https://api.jikan.moe/v4/manga?q=naruto&limit=20
+    - Forma risposta: JSON con `data` (array di risorse) e `pagination`.
+        Esempio ridotto: {"data":[{"mal_id":1,"title":"...","type":"Manga"}],"pagination":{"last_visible_page":5}}
+    - Errori comuni: 400 Bad Request, 404 Not Found, 429 Too Many Requests, 500 Server Error.
+    - Note: solo GET (read-only). Rate-limit: ~3 req/sec, 60 req/min. Risposte cacheate 24h; supporta ETag/If-None-Match.
+
+- Open Library (Books metadata)
+    - Base URL: https://openlibrary.org
+    - Come chiamare: GET /search.json?q=<term>
+        Esempio: https://openlibrary.org/search.json?q=harry+potter
+    - Forma risposta: JSON con `numFound` e `docs` (array). Ogni doc contiene title, author_name, isbn, edition_key, ecc.
+        Esempio: {"numFound":123,"docs":[{"title":"...","author_name":["..."],"isbn":["..."]}, ...]}
+    - Errori comuni: 429 Rate Limit, 500 Server Error.
+    - Note: non richiede chiave; usare `User-Agent` con email per limiti migliori. Default ~1 req/sec, 3 rps se identificati.
+
+- Google Books
+    - Base URL: https://www.googleapis.com/books/v1
+    - Come chiamare: GET /volumes?q=<term>&key=<API_KEY>
+        Esempio: https://www.googleapis.com/books/v1/volumes?q=tolkien&key=YOUR_KEY
+    - Forma risposta: JSON con `kind`, `totalItems`, `items`[]. Ogni item contiene `id` e `volumeInfo` (title, authors, imageLinks, accessInfo...)
+        Esempio: {"kind":"books#volumes","totalItems":2,"items":[{"id":"...","volumeInfo":{"title":"..."}}]}
+    - Errori comuni: 400/401/403 (API key mancante o non valida), 429 Quota exceeded, 500 Server Error.
+    - Note: richiede API key per produzione; utile per cover/previews/accessInfo.
+
+- Gutendex (Project Gutenberg metadata)
+    - Base URL: https://gutendex.com/books
+    - Come chiamare: GET /books?search=<term>&page=<n>
+        Esempio: https://gutendex.com/books?search=frankenstein
+    - Forma risposta: {"count":<n>,"next":"...","previous":null,"results":[{id,title,authors,formats,...}]}
+    - Errori comuni: 404 (id non trovato), 500.
+    - Note: ottimo per public-domain texts; nessuna auth; per carico elevato meglio self-hostare.
+
+- The Guardian Open Platform (News)
+    - Base URL: https://content.guardianapis.com
+    - Come chiamare: GET /search?q=<term>&api-key=<KEY>&show-fields=thumbnail,trailText,body
+        Esempio: https://content.guardianapis.com/search?q=climate&api-key=YOUR_KEY&show-fields=trailText,thumbnail
+    - Forma risposta: {"response":{"status":"ok","results":[{"id":"...","webTitle":"...","webUrl":"...","fields":{...}}]}}
+    - Errori comuni: 401/403 (chiave), 429 (quota giornaliera), 500.
+    - Note: richiede registrazione per ottenere API key; quota tipica per developer ≈500 req/day (richiedere aumento se necessario).
+
+- GDELT (analytics/news dataset)
+    - Tipologia: dataset + API di sintesi; uso tipico via BigQuery o download dei dump.
+    - Per UI: preferibile usare Summary APIs o un proprio pipeline; non è pensato per fetch di singoli articoli.
+    - Errori/attenzioni: dataset molto grande, latenza e complessità di query; non adatto come unica sorgente per articoli completi.
+
+Consigli integrazione (pratici):
+- Implementare un proxy server-side (Nuxt server routes) che normalizzi risposte e mantenga le chiavi API.
+- Cache preferita: Redis. TTL suggeriti: search = 1h, dettaglio risorsa = 24h, news = 30m.
+- Rate-limiter upstream (es. Bottleneck): reservoir 60/min, minTime ~334ms; gestire 429 con backoff/escalation.
+- Usare ETag / If-None-Match per evitare traffico inutile; servire 304 Not Modified quando possibile.
+- Tradurre errori upstream in payload client-friendly (es. mettere header X-Upstream-Status, Retry-After).
+
+---
