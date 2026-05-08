@@ -30,7 +30,7 @@
           width="80"
           height="80"
           @error="onAvatarError"
-          @click="$router.push('/profile  ')"
+          @click="$router.push('/profile')"
           class="rounded-full"
         />
         <!-- UserName-->
