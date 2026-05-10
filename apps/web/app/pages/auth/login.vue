@@ -85,6 +85,7 @@ async function onSubmit() {
   } catch (err: any) {
     errorMessage.value =
       err?.data?.statusMessage || 'Login non riuscito'
+      console.error('Login error:', err)
   } finally {
     loading.value = false
   }

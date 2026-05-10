@@ -230,5 +230,10 @@ Consigli integrazione (pratici):
 PROFILI 
 ruoli (role):
     user (o null): è un utente normale, può leggere, mettere like, commentare ...
-    author: sono gli autori, possono pubblicare 
-    admin: è l'admnin 
+    author: sono gli autori, possono pubblicare opere, modificare le proprie e fare tutto ciò che un utente normale può fare. Avranno il tag certificato accanto quando fanno un commento. Per diventare un'autore, devi fare la richiesta ai manager o agli admin
+    manager: sono gli "helper" dell'admin, tipo la segreteria. ognuno potra avere permessi diversi (scelti dall'admin), tipo accettare richieste di creazione autori, modificare opere (magari soltanto i tag, come età minima, copertina, il genere...)
+    admin: è l'admin, può modificare tutti gli utenti (la pagina admin sara ovviamente accessibilem solo all'admin), crearli, eliminarli... Può anche modificare le opere a piacimento. 
+
+---
+OPERE
+le opere create dagli autori interni al sito saranno quelle inserite nel database. le opere prese dalle API e quelle del database sono di tipo diverso. le opere interne al database sono "Opere interne", avranno una sezione diversa. 

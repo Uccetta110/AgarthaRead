@@ -17,14 +17,15 @@ const publicRoutes = ['/auth/login', '/auth/register']
 const route = useRoute()
 const isPublicRoute = publicRoutes.includes(route.path)
 
-const { data: sessionData } = await useFetch<SessionResponse>('/api/auth/me', {
+const sessionResult = await useFetch<SessionResponse>('/api/auth/me', {
   method: 'POST',
   credentials: 'include'
 })
 
-const isAuthenticated = !!sessionData.value?.ok
+const sessionData = sessionResult?.data
+const isAuthenticated = !!sessionData?.value?.ok
 
-if (sessionData.value?.ok) {
+if (sessionData?.value?.ok) {
   authUser.value = sessionData.value.user
 }
 

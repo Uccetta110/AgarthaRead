@@ -111,6 +111,8 @@ export default defineEventHandler(async (event) => {
 
   // Restituisce una risposta di successo con i dati dell'utente
   // Il token di sessione è già nel cookie, quindi non è necessario includerlo
+  //output console se qualcuno ha fatto un login con successo, mostra l'username, l'id e l'email dell'utente che ha fatto login
+  console.log(`Login successful: userId=${user.id}, username=${user.username}, email=${user.email}`)
   return {
     ok: true,
     user: {

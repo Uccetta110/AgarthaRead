@@ -1,0 +1,17 @@
+HTTP/1.1 200 OK
+set-cookie: session_token=036df86f7256cfc82fe6b78a8cf03ca41ae1d34d2ec4066c31142d787abcf145; Max-Age=604800; Path=/; Expires=Sun, 17 May 2026 16:20:34 GMT; HttpOnly; SameSite=Lax
+content-type: application/json
+date: Sun, 10 May 2026 16:20:34 GMT
+connection: keep-alive
+keep-alive: timeout=5
+content-length: 116
+
+{
+  "ok": true,
+  "user": {
+    "id": 4,
+    "username": "testuser456",
+    "email": "testuser456@example.com"
+  }
+}
+HTTP_CODE:200

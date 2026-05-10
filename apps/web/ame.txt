@@ -1,0 +1,17 @@
+HTTP/1.1 200 OK
+content-type: application/json
+date: Sun, 10 May 2026 16:20:34 GMT
+connection: keep-alive
+keep-alive: timeout=5
+content-length: 149
+
+{
+  "ok": true,
+  "user": {
+    "id": 4,
+    "username": "testuser456",
+    "email": "testuser456@example.com",
+    "avatar_dir": "default.png"
+  }
+}
+HTTP_CODE:200
