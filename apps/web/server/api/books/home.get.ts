@@ -1,14 +1,39 @@
 import { getCache, setCache } from '../../utils/simpleCache'
+import { getQuery } from 'h3'
 
-export default defineEventHandler(async () => {
-  const cacheKey = 'books:home'
+function parseQueryArray(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item).trim()).filter(Boolean)
+  }
+  if (typeof value === 'string') {
+    return value
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
+  return []
+}
+
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event)
+  const subjectsKeys = parseQueryArray(query.subjects || query.subject)
+  const sectionTitles = parseQueryArray(query.titles || query.title)
+  const hasCustomSubjects = subjectsKeys.length > 0
+  const cacheKey = `books:home:${subjectsKeys.join(',')}:${sectionTitles.join(',')}`
   const cached = getCache(cacheKey)
   if (cached) return cached
 
-  const subjects = [
+  const defaultSubjects = [
     { title: 'Romanzi', subject: 'fiction' },
     { title: 'Gialli', subject: 'mystery' }
   ]
+
+  const subjects = hasCustomSubjects
+    ? subjectsKeys.map((subject, index) => ({
+        title: sectionTitles[index] || subject,
+        subject
+      }))
+    : defaultSubjects
 
   const sections: Array<any> = []
 

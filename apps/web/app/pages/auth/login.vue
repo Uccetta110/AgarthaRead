@@ -70,18 +70,12 @@ async function onSubmit() {
   try {
     const response = await $fetch<LoginResponse>('/api/auth/login', {
       method: 'POST',
+      credentials: 'include',
       body: {
         identifier: form.identifier,
-        password: form.password,
-        type: accessMode.value
+        password: form.password
       }
     })
-
-    if (import.meta.client) {
-      //sessionStorage.setItem('user', JSON.stringify(response.user))
-      sessionStorage.setItem('username', response.user.username)
-      sessionStorage.setItem('email', response.user.email)
-    }
 
     await navigateTo('/')
   } catch (err: any) {

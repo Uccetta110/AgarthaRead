@@ -11,7 +11,8 @@ type AvatarItem = {
 
 const avatarModules = import.meta.glob('../../assets/images/avatars/*.{png,jpg,jpeg}', {
   eager: true,
-  as: 'url',
+  query: '?url',
+  import: 'default',
 }) as Record<string, string>
 
 const avatars = Object.entries(avatarModules)
@@ -41,7 +42,6 @@ watch(currentAvatarName, (value) => {
   }
 })
 
-const sessionToken = useCookie('session_token').value
 
 async function selectAvatar(name: string) {
   selectedAvatar.value = name
@@ -54,24 +54,32 @@ async function updateAvatar() {
     return
   }
 
-  if (!sessionToken || typeof sessionToken !== 'string') {
-    error.value = 'Sessione non trovata. Effettua il login e riprova.'
-    return
-  }
-
   loading.value = true
   error.value = null
   message.value = null
 
+  const token = useCookie('session_token').value as string | undefined
+
   try {
-    await $fetch('/api/database/avatar', {
+    const body: { username: string; url: string; identifier?: string } = {
+      username: authUser.value.username,
+      url: selectedAvatar.value,
+    }
+
+    if (token && typeof token === 'string') {
+      body.identifier = token
+    }
+
+    const res = await $fetch('/api/database/avatar', {
       method: 'POST',
-      body: {
-        identifier: sessionToken,
-        username: authUser.value.username,
-        url: selectedAvatar.value,
-      },
+      body,
+      credentials: 'include',
     })
+
+    if (!res || !(res as any).success) {
+      error.value = 'Sessione non trovata o non autorizzata. Effettua il login e riprova.'
+      return
+    }
 
     authUser.value = {
       ...authUser.value,

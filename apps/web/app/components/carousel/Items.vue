@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType } from 'vue'
+import type { PropType } from 'vue'
 import CarouselBase from './Base.vue'
 import ItemCard from '../ItemCard.vue'
 
@@ -18,6 +18,6 @@ const props = defineProps({
       <slot name="more" />
     </template>
 
-    <ItemCard v-for="i of items" :key="i.id" :item="i" class="flex-1 w-40 md:w-60" />
+    <ItemCard v-for="i of items" :key="i.id" :item="i" class="flex-shrink-0 w-48 md:w-56 lg:w-64" />
   </CarouselBase>
 </template>

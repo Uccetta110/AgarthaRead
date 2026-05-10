@@ -1,3 +1,9 @@
-body{
+/* dimensione massima quella dello schermo */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
     background-color: #f0f0f0;
 }

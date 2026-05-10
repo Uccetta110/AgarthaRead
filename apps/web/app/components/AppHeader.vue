@@ -63,7 +63,7 @@
   </header>
 </template>
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { getAvatarUrl, defaultAvatarUrl } from '~/composables/useAvatar'
 
 const authUser = useAuthUser()
@@ -111,7 +111,11 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 }
 onMounted(() => {
-  
+  const header = document.querySelector('header') as HTMLElement | null
+  if (header) {
+    document.documentElement.style.setProperty('--app-header-height', `${header.offsetHeight}px`)
+  }
+
   if (sessionStorage.getItem('username')) {
     const username = sessionStorage.getItem('username');
     console.log("Username in session:", username);

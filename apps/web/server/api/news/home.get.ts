@@ -1,7 +1,37 @@
 import { getCache, setCache } from '../../utils/simpleCache'
+import { getQuery } from 'h3'
 
-export default defineEventHandler(async () => {
-  const cacheKey = 'news:home'
+function parseQueryArray(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item).trim()).filter(Boolean)
+  }
+  if (typeof value === 'string') {
+    return value
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
+  return []
+}
+
+function buildGuardianUrl(key: string, sectionKey: string) {
+  const base = `https://content.guardianapis.com/search?api-key=${key}&page-size=12&show-fields=thumbnail,trailText`
+  const normalized = sectionKey.toLowerCase().trim()
+  if (normalized === 'latest' || normalized === 'recent' || normalized === 'newest') {
+    return `${base}&order-by=newest`
+  }
+  if (normalized === 'top' || normalized === 'relevance') {
+    return `${base}&order-by=relevance`
+  }
+  return `${base}&q=${encodeURIComponent(sectionKey)}&order-by=relevance`
+}
+
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event)
+  const sectionKeys = parseQueryArray(query.sections || query.section)
+  const sectionTitles = parseQueryArray(query.titles || query.title)
+  const hasCustomSections = sectionKeys.length > 0
+  const cacheKey = `news:home:${sectionKeys.join(',')}:${sectionTitles.join(',')}`
   const cached = getCache(cacheKey)
   if (cached) return cached
 
@@ -15,30 +45,39 @@ export default defineEventHandler(async () => {
       cover: null,
       trailText: `Esempio di anteprima per la notizia ${i + 1}`
     }))
-    return { sections: [{ title: 'Ultime (demo)', items: sample }, { title: 'Top (demo)', items: sample }], notice: 'GUARDIAN_KEY not configured - showing demo data' }
+    const defaultSections = [{ title: 'Ultime (demo)', items: sample }, { title: 'Top (demo)', items: sample }]
+    const sections = hasCustomSections
+      ? sectionKeys.map((key, index) => ({ title: sectionTitles[index] || key, items: sample }))
+      : defaultSections
+    return { sections, notice: 'GUARDIAN_KEY not configured - showing demo data' }
   }
 
   try {
-    const latestRes = await fetch(`https://content.guardianapis.com/search?api-key=${key}&page-size=12&order-by=newest&show-fields=thumbnail,trailText`)
-    const topRes = await fetch(`https://content.guardianapis.com/search?api-key=${key}&page-size=12&order-by=relevance&show-fields=thumbnail,trailText`)
+    const sectionDefs = hasCustomSections
+      ? sectionKeys.map((key, index) => ({ title: sectionTitles[index] || key, url: buildGuardianUrl(key, key) }))
+      : [
+          { title: 'Ultime', url: buildGuardianUrl(key, 'latest') },
+          { title: 'Top', url: buildGuardianUrl(key, 'top') }
+        ]
 
-    const latestJson = latestRes.ok ? await latestRes.json() : { response: { results: [] } }
-    const topJson = topRes.ok ? await topRes.json() : { response: { results: [] } }
+    const sectionResponses = await Promise.all(
+      sectionDefs.map(async (section) => {
+        const res = await fetch(section.url)
+        const json = res.ok ? await res.json() : { response: { results: [] } }
+        return {
+          title: section.title,
+          items: (json.response.results || []).map((it: any) => ({
+            id: it.id,
+            title: it.webTitle,
+            url: it.webUrl,
+            cover: it.fields?.thumbnail || null,
+            trailText: it.fields?.trailText || null
+          }))
+        }
+      })
+    )
 
-    const mapItem = (it: any) => ({
-      id: it.id,
-      title: it.webTitle,
-      url: it.webUrl,
-      cover: it.fields?.thumbnail || null,
-      trailText: it.fields?.trailText || null
-    })
-
-    const sections = [
-      { title: 'Ultime', items: (latestJson.response.results || []).map(mapItem) },
-      { title: 'Top', items: (topJson.response.results || []).map(mapItem) }
-    ]
-
-    const payload = { sections }
+    const payload = { sections: sectionResponses }
     setCache(cacheKey, payload, 30 * 60 * 1000)
     return payload
   } catch (err) {

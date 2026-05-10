@@ -10,8 +10,10 @@ type AvatarBody = {
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<AvatarBody>(event);
+  const cookieIdentifier = getCookie(event, 'session_token') as string | undefined;
+  const identifier = cookieIdentifier ?? body?.identifier;
 
-  if (!body?.identifier || !body?.url) {
+  if (!identifier || !body?.url) {
     throw createError({
       statusCode: 400,
       statusMessage: "Credenziali mancanti",
@@ -24,7 +26,7 @@ export default defineEventHandler(async (event) => {
   const result = await db
     .select()
     .from(userSessions)
-    .where(eq(userSessions.sessionToken, body.identifier))
+    .where(eq(userSessions.sessionToken, identifier))
     .limit(1);
 
   const session = result[0];

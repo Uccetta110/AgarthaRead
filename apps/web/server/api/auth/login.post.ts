@@ -13,7 +13,6 @@ import { users, userSessions } from '../../db/schema'
 type LoginBody = {
   identifier: string // Email o username dell'utente
   password: string   // Password in chiaro (sarà verificata con bcrypt)
-  type?: 'email' | 'username' // Tipo di identificatore utilizzato (opzionale)
 }
 
 // Handler principale della rotta POST /api/auth/login

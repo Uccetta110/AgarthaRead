@@ -5,7 +5,7 @@
 
     <div v-if="error" class="mt-4 text-red-600">Errore: {{ error.message || error }}</div>
 
-    <div v-else class="mt-6 space-y-6">
+    <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
       <div v-for="section in sections" :key="section.title">
         <CarouselItems :items="section.items">
           <template #title>{{ section.title }}</template>

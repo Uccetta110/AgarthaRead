@@ -7,7 +7,8 @@ type AvatarItem = {
 
 const avatarModules = import.meta.glob('../assets/images/avatars/*.{png,jpg,jpeg}', {
   eager: true,
-  as: 'url',
+  query: '?url',
+  import: 'default',
 }) as AvatarMap
 
 const avatars = Object.entries(avatarModules)

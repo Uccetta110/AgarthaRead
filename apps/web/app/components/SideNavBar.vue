@@ -35,12 +35,12 @@ function closeSidebar() {
 <template>
     <div
         v-if="props.isOpen"
-        class="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm lg:hidden"
+        class="fixed inset-x-0 top-[var(--app-header-height)] bottom-0 z-40 bg-slate-900/40 backdrop-blur-sm lg:hidden mobile-overlay"
         @click="closeSidebar"
     />
 
     <aside
-        class="fixed left-0 top-0 z-50 h-full w-72 border-r border-slate-200 bg-white px-4 py-6 shadow-xl transition-transform duration-300 lg:sticky lg:top-0 lg:z-10 lg:h-[calc(100vh-5rem)] lg:w-64 lg:translate-x-0 lg:rounded-r-2xl lg:py-8 lg:shadow-sm"
+        class="fixed left-0 top-[var(--app-header-height)] z-50 h-[calc(100vh-var(--app-header-height))] w-72 border-r border-slate-200 bg-white px-4 py-6 shadow-xl transition-transform duration-300 lg:static lg:min-h-screen lg:w-64 lg:top-0 lg:translate-x-0 lg:py-8 lg:shadow-sm mobile-sidebar"
         :class="props.isOpen ? 'translate-x-0' : '-translate-x-full'"
         aria-label="Navigazione laterale"
     >
@@ -72,3 +72,12 @@ function closeSidebar() {
         </nav>
     </aside>
 </template>
+
+<style scoped>
+.mobile-overlay { top: var(--app-header-height); }
+.mobile-sidebar { top: var(--app-header-height); height: calc(100vh - var(--app-header-height)); }
+@media (min-width: 1024px) {
+  .mobile-overlay { top: auto; }
+  .mobile-sidebar { top: auto; height: auto; }
+}
+</style>

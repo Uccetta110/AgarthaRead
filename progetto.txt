@@ -227,3 +227,8 @@ Consigli integrazione (pratici):
 - Tradurre errori upstream in payload client-friendly (es. mettere header X-Upstream-Status, Retry-After).
 
 ---
+PROFILI 
+ruoli (role):
+    user (o null): è un utente normale, può leggere, mettere like, commentare ...
+    author: sono gli autori, possono pubblicare 
+    admin: è l'admnin 

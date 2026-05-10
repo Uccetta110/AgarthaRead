@@ -51,10 +51,10 @@ function closeSidebar() {
   <div class="min-h-screen bg-slate-100">
     <AppHeader />
 
-    <div class="flex w-full">
+    <div class="flex w-full min-h-screen">
       <SideNavBar :is-open="isSidebarOpen" @close="closeSidebar" />
 
-      <main class="w-full px-4 py-5 lg:px-8 lg:py-8">
+      <main class="flex-1 min-w-0 px-4 py-5 lg:px-8 lg:py-8">
         <div class="mb-4 lg:hidden">
           <button
             class="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"

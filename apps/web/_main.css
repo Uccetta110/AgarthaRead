@@ -1,0 +1,8 @@
+import { createHotContext as __vite__createHotContext } from "/_nuxt/@vite/client";import.meta.hot = __vite__createHotContext("/assets/css/main.css");import { updateStyle as __vite__updateStyle, removeStyle as __vite__removeStyle } from "/_nuxt/@vite/client"
+const __vite__id = "C:/Users/herob/Documents/Visual Studio Code/Projects/AgarthaRead/apps/web/app/assets/css/main.css"
+const __vite__css = "/* dimensione massima quella dello schermo */\r\nbody{\r\n    background-color: #f0f0f0;\r\n    max-width: 100%;\r\n}\n/*# sourceMappingURL=data:application/json;base64,eyJmaWxlIjoiQzovVXNlcnMvaGVyb2IvRG9jdW1lbnRzL1Zpc3VhbCBTdHVkaW8gQ29kZS9Qcm9qZWN0cy9BZ2FydGhhUmVhZC9hcHBzL3dlYi9hcHAvYXNzZXRzL2Nzcy9tYWluLmNzcyIsIm1hcHBpbmdzIjoiQUFBQSw0Q0FBNEM7QUFDNUM7SUFDSSx5QkFBeUI7SUFDekIsZUFBZTtBQUNuQiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJDOi9Vc2Vycy9oZXJvYi9Eb2N1bWVudHMvVmlzdWFsIFN0dWRpbyBDb2RlL1Byb2plY3RzL0FnYXJ0aGFSZWFkL2FwcHMvd2ViL2FwcC9hc3NldHMvY3NzL21haW4uY3NzIl0sInNvdXJjZXNDb250ZW50IjpbIi8qIGRpbWVuc2lvbmUgbWFzc2ltYSBxdWVsbGEgZGVsbG8gc2NoZXJtbyAqL1xyXG5ib2R5e1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2YwZjBmMDtcclxuICAgIG1heC13aWR0aDogMTAwJTtcclxufSJdLCJ2ZXJzaW9uIjozfQ== */"
+__vite__updateStyle(__vite__id, __vite__css)
+import.meta.hot.accept()
+import.meta.hot.prune(() => __vite__removeStyle(__vite__id))
+document.querySelectorAll(`link[href="/_nuxt/assets/css/main.css"]`).forEach(i=>i.remove())
+document.querySelectorAll(`link[href="/_nuxt/@fs/assets/css/main.css"]`).forEach(i=>i.remove())
