@@ -37,6 +37,10 @@
           {{ loading ? 'Accesso...' : 'Login' }}
         </button>
       </form>
+
+      <div class="mt-4 text-center text-sm text-slate-600">
+        Non hai un account? <NuxtLink to="/auth/register" class="font-medium text-blue-600 hover:underline">Registrati</NuxtLink>
+      </div>
     </div>
   </div>
 </template>
