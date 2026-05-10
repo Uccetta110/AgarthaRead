@@ -5,7 +5,7 @@
       
     <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
       <div v-for="section in mangaSections" :key="section.title">
-        <CarouselItems :items="section.items">
+        <CarouselItems type="mangas" :items="section.items">
           <template #title>{{ section.title }}</template>
         </CarouselItems>
       </div>
@@ -16,7 +16,7 @@
 
     <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
       <div v-for="section in booksSections" :key="section.title">
-        <CarouselItems :items="section.items">
+        <CarouselItems type="books" :items="section.items">
           <template #title>{{ section.title }}</template>
         </CarouselItems>
       </div>
@@ -27,7 +27,7 @@
 
     <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
       <div v-for="section in newsSections" :key="section.title">
-        <CarouselItems :items="section.items">
+        <CarouselItems type="newspapers" :items="section.items">
           <template #title>{{ section.title }}</template>
         </CarouselItems>
       </div>

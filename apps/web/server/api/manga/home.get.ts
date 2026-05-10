@@ -1,5 +1,10 @@
 import { getCache, setCache } from '../../utils/simpleCache'
 import { getQuery } from 'h3'
+import {
+  fetchMangaDexJson,
+  normalizeMangaDexHomeItem,
+  resolveMangaDexTagIds
+} from '../../utils/mangaDex'
 
 function parseQueryArray(value: unknown): string[] {
   if (Array.isArray(value)) {
@@ -24,16 +29,14 @@ export default defineEventHandler(async (event) => {
   if (cached) return cached
 
   const defaultSections = [
-    { title: 'Popolari', url: 'https://api.jikan.moe/v4/top/manga?limit=12' },
-    { title: 'Romantici', url: 'https://api.jikan.moe/v4/manga?q=romance&limit=12' }
+    { title: 'Popolari', key: 'top' },
+    { title: 'Romantici', key: 'romance' }
   ]
 
   const sectionsDef = hasCustomSections
     ? sectionKeys.map((key, index) => ({
         title: sectionTitles[index] || key,
-        url: key.startsWith('top')
-          ? `https://api.jikan.moe/v4/top/manga?limit=12`
-          : `https://api.jikan.moe/v4/manga?q=${encodeURIComponent(key)}&limit=12`
+        key
       }))
     : defaultSections
 
@@ -41,19 +44,30 @@ export default defineEventHandler(async (event) => {
 
   for (const s of sectionsDef) {
     try {
-      const res = await fetch(s.url)
-      if (!res.ok) {
-        sections.push({ title: s.title, items: [] })
-        continue
+      const params = new URLSearchParams()
+      params.set('limit', '12')
+      params.append('includes[]', 'author')
+      params.append('includes[]', 'artist')
+      params.append('includes[]', 'cover_art')
+      params.append('availableTranslatedLanguage[]', 'it')
+      params.append('availableTranslatedLanguage[]', 'en')
+
+      const normalizedKey = String(s.key || '').trim().toLowerCase()
+      if (normalizedKey === 'top' || normalizedKey === 'popular' || normalizedKey === 'popolari') {
+        params.set('order[followedCount]', 'desc')
+      } else {
+        const tagIds = await resolveMangaDexTagIds([normalizedKey, String(s.title || '')])
+        if (tagIds.length > 0) {
+          tagIds.forEach((tagId: string) => params.append('includedTags[]', tagId))
+        } else if (normalizedKey) {
+          params.set('title', normalizedKey)
+        }
       }
-      const json = await res.json()
-      const items = (json.data || []).slice(0, 12).map((m: any) => ({
-        id: m.mal_id ?? m.id,
-        title: m.title,
-        authors: (m.authors || []).map((a: any) => a.name).filter(Boolean),
-        cover: m.images?.jpg?.image_url || m.images?.webp?.image_url || null
-      }))
-      sections.push({ title: s.title, items })
+
+      const mangaDexJson = await fetchMangaDexJson('/manga', params)
+      const mangaDexItems = (mangaDexJson.data || []).slice(0, 12).map((manga: any) => normalizeMangaDexHomeItem(manga))
+
+      sections.push({ title: s.title, items: mangaDexItems })
     } catch (err) {
       console.error(`Error fetching section ${s.title}:`, err)
       sections.push({ title: s.title, items: [] })

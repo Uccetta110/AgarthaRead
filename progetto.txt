@@ -60,12 +60,17 @@ AgarthaRead/
 │  │  │  │  ├─ books/
 │  │  │  │  │  ├─ index.vue                 # catalogo
 │  │  │  │  │  └─ [id].vue                  # dettaglio/lettura
-│  │  │  │  ├─ library/index.vue            # libri salvati/acquistati
 │  │  │  │  ├─ comics/index.vue             # fumetti
+│  │  │  │  ├─ comics/[id].vue              # dettaglio/lettura fumetto
 │  │  │  │  ├─ manga/index.vue              # manga
+│  │  │  │  ├─ manga/[id].vue               # dettaglio/lettura manga
 │  │  │  │  ├─ newspapers/index.vue         # giornali
+│  │  │  │  ├─ newspapers/[id].vue          # dettaglio/lettura giornale
 │  │  │  │  └─ profile/index.vue
 │  │  │  ├─ components/
+│  │  │  │  ├─ ItemCarousel.vue            # carousel oggetti con NuxtLink
+│  │  │  │  ├─ ItemCard.vue
+│  │  │  │  └─ ObjectCard.vue              # singolo item nella carousel
 │  │  │  ├─ layouts/
 │  │  │  ├─ middleware/
 │  │  │  │  └─ auth.ts                      # protezione pagine interne
@@ -132,6 +137,13 @@ AgarthaRead/
 ├─ package.json
 └─ README.md
 
+Navigazione oggetti / pagina dinamica:
+- `app/components/ItemCarousel.vue`: carousel che mostra gli item e usa `<NuxtLink :to="...">` per andare alla pagina dell'oggetto.
+- `app/pages/books/[id].vue`: pagina dinamica per il dettaglio del libro con `params.id`.
+- `app/pages/comics/[id].vue`, `app/pages/manga/[id].vue`, `app/pages/newspapers/[id].vue`: pagine dinamiche per le altre tipologie.
+- `app/server/api/books/[id].get.ts`: endpoint per leggere i dati del singolo oggetto.
+- Comportamento atteso: click su item carousel → route dinamica `/${tipo}/${id}` → dettaglio oggetto.
+
 Note operative (MVP):
 - PostBack (richiesta prof): endpoint login/register in server routes con validazione e risposta sulla stessa rotta.
 - Sessioni/Cookie: cookie HttpOnly + SameSite, salvataggio sessione in tabella sessions.
@@ -145,7 +157,7 @@ Categoria	API	                                Costo                       Serve 
 Libri	    Open Library	                    Gratis	                    ricerca, autori, ISBN, copertine	                rate limit, non pensata come backend ad alto traffico
 Libri	    Gutendex	                        Gratis	                    testo completo dei libri di Project Gutenberg	    solo pubblico dominio; per uso lungo meglio self-host
 Libri	    Google Books	                    Gratis con API key	        catalogo più ampio, preview, copertine	            non dà il testo completo
-Manga	    MangaDex	                        Gratis e pubblica	        manga, capitoli, cover	                            policy molto restrittiva: no ads e no servizi a pagamento
+Manga	    MangaDex	                        Gratis e pubblica	        manga, capitoli, cover	                            credit obbligatorio e niente ads/servizi a pagamento
 News	    GDELT	                            Gratis e open data	        news globali, ricerca multilingua, aggregazione	    meglio per aggregare che per avere il testo completo di una testata
 News	    The Guardian Open Platform	        Gratis con developer key	article text, tag, sezioni	                        non commerciale, 500 richieste al giorno
 News	    NewsAPI	                            Gratis solo per dev/test	headline e ricerca rapida articoli	                100 richieste al giorno, ritardo di 24 ore, niente full article content
@@ -160,8 +172,7 @@ progetto DEV/TEST — Google Books va bene anche senza testo completo
 
 API per i manga:
 documentazione:
-        Jikan (consigliato): https://docs.api.jikan.moe/
-        MangaDex (potenziale, ma soggetto a blocchi): https://api.mangadex.org/docs/
+    MangaDex (capitoli e lettura): https://api.mangadex.org/docs/
 
 API per news/giornali:
 documentazione:
@@ -171,14 +182,17 @@ documentazione:
 ---
 Dettagli pratici per integrazione (richiami, formato risposta, errori)
 
-- Jikan (Manga)
-    - Base URL: https://api.jikan.moe/v4
-    - Come chiamare: GET /manga?q=<term>&page=<n>&limit=<n>
-        Esempio: GET https://api.jikan.moe/v4/manga?q=naruto&limit=20
-    - Forma risposta: JSON con `data` (array di risorse) e `pagination`.
-        Esempio ridotto: {"data":[{"mal_id":1,"title":"...","type":"Manga"}],"pagination":{"last_visible_page":5}}
+- MangaDex (Manga)
+    - Base URL: https://api.mangadex.org
+    - Come chiamare: GET /manga?title=<term>&includes[]=author&includes[]=artist&includes[]=cover_art
+        Esempio: https://api.mangadex.org/manga?title=one%20piece&includes[]=author&includes[]=artist&includes[]=cover_art
+    - Forma risposta: JSON con `data` (array di risorse), `pagination`, `attributes` e `relationships`.
+        Esempio ridotto: {"data":[{"id":"...","attributes":{"title":{"en":"..."}}}],"pagination":{"total":5}}
+    - Feed capitoli: GET /manga/{id}/feed?translatedLanguage[]=it&translatedLanguage[]=en&order[chapter]=asc
+    - Lettura pagine: GET /at-home/server/{chapterId}
+    - Cover: https://uploads.mangadex.org/covers/:manga-id/:cover-filename.512.jpg
     - Errori comuni: 400 Bad Request, 404 Not Found, 429 Too Many Requests, 500 Server Error.
-    - Note: solo GET (read-only). Rate-limit: ~3 req/sec, 60 req/min. Risposte cacheate 24h; supporta ETag/If-None-Match.
+    - Note: API pubblica e gratuita; credit obbligatorio a MangaDex e ai gruppi scanlation; niente ads o servizi a pagamento.
 
 - Open Library (Books metadata)
     - Base URL: https://openlibrary.org
@@ -237,3 +251,167 @@ ruoli (role):
 ---
 OPERE
 le opere create dagli autori interni al sito saranno quelle inserite nel database. le opere prese dalle API e quelle del database sono di tipo diverso. le opere interne al database sono "Opere interne", avranno una sezione diversa. 
+
+---
+PAGINA SINGOLA DEGLI ELEMENTI
+
+Obiettivo della pagina:
+- click su un item della carousel -> route dinamica `/${tipo}/${id}`
+- lettura dei dati tramite endpoint server-side Nuxt
+- rendering della scheda oggetto con contenuti diversi in base al tipo
+
+Flusso comune:
+1. Il componente `ItemCarousel.vue` invia l'`id` e il `tipo` del contenuto.
+2. La pagina dinamica `[id].vue` legge `route.params.id`.
+3. La pagina chiama la server route corretta, per esempio `/api/books/[id]` o l'equivalente per manga/comics/news.
+4. La server route normalizza la risposta dell'API esterna o del DB in un formato unico.
+5. La pagina mostra cover, metadati, descrizione, azioni e contenuti correlati.
+
+Oggetto normalizzato comune:
+- `id`: identificativo interno o esterno
+- `type`: `book`, `comic`, `manga`, `news`
+- `source`: `db`, `openlibrary`, `googlebooks`, `gutendex`, `mangadex`, `guardian`, `gdelt`
+- `title`
+- `subtitle`
+- `authors`
+- `description`
+- `coverUrl`
+- `contentUrl`
+- `language`
+- `publishedAt`
+- `tags`
+- `rating`
+- `price`
+- `isFree`
+- `isSaved`
+- `isPurchased`
+- `commentsCount`
+
+STRUTTURA API E PAGINA
+
+1. LIBRI
+
+API preferite: Open Library, Google Books, Gutendex.
+
+Open Library
+- Request: `GET /search.json?q=<term>` oppure `GET /works/<key>.json`
+- Input principale: testo di ricerca, `key` dell'opera, eventuale pagina
+- Response: `numFound`, `docs[]` o record singolo con titolo, autori, ISBN, copertina, soggetto, anno
+- Uso nel sito: ricerca catalogo, metadati, copertine, link alla scheda libro
+- Pagina dettaglio: hero con copertina, autore, anno, generi, sinossi, pulsanti salva/acquista/leggi, sezione libri simili
+
+Google Books
+- Request: `GET /volumes?q=<term>&key=<API_KEY>` oppure `GET /volumes/<id>`
+- Input principale: query di ricerca, id volume, filtri facoltativi
+- Response: `totalItems`, `items[]`, `volumeInfo`, `accessInfo`, `imageLinks`
+- Uso nel sito: catalogo ricco, preview, copertine, stato di accesso al volume
+- Pagina dettaglio: blocco preview, metadati completi, badge `preview`, pulsante apri anteprima, commenti, salvataggio
+
+Gutendex
+- Request: `GET /books?search=<term>&page=<n>` oppure `GET /books/<id>`
+- Input principale: termine di ricerca, pagina, id libro
+- Response: `count`, `next`, `previous`, `results[]`, con titolo, autori, formati, testo in pubblico dominio
+- Uso nel sito: libri gratuiti e leggibili integralmente
+- Pagina dettaglio: evidenza del testo completo, pulsante leggi ora, formati disponibili, download, capitoli o sezioni
+
+Server route suggerita per i libri
+- `/api/books/index.get.ts`: ricerca e lista catalogo
+- `/api/books/[id].get.ts`: dettaglio singolo libro
+- `/api/books/[id]/comments.post.ts`: nuovo commento
+
+2. MANGA
+
+API consigliata: MangaDex.
+I manga sono divisi in capitoli, quindi la pagina principale è il Manga con la lista dei capitoli; il reader può aprire il capitolo interno oppure rimandare alla fonte esterna.
+
+MangaDex
+- Request: `GET /manga?title=<term>&limit=<n>` oppure `GET /manga/<id>`
+- Input principale: titolo, filtri, pagina, id MangaDex
+- Response: `data[]`, `pagination`, `relationships`, con titolo, copertina, synopsis, generi, autori, stato e ultimo capitolo
+- Feed capitoli: `GET /manga/<id>/feed?translatedLanguage[]=it&translatedLanguage[]=en&order[chapter]=asc`
+- Input principale feed: lingua, ordine capitoli, paginazione
+- Response feed: `data[]` con `chapter`, `volume`, `translatedLanguage`, `publishAt`, `pages`
+- Download pagine: `GET /at-home/server/<chapterId>` per ottenere baseUrl, hash e immagini
+- Uso nel sito: fonte principale per schede manga, capitoli, lettura e reader
+- Pagina dettaglio: copertina, metadati, capitoli, lingua, lettura progressiva, link al reader
+
+Server route suggerita per i manga
+- `/api/manga/index.get.ts`: ricerca e lista catalogo
+- `/api/manga/[id].get.ts`: dettaglio singolo manga
+- `/api/manga/[id]/comments.post.ts`: nuovo commento
+
+3. COMICS
+
+Fonte prevista: database interno o API esterna da decidere in base alla disponibilità.
+
+Request
+- Se interno: `GET /api/comics/index.get.ts` con filtri `page`, `genre`, `search`
+- Se esterno: stessa logica di proxy e normalizzazione del resto del progetto
+
+Response
+- array con `title`, `coverUrl`, `chapters`, `language`, `description`, `status`, `type`
+
+Uso nel sito
+- catalogo a griglia con copertine
+- pagina dettaglio orientata alla lettura di immagini o capitoli
+
+Pagina dettaglio comics
+- cover e titolo in alto
+- lettore immagini o capitoli sequenziali
+- box info con autore, genere, stato, numero tavole
+- azioni: salva, compra, commenta, continua la lettura
+
+Server route suggerita per i comics
+- `/api/comics/index.get.ts`
+- `/api/comics/[id].get.ts`
+- `/api/comics/[id]/comments.post.ts`
+
+4. GIORNALI E NEWS
+
+API possibili: The Guardian Open Platform, GDELT.
+
+The Guardian Open Platform
+- Request: `GET /search?q=<term>&api-key=<KEY>&show-fields=thumbnail,trailText,body`
+- Input principale: parola chiave, sezione, data, paginazione
+- Response: `response.status`, `response.results[]`, con titolo, URL, estratto, immagine, corpo articolo
+- Uso nel sito: news leggibili, ricerca per argomento, articoli completi dove permesso
+- Pagina dettaglio: titolo, fonte, data, immagine, sommario, corpo articolo, link originale, salvataggio
+
+GDELT
+- Request: query su endpoint di sintesi o pipeline interna, non come singolo articolo classico
+- Input principale: argomento, lingua, finestra temporale, area geografica
+- Response: dataset aggregato, eventi, articoli correlati, trend e fonte
+- Uso nel sito: sezione giornali più orientata a raccolta e trend che a lettura articolo per articolo
+- Pagina dettaglio: riepilogo, correlazioni, articoli collegati, fonte di provenienza
+
+Server route suggerita per i giornali
+- `/api/news/index.get.ts`
+- `/api/news/[id].get.ts`
+- `/api/news/[id]/comments.post.ts`
+
+STRUTTURA UI DELLA PAGINA DETTAGLIO
+
+Sezioni comuni:
+- header con breadcrumb e categoria
+- hero con cover/immagine principale
+- colonna sinistra con preview o lettore
+- colonna destra con metadata e azioni
+- tab o sezioni per descrizione, capitoli, commenti, correlati
+
+Comportamento responsive:
+- desktop: layout a due colonne
+- mobile: hero in alto, azioni sotto, lettore a tutta larghezza
+- la carousel deve sempre rimandare alla pagina dettaglio dello stesso tipo di contenuto
+
+Componenti utili:
+- `ObjectHeader.vue`: titolo, autore, badge, rating
+- `ObjectActions.vue`: salva, acquista, leggi, condividi
+- `ObjectMetadata.vue`: anno, genere, lingua, stato, source
+- `ObjectReader.vue`: area lettura o preview
+- `RelatedItems.vue`: contenuti simili
+- `CommentsPanel.vue`: commenti live via Socket.IO
+
+Regola di progetto:
+- tutte le API esterne vengono passate da server routes Nuxt
+- la pagina non parla mai direttamente con l'API esterna
+- ogni risposta viene normalizzata nello stesso formato, così la UI resta uguale per libri, manga, comics e news

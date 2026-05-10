@@ -11,14 +11,25 @@
 
       <div class="w-full justify-self-center">
         <label for="header-search" class="sr-only">Cerca</label>
-        <input
-          id="header-search"
-          type="text"
-          placeholder="Cerca libri, manga, giornali..."
-          @input="handleInput"
-          @keydown="handleKeyDown"
-          class="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-        />
+        <div class="flex w-full items-stretch">
+          <select
+            v-model="searchScope"
+            aria-label="Tipo di ricerca"
+            class="rounded-l-md border border-gray-300 bg-white px-3 text-sm text-gray-700 focus:border-blue-500 focus:outline-none"
+          >
+            <option value="books">Libri</option>
+            <option value="manga">Manga</option>
+            <option value="news">News</option>
+          </select>
+          <input
+            id="header-search"
+            type="text"
+            placeholder="Cerca libri, manga, giornali..."
+            @input="handleInput"
+            @keydown="handleKeyDown"
+            class="w-full rounded-r-md border border-l-0 border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+          />
+        </div>
       </div>
 
       <nav class="flex justify-self-end items-center gap-4 pr-2">
@@ -66,11 +77,29 @@
 import { ref, watch, computed, onMounted } from 'vue'
 import { getAvatarUrl, defaultAvatarUrl } from '~/composables/useAvatar'
 
+const route = useRoute()
 const authUser = useAuthUser()
 const username = computed(() => authUser.value?.username)
 const avatarSrc = ref<string>(defaultAvatarUrl)
+const searchScope = ref('books')
 const avatarDir = computed<string>(() => getAvatarUrl(authUser.value?.avatar_dir))
 
+function updateSearchScopeFromRoute() {
+  if (route.path.startsWith('/books')) {
+    searchScope.value = 'books'
+  } else if (route.path.startsWith('/mangas')) {
+    searchScope.value = 'manga'
+  } else if (route.path.startsWith('/newspapers') || route.path.startsWith('/news')) {
+    searchScope.value = 'news'
+  } else if (route.path.startsWith('/search')) {
+    const type = String(route.query.type || '').toLowerCase()
+    if (['books', 'manga', 'news'].includes(type)) {
+      searchScope.value = type as 'books' | 'manga' | 'news'
+    }
+  }
+}
+
+watch(route, updateSearchScopeFromRoute, { immediate: true, deep: true })
 watch(avatarDir, (value) => {
   avatarSrc.value = value
 }, { immediate: true })
@@ -107,7 +136,7 @@ function handleKeyDown(event: KeyboardEvent) {
   if (!input) return;
   const query = sanitizeInput(input.value).trim();
   if (query) {
-    window.location.href = `search?q=${encodeURIComponent(query)}`;
+    window.location.href = `/search?q=${encodeURIComponent(query)}&type=${encodeURIComponent(searchScope.value)}`;
   }
 }
 onMounted(() => {

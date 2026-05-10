@@ -7,7 +7,7 @@
 
     <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
       <div v-for="section in sections" :key="section.title">
-        <CarouselItems :items="section.items">
+        <CarouselItems type="mangas" :items="section.items">
           <template #title>{{ section.title }}</template>
         </CarouselItems>
       </div>

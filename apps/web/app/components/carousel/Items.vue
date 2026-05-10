@@ -7,6 +7,12 @@ const props = defineProps({
   type: { type: String as PropType<string>, required: false },
   items: { type: Array as PropType<any[]>, default: () => [] }
 })
+
+const itemRoute = (item: any) => {
+  const typePath = props.type || item.type || 'books'
+  const itemId = item.id ?? item.key ?? item.title ?? ''
+  return `/${typePath}/${encodeURIComponent(String(itemId))}`
+}
 </script>
 
 <template>
@@ -18,6 +24,14 @@ const props = defineProps({
       <slot name="more" />
     </template>
 
-    <ItemCard v-for="i of items" :key="i.id" :item="i" class="flex-shrink-0 w-48 md:w-56 lg:w-64" />
+    <NuxtLink
+      v-for="item of items"
+      :key="item.id ?? item.key ?? item.title"
+      :to="itemRoute(item)"
+      class="flex-shrink-0 w-48 md:w-56 lg:w-64 block"
+      :aria-label="`Apri ${item.title}`"
+    >
+      <ItemCard :item="item" />
+    </NuxtLink>
   </CarouselBase>
 </template>
