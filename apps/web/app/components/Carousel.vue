@@ -12,8 +12,15 @@
         ›
       </button>
 
-      <div ref="scroller" class="overflow-x-auto no-scrollbar py-2 px-6">
-        <div class="flex space-x-4">
+      <div
+        ref="scroller"
+        class="overflow-x-auto no-scrollbar py-2 px-6 snap-x snap-mandatory scroll-smooth"
+        tabindex="0"
+        role="region"
+        :aria-label="title ? `${title} carousel` : 'carousel'"
+        @keydown="onKeydown"
+      >
+        <div class="flex space-x-4 carousel-content">
           <slot />
         </div>
       </div>
@@ -22,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 
 const props = defineProps({ title: { type: String, default: '' } })
 const scroller = ref(null)
@@ -58,15 +65,39 @@ function scrollNext() {
   scrollByAmount(amt)
 }
 
+function onKeydown(e) {
+  if (!scroller.value) return
+  if (e.key === 'ArrowLeft') {
+    e.preventDefault()
+    scrollPrev()
+  } else if (e.key === 'ArrowRight') {
+    e.preventDefault()
+    scrollNext()
+  } else if (e.key === 'Home') {
+    scroller.value.scrollLeft = 0
+    updateButtons()
+  } else if (e.key === 'End') {
+    scroller.value.scrollLeft = scroller.value.scrollWidth
+    updateButtons()
+  }
+}
+
 onMounted(() => {
   const el = scroller.value
   if (!el) return
   el.addEventListener('scroll', updateButtons, { passive: true })
   updateButtons()
 })
+
+onBeforeUnmount(() => {
+  const el = scroller.value
+  if (!el) return
+  el.removeEventListener('scroll', updateButtons)
+})
 </script>
 
 <style scoped>
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.carousel-content > * { scroll-snap-align: start; scroll-snap-stop: normal; flex: 0 0 auto; }
 </style>

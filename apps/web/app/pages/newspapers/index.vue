@@ -8,9 +8,9 @@
 
     <div v-else class="mt-6 space-y-6">
       <div v-for="section in sections" :key="section.title">
-        <Carousel :title="section.title">
-          <ItemCard v-for="item in section.items" :key="item.id" :item="item" />
-        </Carousel>
+        <CarouselItems :items="section.items">
+          <template #title>{{ section.title }}</template>
+        </CarouselItems>
       </div>
     </div>
   </section>
@@ -18,8 +18,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import Carousel from '../../components/Carousel.vue'
-import ItemCard from '../../components/ItemCard.vue'
+import CarouselItems from '../../components/carousel/Items.vue'
 
 const { data, error } = useFetch('/api/news/home', { server: false })
 const sections = computed(() => data.value?.sections || [])
