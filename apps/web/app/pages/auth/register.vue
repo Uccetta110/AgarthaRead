@@ -90,6 +90,9 @@ type RegisterResponse = {
     username: string
     email: string
     avatar_dir: string
+    email_verified_at?: string | null
+    two_factor_method?: 'none' | 'email' | 'totp'
+    totp_enabled_at?: string | null
   }
 }
 
@@ -110,7 +113,7 @@ async function onSubmit() {
     })
 
     authUser.value = response.user
-    await navigateTo('/')
+    await navigateTo('/profile/settings')
   } catch (err: unknown) {
     const message = getErrorMessage(err)
     errorMessage.value = message

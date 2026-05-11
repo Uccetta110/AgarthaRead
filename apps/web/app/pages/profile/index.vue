@@ -14,6 +14,16 @@ watch(avatarDir, (value) => {
 function onAvatarError() {
   avatarSrc.value = defaultAvatarUrl
 }
+
+async function logout() {
+  await $fetch('/api/auth/logout', {
+    method: 'POST',
+    credentials: 'include',
+  })
+
+  authUser.value = null
+  await navigateTo('/auth/login')
+}
 </script>
 <template>
   <div>
@@ -33,6 +43,20 @@ function onAvatarError() {
         />
     <!-- Username in grande -->
     <h1 class="text-2xl font-bold">{{ username }}</h1>
+    <button
+      type="button"
+      class="rounded-md border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50"
+      @click="$router.push('/profile/settings')"
+    >
+      Impostazioni
+    </button>
+    <button
+      type="button"
+      class="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+      @click="logout"
+    >
+      Logout
+    </button>
     </div>
   </div>
 </template>

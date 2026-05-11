@@ -35,7 +35,7 @@
       <nav class="flex justify-self-end items-center gap-4 pr-2">
         <!-- Avatar -->
         <img
-                  v-if="username"
+          v-if="username"
           :src="avatarSrc"
           alt="Avatar"
           width="80"
@@ -57,12 +57,14 @@
           >Home</NuxtLink
         >
         <NuxtLink
+          v-if="!username"
           id="login-link"
           to="/auth/login"
           class="text-sm text-gray-200 hover:text-white"
           >Login</NuxtLink
         >
         <NuxtLink
+          v-if="!username"
           id="register-link"
           to="/auth/register"
           class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100"
@@ -74,38 +76,47 @@
   </header>
 </template>
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
-import { getAvatarUrl, defaultAvatarUrl } from '~/composables/useAvatar'
+import { ref, watch, computed, onMounted } from "vue";
+import { getAvatarUrl, defaultAvatarUrl } from "~/composables/useAvatar";
 
-const route = useRoute()
-const authUser = useAuthUser()
-const username = computed(() => authUser.value?.username)
-const avatarSrc = ref<string>(defaultAvatarUrl)
-const searchScope = ref('books')
-const avatarDir = computed<string>(() => getAvatarUrl(authUser.value?.avatar_dir))
+const route = useRoute();
+const authUser = useAuthUser();
+const username = computed(() => authUser.value?.username);
+const avatarSrc = ref<string>(defaultAvatarUrl);
+const searchScope = ref("books");
+const avatarDir = computed<string>(() =>
+  getAvatarUrl(authUser.value?.avatar_dir),
+);
 
 function updateSearchScopeFromRoute() {
-  if (route.path.startsWith('/books')) {
-    searchScope.value = 'books'
-  } else if (route.path.startsWith('/mangas')) {
-    searchScope.value = 'manga'
-  } else if (route.path.startsWith('/newspapers') || route.path.startsWith('/news')) {
-    searchScope.value = 'news'
-  } else if (route.path.startsWith('/search')) {
-    const type = String(route.query.type || '').toLowerCase()
-    if (['books', 'manga', 'news'].includes(type)) {
-      searchScope.value = type as 'books' | 'manga' | 'news'
+  if (route.path.startsWith("/books")) {
+    searchScope.value = "books";
+  } else if (route.path.startsWith("/mangas")) {
+    searchScope.value = "manga";
+  } else if (
+    route.path.startsWith("/newspapers") ||
+    route.path.startsWith("/news")
+  ) {
+    searchScope.value = "news";
+  } else if (route.path.startsWith("/search")) {
+    const type = String(route.query.type || "").toLowerCase();
+    if (["books", "manga", "news"].includes(type)) {
+      searchScope.value = type as "books" | "manga" | "news";
     }
   }
 }
 
-watch(route, updateSearchScopeFromRoute, { immediate: true, deep: true })
-watch(avatarDir, (value) => {
-  avatarSrc.value = value
-}, { immediate: true })
+watch(route, updateSearchScopeFromRoute, { immediate: true, deep: true });
+watch(
+  avatarDir,
+  (value) => {
+    avatarSrc.value = value;
+  },
+  { immediate: true },
+);
 
 function onAvatarError() {
-  avatarSrc.value = defaultAvatarUrl
+  avatarSrc.value = defaultAvatarUrl;
 }
 
 function sanitizeInput(input: string): string {
@@ -140,21 +151,12 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 }
 onMounted(() => {
-  const header = document.querySelector('header') as HTMLElement | null
+  const header = document.querySelector("header") as HTMLElement | null;
   if (header) {
-    document.documentElement.style.setProperty('--app-header-height', `${header.offsetHeight}px`)
+    document.documentElement.style.setProperty(
+      "--app-header-height",
+      `${header.offsetHeight}px`,
+    );
   }
-
-  if (sessionStorage.getItem('username')) {
-    const username = sessionStorage.getItem('username');
-    console.log("Username in session:", username);
-    const loginLink = document.getElementById('login-link');
-    const registerLink = document.getElementById('register-link');
-    if (loginLink) loginLink.classList.add('hidden');
-    if (registerLink) registerLink.classList.add('hidden');
-  } else {
-    console.log("No username in session");
-  }
-  // prova a prendere l'avatarImg da assets/images/avatar/+avatarDir
 });
 </script>

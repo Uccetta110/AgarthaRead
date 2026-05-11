@@ -1,8 +1,10 @@
 import bcrypt from 'bcryptjs'
 import crypto from 'node:crypto'
-import { eq, or } from 'drizzle-orm'
+import { and, eq, isNull, or } from 'drizzle-orm'
 import { getDb } from '../../db/client'
-import { users, userSessions } from '../../db/schema'
+import { authChallenges, users, userSessions } from '../../db/schema'
+import { sendEmail } from '../../utils/email'
+import { generateOtp, generateToken, hashValue } from '../../utils/otp'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{
@@ -65,7 +67,15 @@ export default defineEventHandler(async (event) => {
   })
 
   const userResult = await db
-    .select({ id: users.id, username: users.username, email: users.email, avatarDir: users.avatarDir })
+    .select({
+      id: users.id,
+      username: users.username,
+      email: users.email,
+      avatarDir: users.avatarDir,
+      emailVerifiedAt: users.emailVerifiedAt,
+      twoFactorMethod: users.twoFactorMethod,
+      totpEnabledAt: users.totpEnabledAt
+    })
     .from(users)
     .where(eq(users.email, email))
     .limit(1)
@@ -80,7 +90,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const sessionToken = crypto.randomBytes(32).toString('hex')
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  const sessionExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
   await db.insert(userSessions).values({
     userId: user.id,
@@ -88,7 +98,7 @@ export default defineEventHandler(async (event) => {
     ip: getRequestIP(event, { xForwardedFor: true }) || '0.0.0.0',
     userAgent: getHeader(event, 'user-agent') || 'unknown',
     deviceLabel: 'web',
-    expiresAt
+    expiresAt: sessionExpiresAt
   })
 
   setCookie(event, 'session_token', sessionToken, {
@@ -96,8 +106,37 @@ export default defineEventHandler(async (event) => {
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
     path: '/',
-    expires: expiresAt,
+    expires: sessionExpiresAt,
     maxAge: 7 * 24 * 60 * 60
+  })
+
+  await db
+    .delete(authChallenges)
+    .where(
+      and(
+        eq(authChallenges.userId, user.id),
+        eq(authChallenges.purpose, 'email_verify'),
+        isNull(authChallenges.consumedAt)
+      )
+    )
+
+  const otpCode = generateOtp()
+  const challengeToken = generateToken()
+  const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000)
+
+  await db.insert(authChallenges).values({
+    userId: user.id,
+    purpose: 'email_verify',
+    channel: 'email',
+    challengeTokenHash: hashValue(challengeToken),
+    otpCodeHash: hashValue(otpCode),
+    expiresAt: otpExpiresAt
+  })
+
+  await sendEmail({
+    to: user.email,
+    subject: 'Verifica la tua email AgarthaRead',
+    text: `Il tuo codice di verifica è: ${otpCode}`,
   })
 
   return {
@@ -106,7 +145,10 @@ export default defineEventHandler(async (event) => {
       id: user.id,
       username: user.username,
       email: user.email,
-      avatar_dir: user.avatarDir
+      avatar_dir: user.avatarDir,
+      email_verified_at: user.emailVerifiedAt,
+      two_factor_method: user.twoFactorMethod,
+      totp_enabled_at: user.totpEnabledAt
     }
   }
 })

@@ -25,7 +25,10 @@
     "drizzle-orm": "^0.45.1",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.19.1",
+    "nodemailer": "^8.0.7",
     "nuxt": "^4.4.4",
+    "otpauth": "^9.3.6",
+    "qrcode": "^1.5.4",
     "vue": "^3.5.28",
     "vue-router": "^4.6.4"
   },
@@ -37,6 +40,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
-    "@types/jsonwebtoken": "^9.0.10"
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/nodemailer": "^6.4.17"
   }
 }
