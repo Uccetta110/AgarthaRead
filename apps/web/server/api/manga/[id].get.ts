@@ -1,4 +1,8 @@
+import { getDb } from '../../db/client'
 import { getCache, setCache } from '../../utils/simpleCache'
+import { upsertExternalCatalogItem, incrementCatalogItemViews } from '../../utils/catalog'
+import { getItemEngagementState } from '../../utils/engagement'
+import { getSessionUser } from '../../utils/session'
 import {
   fetchMangaDexJson,
   normalizeMangaDexDetail
@@ -19,7 +23,37 @@ export default defineEventHandler(async (event) => {
   const decodedId = normalizePathId(paramsId)
   const cacheKey = `manga:detail:${decodedId}`
   const cached = getCache(cacheKey)
-  if (cached) return cached
+  if (cached) {
+    const payload = { ...cached }
+    const db = getDb()
+    const itemId = await upsertExternalCatalogItem(db, {
+      type: 'manga',
+      externalProvider: 'mangadex',
+      externalId: decodedId,
+      title: payload.title,
+      description: payload.description,
+      language: payload.language,
+      coverUrl: payload.coverUrl,
+      contentFormat: 'image_sequence'
+    })
+
+    await incrementCatalogItemViews(db, itemId)
+
+    const user = await getSessionUser(event)
+    const engagement = await getItemEngagementState(db, itemId, user?.id ?? null)
+
+    return {
+      ...payload,
+      internalId: itemId,
+      commentsCount: engagement.commentsCount,
+      likesCount: engagement.likesCount,
+      isLiked: engagement.isLiked,
+      isSaved: engagement.isSaved,
+      isPurchased: engagement.isPurchased,
+      canLike: engagement.canLike,
+      canComment: engagement.canComment
+    }
+  }
 
   const mangaDexParams = new URLSearchParams()
   mangaDexParams.append('includes[]', 'author')
@@ -62,7 +96,36 @@ export default defineEventHandler(async (event) => {
     }))
   }
 
-  const payload = normalizeMangaDexDetail(mangaDexData, chapters)
-  setCache(cacheKey, payload, 60 * 60 * 1000)
-  return payload
+  const basePayload = normalizeMangaDexDetail(mangaDexData, chapters)
+  setCache(cacheKey, basePayload, 60 * 60 * 1000)
+
+  const payload = { ...basePayload }
+  const db = getDb()
+  const itemId = await upsertExternalCatalogItem(db, {
+    type: 'manga',
+    externalProvider: 'mangadex',
+    externalId: decodedId,
+    title: payload.title,
+    description: payload.description,
+    language: payload.language,
+    coverUrl: payload.coverUrl,
+    contentFormat: 'image_sequence'
+  })
+
+  await incrementCatalogItemViews(db, itemId)
+
+  const user = await getSessionUser(event)
+  const engagement = await getItemEngagementState(db, itemId, user?.id ?? null)
+
+  return {
+    ...payload,
+    internalId: itemId,
+    commentsCount: engagement.commentsCount,
+    likesCount: engagement.likesCount,
+    isLiked: engagement.isLiked,
+    isSaved: engagement.isSaved,
+    isPurchased: engagement.isPurchased,
+    canLike: engagement.canLike,
+    canComment: engagement.canComment
+  }
 })

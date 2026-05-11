@@ -1,4 +1,8 @@
+import { getDb } from '../../db/client'
 import { getCache, setCache } from '../../utils/simpleCache'
+import { upsertExternalCatalogItem, incrementCatalogItemViews } from '../../utils/catalog'
+import { getItemEngagementState } from '../../utils/engagement'
+import { getSessionUser } from '../../utils/session'
 
 function normalizePathId(paramsId: string | string[]) {
   const rawId = Array.isArray(paramsId) ? paramsId.join('/') : String(paramsId || '')
@@ -10,7 +14,37 @@ export default defineEventHandler(async (event) => {
   const decodedId = normalizePathId(paramsId).replace(/^\/+/, '')
   const cacheKey = `news:detail:${decodedId}`
   const cached = getCache(cacheKey)
-  if (cached) return cached
+  if (cached) {
+    const payload = { ...cached }
+    const db = getDb()
+    const itemId = await upsertExternalCatalogItem(db, {
+      type: 'newspaper',
+      externalProvider: 'guardian',
+      externalId: decodedId,
+      title: payload.title,
+      description: payload.description,
+      language: payload.language,
+      coverUrl: payload.coverUrl,
+      contentFormat: 'html_like'
+    })
+
+    await incrementCatalogItemViews(db, itemId)
+
+    const user = await getSessionUser(event)
+    const engagement = await getItemEngagementState(db, itemId, user?.id ?? null)
+
+    return {
+      ...payload,
+      internalId: itemId,
+      commentsCount: engagement.commentsCount,
+      likesCount: engagement.likesCount,
+      isLiked: engagement.isLiked,
+      isSaved: engagement.isSaved,
+      isPurchased: engagement.isPurchased,
+      canLike: engagement.canLike,
+      canComment: engagement.canComment
+    }
+  }
 
   const key = process.env.GUARDIAN_KEY || null
   if (!key) {
@@ -36,7 +70,35 @@ export default defineEventHandler(async (event) => {
       bodyHtml: ''
     }
     setCache(cacheKey, payload, 5 * 60 * 1000)
-    return payload
+
+    const db = getDb()
+    const itemId = await upsertExternalCatalogItem(db, {
+      type: 'newspaper',
+      externalProvider: 'guardian',
+      externalId: decodedId,
+      title: payload.title,
+      description: payload.description,
+      language: payload.language,
+      coverUrl: payload.coverUrl,
+      contentFormat: 'html_like'
+    })
+
+    await incrementCatalogItemViews(db, itemId)
+
+    const user = await getSessionUser(event)
+    const engagement = await getItemEngagementState(db, itemId, user?.id ?? null)
+
+    return {
+      ...payload,
+      internalId: itemId,
+      commentsCount: engagement.commentsCount,
+      likesCount: engagement.likesCount,
+      isLiked: engagement.isLiked,
+      isSaved: engagement.isSaved,
+      isPurchased: engagement.isPurchased,
+      canLike: engagement.canLike,
+      canComment: engagement.canComment
+    }
   }
 
   const res = await fetch(`https://content.guardianapis.com/${encodeURIComponent(decodedId)}?api-key=${key}&show-fields=thumbnail,trailText,body,byline`)
@@ -70,5 +132,33 @@ export default defineEventHandler(async (event) => {
   }
 
   setCache(cacheKey, payload, 30 * 60 * 1000)
-  return payload
+
+  const db = getDb()
+  const itemId = await upsertExternalCatalogItem(db, {
+    type: 'newspaper',
+    externalProvider: 'guardian',
+    externalId: decodedId,
+    title: payload.title,
+    description: payload.description,
+    language: payload.language,
+    coverUrl: payload.coverUrl,
+    contentFormat: 'html_like'
+  })
+
+  await incrementCatalogItemViews(db, itemId)
+
+  const user = await getSessionUser(event)
+  const engagement = await getItemEngagementState(db, itemId, user?.id ?? null)
+
+  return {
+    ...payload,
+    internalId: itemId,
+    commentsCount: engagement.commentsCount,
+    likesCount: engagement.likesCount,
+    isLiked: engagement.isLiked,
+    isSaved: engagement.isSaved,
+    isPurchased: engagement.isPurchased,
+    canLike: engagement.canLike,
+    canComment: engagement.canComment
+  }
 })

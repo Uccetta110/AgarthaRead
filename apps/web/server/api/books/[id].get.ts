@@ -1,4 +1,8 @@
+import { getDb } from '../../db/client'
 import { getCache, setCache } from '../../utils/simpleCache'
+import { upsertExternalCatalogItem, incrementCatalogItemViews } from '../../utils/catalog'
+import { getItemEngagementState } from '../../utils/engagement'
+import { getSessionUser } from '../../utils/session'
 
 function normalizePathId(paramsId: string | string[]) {
   const rawId = Array.isArray(paramsId) ? paramsId.join('/') : String(paramsId || '')
@@ -27,44 +31,74 @@ export default defineEventHandler(async (event) => {
   const decodedId = normalizePathId(paramsId)
   const workKey = decodedId.startsWith('/works/') ? decodedId : `/works/${decodedId}`
   const cacheKey = `books:detail:${workKey}`
-  const cached = getCache(cacheKey)
-  if (cached) return cached
+  let basePayload = getCache(cacheKey)
 
-  const res = await fetch(`https://openlibrary.org${workKey}.json`)
-  if (!res.ok) {
-    throw createError({ statusCode: res.status, statusMessage: 'Open Library not available' })
+  if (!basePayload) {
+    const res = await fetch(`https://openlibrary.org${workKey}.json`)
+    if (!res.ok) {
+      throw createError({ statusCode: res.status, statusMessage: 'Open Library not available' })
+    }
+
+    const workData = await res.json()
+    const authors = await fetchAuthorNames(workData.authors || [])
+    const description = typeof workData.description === 'string'
+      ? workData.description
+      : workData.description?.value || ''
+    const coverUrl = workData.covers?.[0]
+      ? `https://covers.openlibrary.org/b/id/${workData.covers[0]}-L.jpg`
+      : null
+
+    basePayload = {
+      id: decodedId,
+      type: 'book',
+      source: 'openlibrary',
+      title: workData.title || 'Titolo non disponibile',
+      subtitle: workData.subtitle || '',
+      authors,
+      description,
+      coverUrl,
+      contentUrl: `https://openlibrary.org${workKey}`,
+      language: workData.languages?.[0]?.key?.replace('/languages/', '') || null,
+      publishedAt: workData.created?.value || workData.first_publish_date || null,
+      tags: workData.subjects || [],
+      rating: null,
+      price: null,
+      isFree: true,
+      isSaved: false,
+      isPurchased: false,
+      commentsCount: 0
+    }
+
+    setCache(cacheKey, basePayload, 24 * 60 * 60 * 1000)
   }
 
-  const workData = await res.json()
-  const authors = await fetchAuthorNames(workData.authors || [])
-  const description = typeof workData.description === 'string'
-    ? workData.description
-    : workData.description?.value || ''
-  const coverUrl = workData.covers?.[0]
-    ? `https://covers.openlibrary.org/b/id/${workData.covers[0]}-L.jpg`
-    : null
-
-  const payload = {
-    id: decodedId,
+  const payload = { ...basePayload }
+  const db = getDb()
+  const itemId = await upsertExternalCatalogItem(db, {
     type: 'book',
-    source: 'openlibrary',
-    title: workData.title || 'Titolo non disponibile',
-    subtitle: workData.subtitle || '',
-    authors,
-    description,
-    coverUrl,
-    contentUrl: `https://openlibrary.org${workKey}`,
-    language: workData.languages?.[0]?.key?.replace('/languages/', '') || null,
-    publishedAt: workData.created?.value || workData.first_publish_date || null,
-    tags: workData.subjects || [],
-    rating: null,
-    price: null,
-    isFree: true,
-    isSaved: false,
-    isPurchased: false,
-    commentsCount: 0
-  }
+    externalProvider: 'openlibrary',
+    externalId: workKey,
+    title: payload.title,
+    description: payload.description,
+    language: payload.language,
+    coverUrl: payload.coverUrl,
+    contentFormat: 'txt'
+  })
 
-  setCache(cacheKey, payload, 24 * 60 * 60 * 1000)
-  return payload
+  await incrementCatalogItemViews(db, itemId)
+
+  const user = await getSessionUser(event)
+  const engagement = await getItemEngagementState(db, itemId, user?.id ?? null)
+
+  return {
+    ...payload,
+    internalId: itemId,
+    commentsCount: engagement.commentsCount,
+    likesCount: engagement.likesCount,
+    isLiked: engagement.isLiked,
+    isSaved: engagement.isSaved,
+    isPurchased: engagement.isPurchased,
+    canLike: engagement.canLike,
+    canComment: engagement.canComment
+  }
 })
