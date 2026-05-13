@@ -2,10 +2,6 @@ import { getCache, setCache } from './simpleCache'
 
 const JIKAN_API_BASE = 'https://api.jikan.moe/v4/'
 
-// Jikan impone un rate-limit di ~3 req/s. Se riceviamo 429 aspettiamo
-// il tempo indicato da Retry-After (default 1 secondo) e riproviamo una volta.
-const JIKAN_RETRY_AFTER_DEFAULT_MS = 1000
-
 type JikanTitle = {
   type?: string
   title?: string
@@ -57,9 +53,11 @@ function pickTitle(manga: JikanManga) {
     manga.title_japanese,
     ...(manga.titles || []).map((entry) => entry.title)
   ]
+
   for (const value of candidates) {
     if (typeof value === 'string' && value.trim()) return value.trim()
   }
+
   return 'Titolo non disponibile'
 }
 
@@ -72,9 +70,11 @@ function pickImage(images?: JikanImages) {
     images?.webp?.small_image_url,
     images?.jpg?.small_image_url
   ]
+
   for (const value of variants) {
     if (typeof value === 'string' && value.trim()) return value.trim()
   }
+
   return null
 }
 
@@ -104,6 +104,7 @@ export function collectJikanTitles(manga: JikanManga) {
     manga.title_japanese,
     ...(manga.titles || []).map((entry) => entry.title)
   ]
+
   return Array.from(
     new Set(
       titles
@@ -168,42 +169,17 @@ export function normalizeJikanDetail(manga: JikanManga) {
   }
 }
 
-/**
- * Esegue una GET verso Jikan con supporto AbortSignal e retry automatico su 429.
- * Bug corretti rispetto all'originale:
- * - aggiunto parametro `signal` (mancava → nessun timeout possibile → 504)
- * - gestione 429 con Retry-After (prima lanciava createError subito → loop di 500)
- */
-export async function fetchJikanJson(
-  path: string,
-  params?: URLSearchParams,
-  signal?: AbortSignal
-): Promise<any> {
+export async function fetchJikanJson(path: string, params?: URLSearchParams) {
   const normalizedPath = String(path || '').replace(/^\/+/, '')
   const url = new URL(normalizedPath, JIKAN_API_BASE)
   if (params) url.search = params.toString()
 
-  const doFetch = () =>
-    fetch(url.toString(), {
-      headers: {
-        Accept: 'application/json',
-        'User-Agent': 'AgarthaRead/1.0'
-      },
-      signal
-    })
-
-  let response = await doFetch()
-
-  // Gestione rate-limit: aspetta Retry-After e riprova una sola volta
-  if (response.status === 429) {
-    const retryAfter = Number(response.headers.get('Retry-After') || '') * 1000
-    const waitMs = Number.isFinite(retryAfter) && retryAfter > 0
-      ? retryAfter
-      : JIKAN_RETRY_AFTER_DEFAULT_MS
-
-    await new Promise<void>((resolve) => setTimeout(resolve, waitMs))
-    response = await doFetch()
-  }
+  const response = await fetch(url.toString(), {
+    headers: {
+      Accept: 'application/json',
+      'User-Agent': 'AgarthaRead/1.0'
+    }
+  })
 
   if (!response.ok) {
     throw createError({
@@ -212,37 +188,27 @@ export async function fetchJikanJson(
     })
   }
 
-  return response.json()
+  return await response.json()
 }
 
-/**
- * Versione con cache e fallback di fetchJikanJson.
- * Bug corretti:
- * - la firma ora accetta `signal` come terzo parametro invece di `params`
- *   (in [id].get.ts veniva passato AbortSignal come terzo arg ma la firma
- *    originale aspettava URLSearchParams → il segnale veniva ignorato)
- * - il fallback viene usato solo se la chiave primaria è scaduta/assente
- */
 export async function fetchCachedJikanJson(
   cacheKey: string,
   path: string,
-  signal?: AbortSignal,
+  params?: URLSearchParams,
   ttlMs = 60 * 60 * 1000,
-  fallbackTtlMs = 6 * 60 * 60 * 1000,
-  params?: URLSearchParams
-): Promise<any> {
+  fallbackTtlMs = 6 * 60 * 60 * 1000
+) {
   const cached = getCache(cacheKey)
   if (cached) return cached
 
   const fallbackKey = `${cacheKey}:fallback`
 
   try {
-    const payload = await fetchJikanJson(path, params, signal)
+    const payload = await fetchJikanJson(path, params)
     setCache(cacheKey, payload, ttlMs)
     setCache(fallbackKey, payload, fallbackTtlMs)
     return payload
   } catch (error) {
-    // Se è un AbortError (timeout) proviamo comunque il fallback prima di rilanciare
     const fallback = getCache(fallbackKey)
     if (fallback) return fallback
     throw error
