@@ -415,3 +415,48 @@ Regola di progetto:
 - tutte le API esterne vengono passate da server routes Nuxt
 - la pagina non parla mai direttamente con l'API esterna
 - ogni risposta viene normalizzata nello stesso formato, così la UI resta uguale per libri, manga, comics e news
+
+---
+Inserimento oggetti da API nel database, Like, commenti, liste...
+Quando un utente apre la pagina di un oggetto, che sia Libro, Manga o News, questa viene inserita nel database coem catalog_items, source sarà ovviamente API ed external_provider da quale API viene presa ed external_id l'ID dell'oggetto dall'API. grazie a questo, i like e commenti (saranno tutti interni al sito) possono essere messi sia agli oggetti presi dalle API che a quelli interni al sito. 
+
+FLUSSO APPLICATIVO (OGGETTI API + LIKE/COMMENTI)
+
+1) Apertura pagina oggetto
+- Input pagina: type + external_id (se arriva da API esterna) oppure item_id interno.
+- Server route:
+    a) Se source=api: fetch API esterna.
+    b) Normalizza risposta nel formato comune.
+    c) Upsert catalog_items (chiave unica: type + source + external_provider + external_id).
+    d) Upsert catalog_item_translations per lingua (title/description).
+    e) Upsert item_media per cover/immagini.
+    f) views_count = views_count + 1.
+    g) Carica stato utente: isLiked, isSaved, isPurchased, canLike, canComment.
+    h) Risposta: item_id interno + oggetto normalizzato + flags.
+
+2) Like (toggle)
+- UI click sul cuore.
+- Se non loggato: login modal o redirect.
+- Backend: insert/delete su item_likes.
+- Se like = true: aggiunge anche in lista "Preferiti" (user_list_items).
+- Risposta: liked, likesCount, saved.
+
+3) Commenti
+- UI invio commento.
+- Backend: validazione + sanitizzazione input.
+- Permessi: canComment se reading_progress.percentage >= soglia (default 10%, configurabile).
+- Inserimento in comments.
+- Se Socket.IO attivo: broadcast nuovo commento alla pagina.
+
+UI LIKE
+- Bottone cuore con stato: off (contorno) / on (pieno).
+- Tooltip: "Aggiungi ai preferiti" / "Rimuovi dai preferiti".
+- Contatore like vicino al bottone.
+- Stato loading durante la request, update ottimistico con rollback su errore.
+
+UI COMMENTI
+- Header con conteggio commenti.
+- Form con textarea + bottone "Invia".
+- Lista commenti: avatar, username, badge ruolo, data, testo, rating (se usato).
+- Stato vuoto: "Nessun commento ancora".
+- Paginazione o "Carica altri".

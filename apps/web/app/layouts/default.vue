@@ -15,7 +15,7 @@ type SessionResponse = {
 
 const publicRoutes = ['/auth/login', '/auth/register']
 const route = useRoute()
-const isPublicRoute = publicRoutes.includes(route.path)
+const isPublicRoute = computed(() => publicRoutes.includes(route.path))
 
 const sessionResult = await useFetch<SessionResponse>('/api/auth/me', {
   method: 'POST',
@@ -23,21 +23,40 @@ const sessionResult = await useFetch<SessionResponse>('/api/auth/me', {
 })
 
 const sessionData = sessionResult?.data
-const isAuthenticated = !!sessionData?.value?.ok
 
-if (sessionData?.value?.ok) {
-  authUser.value = sessionData.value.user
-}
-
-if (isPublicRoute) {
-  if (isAuthenticated) {
-    await navigateTo('/')
-  }
-} else {
-  if (!isAuthenticated) {
-    await navigateTo('/auth/login')
+function syncAuthUser() {
+  if (sessionData?.value?.ok) {
+    authUser.value = sessionData.value.user
+  } else {
+    authUser.value = null
   }
 }
+
+syncAuthUser()
+
+const isAuthenticated = computed(() => !!authUser.value)
+
+async function enforceRouteAccess() {
+  if (isPublicRoute.value) {
+    if (isAuthenticated.value) {
+      await navigateTo('/')
+    }
+  } else {
+    if (!isAuthenticated.value) {
+      await navigateTo('/auth/login')
+    }
+  }
+}
+
+await enforceRouteAccess()
+
+watch(sessionData, () => {
+  syncAuthUser()
+})
+
+watch([isPublicRoute, isAuthenticated], () => {
+  enforceRouteAccess()
+})
 
 function openSidebar() {
   isSidebarOpen.value = true

@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import {
   bigint,
+  char,
   date,
   datetime,
   decimal,
@@ -15,7 +16,7 @@ import {
 } from "drizzle-orm/mysql-core";
 
 export const users = mysqlTable("users", {
-  id: int("id").autoincrement().primaryKey(),
+  id: int("id", { unsigned: true }).autoincrement().primaryKey(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   username: varchar("username", { length: 50 }).notNull().unique(),
   passwordHash: varchar("password_hash", { length: 255 }),
@@ -23,9 +24,15 @@ export const users = mysqlTable("users", {
   role: mysqlEnum("role", ["user", "admin", "author", "editor"])
     .notNull()
     .default("user"),
-  countryCode: varchar("country_code", { length: 2 }).notNull(),
+  countryCode: char("country_code", { length: 2 }).notNull(),
   birthDate: date("birth_date").notNull(),
   avatarDir: varchar("avatar_dir", { length: 255 }).default("1.png"),
+  emailVerifiedAt: datetime("email_verified_at", { mode: "date" }),
+  twoFactorMethod: mysqlEnum("two_factor_method", ["none", "email", "totp"])
+    .notNull()
+    .default("none"),
+  totpSecret: varchar("totp_secret", { length: 255 }),
+  totpEnabledAt: datetime("totp_enabled_at", { mode: "date" }),
   createdAt: datetime("created_at", { mode: "date" })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
@@ -37,7 +44,7 @@ export const users = mysqlTable("users", {
 export const userLanguages = mysqlTable(
   "user_languages",
   {
-    userId: int("user_id")
+    userId: int("user_id", { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     languageCode: varchar("language_code", { length: 10 }).notNull(),
@@ -46,8 +53,8 @@ export const userLanguages = mysqlTable(
 );
 
 export const userPreferences = mysqlTable("user_preferences", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("user_id")
+  id: int("id", { unsigned: true }).autoincrement().primaryKey(),
+  userId: int("user_id", { unsigned: true })
     .notNull()
     .unique()
     .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
@@ -62,8 +69,8 @@ export const userPreferences = mysqlTable("user_preferences", {
 export const userSessions = mysqlTable(
   "user_sessions",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    userId: int("user_id")
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    userId: int("user_id", { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     sessionToken: varchar("session_token", { length: 255 }).notNull().unique(),
@@ -84,15 +91,22 @@ export const userSessions = mysqlTable(
 export const authChallenges = mysqlTable(
   "auth_challenges",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    userId: int("user_id")
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    userId: int("user_id", { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-    purpose: mysqlEnum("purpose", ["login", "password_reset"]).notNull(),
-    channel: mysqlEnum("channel", ["email"]).notNull().default("email"),
+    purpose: mysqlEnum("purpose", [
+      "login",
+      "password_reset",
+      "email_verify",
+      "account_delete",
+    ]).notNull(),
+    channel: mysqlEnum("channel", ["email", "totp"]).notNull().default("email"),
     challengeTokenHash: varchar("challenge_token_hash", { length: 255 })
       .notNull()
       .unique(),
+    otpCodeHash: varchar("otp_code_hash", { length: 255 }),
+    attempts: int("attempts").notNull().default(0),
     expiresAt: datetime("expires_at", { mode: "date" }).notNull(),
     consumedAt: datetime("consumed_at", { mode: "date" }),
     createdAt: datetime("created_at", { mode: "date" })
@@ -106,19 +120,19 @@ export const authChallenges = mysqlTable(
 );
 
 export const publishers = mysqlTable("publishers", {
-  id: int("id").autoincrement().primaryKey(),
+  id: int("id", { unsigned: true }).autoincrement().primaryKey(),
   name: varchar("name", { length: 150 }).notNull().unique(),
 });
 
 export const catalogItems = mysqlTable(
   "catalog_items",
   {
-    id: int("id").autoincrement().primaryKey(),
+    id: int("id", { unsigned: true }).autoincrement().primaryKey(),
     type: mysqlEnum("type", ["book", "comic", "manga", "newspaper"]).notNull(),
     fulfillmentType: mysqlEnum("fulfillment_type", ["digital", "physical"])
       .notNull()
       .default("digital"),
-    publisherId: int("publisher_id").references(() => publishers.id, {
+    publisherId: int("publisher_id", { unsigned: true }).references(() => publishers.id, {
       onDelete: "set null",
       onUpdate: "cascade",
     }),
@@ -157,8 +171,8 @@ export const catalogItems = mysqlTable(
 export const catalogItemTranslations = mysqlTable(
   "catalog_item_translations",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    itemId: int("item_id")
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "cascade",
@@ -187,7 +201,7 @@ export const catalogItemTranslations = mysqlTable(
 export const series = mysqlTable(
   "series",
   {
-    id: int("id").autoincrement().primaryKey(),
+    id: int("id", { unsigned: true }).autoincrement().primaryKey(),
     name: varchar("name", { length: 255 }).notNull(),
     type: mysqlEnum("type", ["comic", "manga"]).notNull(),
   },
@@ -200,22 +214,22 @@ export const series = mysqlTable(
 export const seriesEntries = mysqlTable(
   "series_entries",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    seriesId: int("series_id")
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    seriesId: int("series_id", { unsigned: true })
       .notNull()
       .references(() => series.id, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    itemId: int("item_id")
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
     volumeNo: decimal("volume_no", { precision: 5, scale: 2 }),
-    chapterNo: int("chapter_no"),
-    entryOrder: int("entry_order").notNull(),
+    chapterNo: int("chapter_no", { unsigned: true }),
+    entryOrder: int("entry_order", { unsigned: true }).notNull(),
   },
   (table) => [
     uniqueIndex("uq_series_entries_series_item").on(
@@ -230,8 +244,8 @@ export const seriesEntries = mysqlTable(
 export const itemMedia = mysqlTable(
   "item_media",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    itemId: int("item_id")
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "cascade",
@@ -241,7 +255,7 @@ export const itemMedia = mysqlTable(
     mediaType: mysqlEnum("media_type", ["cover", "page", "image"]).notNull(),
     storagePath: varchar("storage_path", { length: 512 }).notNull(),
     mimeType: varchar("mime_type", { length: 100 }).notNull(),
-    sortOrder: int("sort_order").notNull().default(0),
+    sortOrder: int("sort_order", { unsigned: true }).notNull().default(0),
   },
   (table) => [
     index("idx_item_media_item_id").on(table.itemId),
@@ -252,7 +266,7 @@ export const itemMedia = mysqlTable(
 export const authors = mysqlTable(
   "authors",
   {
-    id: int("id").autoincrement().primaryKey(),
+    id: int("id", { unsigned: true }).autoincrement().primaryKey(),
     fullName: varchar("full_name", { length: 150 }).notNull(),
     role: varchar("role", { length: 60 }).notNull(),
   },
@@ -262,13 +276,13 @@ export const authors = mysqlTable(
 export const itemAuthors = mysqlTable(
   "item_authors",
   {
-    itemId: int("item_id")
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    authorId: int("author_id")
+    authorId: int("author_id", { unsigned: true })
       .notNull()
       .references(() => authors.id, {
         onDelete: "cascade",
@@ -282,20 +296,20 @@ export const itemAuthors = mysqlTable(
 );
 
 export const categories = mysqlTable("categories", {
-  id: int("id").autoincrement().primaryKey(),
+  id: int("id", { unsigned: true }).autoincrement().primaryKey(),
   name: varchar("name", { length: 100 }).notNull().unique(),
 });
 
 export const itemCategories = mysqlTable(
   "item_categories",
   {
-    itemId: int("item_id")
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    categoryId: int("category_id")
+    categoryId: int("category_id", { unsigned: true })
       .notNull()
       .references(() => categories.id, {
         onDelete: "cascade",
@@ -311,8 +325,8 @@ export const itemCategories = mysqlTable(
 export const userLists = mysqlTable(
   "user_lists",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    userId: int("user_id")
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    userId: int("user_id", { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     name: varchar("name", { length: 100 }).notNull(),
@@ -329,14 +343,14 @@ export const userLists = mysqlTable(
 export const userListItems = mysqlTable(
   "user_list_items",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    listId: bigint("list_id", { mode: "number" })
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    listId: bigint("list_id", { mode: "number", unsigned: true })
       .notNull()
       .references(() => userLists.id, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    itemId: int("item_id")
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "cascade",
@@ -355,11 +369,11 @@ export const userListItems = mysqlTable(
 export const libraryItems = mysqlTable(
   "library_items",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    userId: int("user_id")
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    userId: int("user_id", { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-    itemId: int("item_id")
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "cascade",
@@ -383,8 +397,8 @@ export const libraryItems = mysqlTable(
 export const orders = mysqlTable(
   "orders",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    userId: int("user_id")
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    userId: int("user_id", { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     status: mysqlEnum("status", ["pending", "paid", "failed", "cancelled"])
@@ -404,14 +418,14 @@ export const orders = mysqlTable(
 export const orderItems = mysqlTable(
   "order_items",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    orderId: bigint("order_id", { mode: "number" })
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    orderId: bigint("order_id", { mode: "number", unsigned: true })
       .notNull()
       .references(() => orders.id, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    itemId: int("item_id")
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "restrict",
@@ -429,8 +443,8 @@ export const orderItems = mysqlTable(
 export const payments = mysqlTable(
   "payments",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    orderId: bigint("order_id", { mode: "number" })
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    orderId: bigint("order_id", { mode: "number", unsigned: true })
       .notNull()
       .references(() => orders.id, {
         onDelete: "cascade",
@@ -450,7 +464,7 @@ export const payments = mysqlTable(
 );
 
 export const itemLicenses = mysqlTable("item_licenses", {
-  itemId: int("item_id")
+  itemId: int("item_id", { unsigned: true })
     .primaryKey()
     .references(() => catalogItems.id, {
       onDelete: "cascade",
@@ -465,11 +479,11 @@ export const itemLicenses = mysqlTable("item_licenses", {
 export const comments = mysqlTable(
   "comments",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    userId: int("user_id")
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    userId: int("user_id", { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-    itemId: int("item_id")
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "cascade",
@@ -493,10 +507,10 @@ export const comments = mysqlTable(
 export const itemLikes = mysqlTable(
   "item_likes",
   {
-    userId: int("user_id")
+    userId: int("user_id", { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-    itemId: int("item_id")
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "cascade",
@@ -515,11 +529,11 @@ export const itemLikes = mysqlTable(
 export const highlights = mysqlTable(
   "highlights",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    userId: int("user_id")
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    userId: int("user_id", { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-    itemId: int("item_id")
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "cascade",
@@ -540,11 +554,11 @@ export const highlights = mysqlTable(
 export const readingProgress = mysqlTable(
   "reading_progress",
   {
-    id: bigint("id", { mode: "number" }).autoincrement().primaryKey(),
-    userId: int("user_id")
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    userId: int("user_id", { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
-    itemId: int("item_id")
+    itemId: int("item_id", { unsigned: true })
       .notNull()
       .references(() => catalogItems.id, {
         onDelete: "cascade",

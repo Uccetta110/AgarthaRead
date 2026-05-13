@@ -3,11 +3,13 @@ import bcrypt from 'bcryptjs'
 // Importa il modulo crypto per generare token di sessione casuale e sicuro
 import crypto from 'node:crypto'
 // Importa i comparatori di Drizzle ORM per costruire query WHERE
-import { eq, or } from 'drizzle-orm'
+import { and, eq, isNull, or } from 'drizzle-orm'
 // Importa la funzione per ottenere l'istanza del database connesso
 import { getDb } from '../../db/client'
 // Importa le definizioni delle tabelle 'users' e 'userSessions' dallo schema
-import { users, userSessions } from '../../db/schema'
+import { authChallenges, users, userSessions } from '../../db/schema'
+import { sendEmail } from '../../utils/email'
+import { generateOtp, generateToken, hashValue } from '../../utils/otp'
 
 // Definisce il tipo di dati che ci aspettiamo nel corpo della richiesta POST
 type LoginBody = {
@@ -55,7 +57,7 @@ export default defineEventHandler(async (event) => {
   if (!user) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Credenziali non valide || user non esiste'
+      statusMessage: 'Credenziali non valide'
     })
   }
 
@@ -81,8 +83,54 @@ export default defineEventHandler(async (event) => {
 
   // Genera un token di sessione casuale e sicuro (32 byte = 64 caratteri esadecimali)
   // crypto.randomBytes() usa l'RNG crittografico del sistema operativo
+  let twoFactorMethod = user.twoFactorMethod ?? 'none'
+  if (twoFactorMethod === 'totp' && !user.totpSecret) {
+    twoFactorMethod = 'none'
+  }
+  if (twoFactorMethod !== 'none') {
+    await db
+      .delete(authChallenges)
+      .where(
+        and(
+          eq(authChallenges.userId, user.id),
+          eq(authChallenges.purpose, 'login'),
+          isNull(authChallenges.consumedAt)
+        )
+      )
+
+    const challengeToken = generateToken()
+    const challengeTokenHash = hashValue(challengeToken)
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
+    const otpCode = twoFactorMethod === 'email' ? generateOtp() : null
+    const otpCodeHash = otpCode ? hashValue(otpCode) : null
+
+    await db.insert(authChallenges).values({
+      userId: user.id,
+      purpose: 'login',
+      channel: twoFactorMethod === 'email' ? 'email' : 'totp',
+      challengeTokenHash,
+      otpCodeHash,
+      expiresAt,
+    })
+
+    if (otpCode) {
+      await sendEmail({
+        to: user.email,
+        subject: 'Codice di accesso AgarthaRead',
+        text: `Il tuo codice di accesso è: ${otpCode}`,
+      })
+    }
+
+    return {
+      ok: false,
+      requires2fa: true,
+      method: twoFactorMethod,
+      challengeToken,
+    }
+  }
+
   const sessionToken = crypto.randomBytes(32).toString('hex')
-  
+
   // Calcola la data di scadenza della sessione: 7 giorni da ora
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
@@ -118,7 +166,11 @@ export default defineEventHandler(async (event) => {
     user: {
       id: user.id,
       username: user.username,
-      email: user.email
+      email: user.email,
+      avatar_dir: user.avatarDir,
+      email_verified_at: user.emailVerifiedAt,
+      two_factor_method: user.twoFactorMethod,
+      totp_enabled_at: user.totpEnabledAt
     }
   }
 })

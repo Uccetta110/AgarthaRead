@@ -29,6 +29,12 @@
             <div class="mt-6 flex flex-wrap gap-3">
               <button class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">Salva</button>
               <button class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200">Acquista</button>
+              <LikeButton
+                :item-id="item.internalId || null"
+                :initial-liked="item.isLiked"
+                :initial-count="item.likesCount"
+                :can-like="item.canLike"
+              />
               <a v-if="item.contentUrl" :href="item.contentUrl" target="_blank" rel="noopener noreferrer" class="rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700">Vai alla fonte</a>
             </div>
           </div>
@@ -43,6 +49,13 @@
             <h2 class="text-xl font-semibold text-slate-900">Contenuto</h2>
             <div class="prose max-w-none mt-4 text-slate-700 whitespace-pre-wrap">{{ item.bodyHtml }}</div>
           </div>
+
+          <CommentsPanel
+            v-if="item.internalId"
+            :item-id="item.internalId"
+            :initial-count="item.commentsCount"
+            :can-comment="item.canComment"
+          />
         </div>
       </div>
     </div>
