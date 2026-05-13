@@ -1,7 +1,8 @@
 import { getCache, setCache } from './simpleCache'
 
-const MANGADEX_API_BASE = 'https://api.mangadex.org'
+const MANGADEX_API_BASE  = 'https://api.mangadex.org'
 const MANGADEX_COVER_BASE = 'https://uploads.mangadex.org/covers'
+const MANGADEX_TIMEOUT_MS = 10_000
 
 type Relationship = {
   id?: string
@@ -21,7 +22,7 @@ type MangaDexChapter = {
   relationships?: Relationship[]
 }
 
-export function pickLocalizedText(source: unknown, preferredLocales: string[] = ['en', 'it']) {
+export function pickLocalizedText(source: unknown, preferredLocales: string[] = ['en', 'it']): string {
   if (!source) return ''
   if (typeof source === 'string') return source.trim()
 
@@ -40,29 +41,31 @@ export function pickLocalizedText(source: unknown, preferredLocales: string[] = 
     const value = record[locale]
     if (typeof value === 'string' && value.trim()) return value.trim()
   }
-
   for (const value of Object.values(record)) {
     if (typeof value === 'string' && value.trim()) return value.trim()
   }
-
   return ''
 }
 
 function getRelationships(relationships: Relationship[] | undefined, types: string[]) {
-  return (relationships || []).filter((relationship) => relationship?.type && types.includes(relationship.type))
+  return (relationships || []).filter(
+    (r) => r?.type && types.includes(r.type)
+  )
 }
 
 export function extractMangaDexAuthors(relationships: Relationship[] = []) {
   const authorNames = getRelationships(relationships, ['author', 'artist'])
-    .map((relationship) => pickLocalizedText(relationship.attributes?.name) || relationship.id || '')
+    .map((r) => pickLocalizedText(r.attributes?.name) || r.id || '')
     .filter(Boolean)
-
   return Array.from(new Set(authorNames))
 }
 
 export function extractMangaDexCoverUrl(mangaId: string, relationships: Relationship[] = []) {
-  const coverRelationship = getRelationships(relationships, ['cover_art'])[0]
-  const fileName = coverRelationship?.attributes?.fileName || coverRelationship?.attributes?.filename || coverRelationship?.attributes?.file_name
+  const coverRel = getRelationships(relationships, ['cover_art'])[0]
+  const fileName =
+    coverRel?.attributes?.fileName ||
+    coverRel?.attributes?.filename ||
+    coverRel?.attributes?.file_name
   if (!fileName) return null
   return `${MANGADEX_COVER_BASE}/${mangaId}/${fileName}.512.jpg`
 }
@@ -75,7 +78,7 @@ export function extractMangaDexTags(tags: any[] = []) {
 
 export async function resolveMangaDexTagIds(tagNames: string[] = []) {
   const normalizedNames = tagNames
-    .map((tagName) => String(tagName || '').trim().toLowerCase())
+    .map((n) => String(n || '').trim().toLowerCase())
     .filter(Boolean)
 
   if (normalizedNames.length === 0) return []
@@ -87,8 +90,10 @@ export async function resolveMangaDexTagIds(tagNames: string[] = []) {
   const responseJson = await fetchMangaDexJson('/manga/tag')
   const tagIds = (responseJson.data || [])
     .filter((tag: any) => {
-      const tagName = pickLocalizedText(tag?.attributes?.name).toLowerCase()
-      return normalizedNames.some((candidate) => tagName === candidate || tagName.includes(candidate) || candidate.includes(tagName))
+      const name = pickLocalizedText(tag?.attributes?.name).toLowerCase()
+      return normalizedNames.some(
+        (c) => name === c || name.includes(c) || c.includes(name)
+      )
     })
     .map((tag: any) => tag.id)
 
@@ -97,58 +102,55 @@ export async function resolveMangaDexTagIds(tagNames: string[] = []) {
 }
 
 export function normalizeMangaDexHomeItem(manga: MangaDexManga) {
-  const attributes = manga.attributes || {}
-  const relationships = manga.relationships || []
-
+  const attr = manga.attributes || {}
+  const rels = manga.relationships || []
   return {
     id: manga.id,
     type: 'manga',
     source: 'mangadex',
-    title: pickLocalizedText(attributes.title) || 'Titolo non disponibile',
-    subtitle: [attributes.status, attributes.year].filter(Boolean).join(' • '),
-    authors: extractMangaDexAuthors(relationships),
-    description: pickLocalizedText(attributes.description) || '',
-    cover: extractMangaDexCoverUrl(manga.id, relationships),
+    title: pickLocalizedText(attr.title) || 'Titolo non disponibile',
+    subtitle: [attr.status, attr.year].filter(Boolean).join(' • '),
+    authors: extractMangaDexAuthors(rels),
+    description: pickLocalizedText(attr.description) || '',
+    cover: extractMangaDexCoverUrl(manga.id, rels),
     contentUrl: `https://mangadex.org/title/${manga.id}`,
-    language: attributes.originalLanguage || null,
-    publishedAt: attributes.year ? String(attributes.year) : null,
-    tags: extractMangaDexTags(attributes.tags || []),
-    chapterCount: Number(attributes.lastChapter || 0) || null
+    language: attr.originalLanguage || null,
+    publishedAt: attr.year ? String(attr.year) : null,
+    tags: extractMangaDexTags(attr.tags || []),
+    chapterCount: Number(attr.lastChapter || 0) || null
   }
 }
 
 export function normalizeMangaDexChapter(chapter: MangaDexChapter) {
-  const attributes = chapter.attributes || {}
-
+  const attr = chapter.attributes || {}
   return {
     id: chapter.id,
-    title: attributes.title || '',
-    chapter: attributes.chapter || null,
-    volume: attributes.volume || null,
-    language: attributes.translatedLanguage || null,
-    publishedAt: attributes.publishAt || attributes.createdAt || null,
-    pages: Number(attributes.pages || 0) || null,
+    title: attr.title || '',
+    chapter: attr.chapter || null,
+    volume: attr.volume || null,
+    language: attr.translatedLanguage || null,
+    publishedAt: attr.publishAt || attr.createdAt || null,
+    pages: Number(attr.pages || 0) || null,
     contentUrl: `https://mangadex.org/chapter/${chapter.id}`
   }
 }
 
 export function normalizeMangaDexDetail(manga: MangaDexManga, chapters: MangaDexChapter[] = []) {
-  const attributes = manga.attributes || {}
-  const relationships = manga.relationships || []
-
+  const attr = manga.attributes || {}
+  const rels = manga.relationships || []
   return {
     id: manga.id,
     type: 'manga',
     source: 'mangadex',
-    title: pickLocalizedText(attributes.title) || 'Titolo non disponibile',
-    subtitle: [attributes.status, attributes.year, attributes.publicationDemographic].filter(Boolean).join(' • '),
-    authors: extractMangaDexAuthors(relationships),
-    description: pickLocalizedText(attributes.description) || '',
-    coverUrl: extractMangaDexCoverUrl(manga.id, relationships),
+    title: pickLocalizedText(attr.title) || 'Titolo non disponibile',
+    subtitle: [attr.status, attr.year, attr.publicationDemographic].filter(Boolean).join(' • '),
+    authors: extractMangaDexAuthors(rels),
+    description: pickLocalizedText(attr.description) || '',
+    coverUrl: extractMangaDexCoverUrl(manga.id, rels),
     contentUrl: `https://mangadex.org/title/${manga.id}`,
-    language: attributes.originalLanguage || null,
-    publishedAt: attributes.year ? String(attributes.year) : attributes.createdAt || null,
-    tags: extractMangaDexTags(attributes.tags || []),
+    language: attr.originalLanguage || null,
+    publishedAt: attr.year ? String(attr.year) : attr.createdAt || null,
+    tags: extractMangaDexTags(attr.tags || []),
     rating: null,
     price: null,
     isFree: true,
@@ -160,12 +162,22 @@ export function normalizeMangaDexDetail(manga: MangaDexManga, chapters: MangaDex
   }
 }
 
-export async function fetchMangaDexJson(path: string, params?: URLSearchParams) {
+/**
+ * GET verso MangaDex con AbortSignal opzionale.
+ * FIX: aggiunto parametro `signal` — mancava come in jikan.ts e comick.ts,
+ * rendendo impossibile qualsiasi timeout → potenziali 504.
+ */
+export async function fetchMangaDexJson(
+  path: string,
+  params?: URLSearchParams,
+  signal?: AbortSignal
+): Promise<any> {
   const url = new URL(path, MANGADEX_API_BASE)
   if (params) url.search = params.toString()
 
   const response = await fetch(url.toString(), {
-    headers: { Accept: 'application/json' }
+    headers: { Accept: 'application/json' },
+    signal
   })
 
   if (!response.ok) {
@@ -175,7 +187,7 @@ export async function fetchMangaDexJson(path: string, params?: URLSearchParams) 
     })
   }
 
-  return await response.json()
+  return response.json()
 }
 
 type MangaDexAtHomeResponse = {
@@ -200,21 +212,43 @@ export type MangaDexChapterPages = {
   }>
 }
 
-export async function resolveMangaDexChapterPages(chapterId: string, quality: 'data' | 'data-saver' = 'data-saver'): Promise<MangaDexChapterPages> {
-  const responseJson = (await fetchMangaDexJson(`/at-home/server/${encodeURIComponent(chapterId)}`)) as MangaDexAtHomeResponse
-  if (responseJson.result && responseJson.result !== 'ok') {
-    throw createError({
-      statusCode: 502,
-      statusMessage: 'MangaDex at-home request failed'
-    })
+/**
+ * Risolve le pagine di un capitolo MangaDex.
+ * FIX: aggiunto timeout interno di MANGADEX_TIMEOUT_MS — la fetch at-home
+ * poteva bloccarsi indefinitamente su CDN lenti → 504.
+ */
+export async function resolveMangaDexChapterPages(
+  chapterId: string,
+  quality: 'data' | 'data-saver' = 'data-saver'
+): Promise<MangaDexChapterPages> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), MANGADEX_TIMEOUT_MS)
+  if (typeof timer === 'object' && timer !== null && 'unref' in timer) {
+    (timer as any).unref()
   }
 
-  const baseUrl = responseJson.baseUrl?.trim() || ''
-  const chapterHash = responseJson.chapter?.hash?.trim() || ''
+  let responseJson: MangaDexAtHomeResponse
+  try {
+    responseJson = await fetchMangaDexJson(
+      `/at-home/server/${encodeURIComponent(chapterId)}`,
+      undefined,
+      controller.signal
+    ) as MangaDexAtHomeResponse
+  } finally {
+    clearTimeout(timer)
+  }
+
+  if (responseJson.result && responseJson.result !== 'ok') {
+    throw createError({ statusCode: 502, statusMessage: 'MangaDex at-home request failed' })
+  }
+
+  const baseUrl       = responseJson.baseUrl?.trim() || ''
+  const chapterHash   = responseJson.chapter?.hash?.trim() || ''
   const dataFilenames = responseJson.chapter?.data || []
-  const dataSaverFilenames = responseJson.chapter?.dataSaver || []
+  const saverFilenames = responseJson.chapter?.dataSaver || []
+
   let effectiveQuality: 'data' | 'data-saver' = quality
-  let filenames = quality === 'data' ? dataFilenames : dataSaverFilenames
+  let filenames = quality === 'data' ? dataFilenames : saverFilenames
 
   if (filenames.length === 0 && quality === 'data-saver' && dataFilenames.length > 0) {
     filenames = dataFilenames
@@ -222,10 +256,7 @@ export async function resolveMangaDexChapterPages(chapterId: string, quality: 'd
   }
 
   if (!baseUrl || !chapterHash || filenames.length === 0) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'No images available for this chapter'
-    })
+    throw createError({ statusCode: 404, statusMessage: 'No images available for this chapter' })
   }
 
   const pages = filenames.map((filename, index) => ({
@@ -234,11 +265,5 @@ export async function resolveMangaDexChapterPages(chapterId: string, quality: 'd
     url: `${baseUrl}/${effectiveQuality}/${chapterHash}/${filename}`
   }))
 
-  return {
-    chapterId,
-    quality: effectiveQuality,
-    baseUrl,
-    hash: chapterHash,
-    pages
-  }
+  return { chapterId, quality: effectiveQuality, baseUrl, hash: chapterHash, pages }
 }

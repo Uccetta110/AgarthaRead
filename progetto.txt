@@ -157,11 +157,15 @@ Categoria	API	                                Costo                       Serve 
 Libri	    Open Library	                    Gratis	                    ricerca, autori, ISBN, copertine	                rate limit, non pensata come backend ad alto traffico
 Libri	    Gutendex	                        Gratis	                    testo completo dei libri di Project Gutenberg	    solo pubblico dominio; per uso lungo meglio self-host
 Libri	    Google Books	                    Gratis con API key	        catalogo più ampio, preview, copertine	            non dà il testo completo
-Manga	    MangaDex	                        Gratis e pubblica	        manga, capitoli, cover	                            credit obbligatorio e niente ads/servizi a pagamento
+Manga	    Jikan (MyAnimeList)	            Gratis	                    ricerca, rating pubblici, popularity	            niente chapters (solo metadata)
+Manga	    Comick Source API	               Gratis	                    capitoli e fonti di lettura	                    API non ufficiale; stabilita variabile
 News	    GDELT	                            Gratis e open data	        news globali, ricerca multilingua, aggregazione	    meglio per aggregare che per avere il testo completo di una testata
 News	    The Guardian Open Platform	        Gratis con developer key	article text, tag, sezioni	                        non commerciale, 500 richieste al giorno
 News	    NewsAPI	                            Gratis solo per dev/test	headline e ricerca rapida articoli	                100 richieste al giorno, ritardo di 24 ore, niente full article content
 
+(non utilizzate)
+Manga	    MangaDex	                        Gratis e pubblica	        manga, capitoli, cover	                            credit obbligatorio e niente ads/servizi a pagamento
+MangaDex (capitoli e lettura): https://api.mangadex.org/docs/
 
 API per i libri:
 documentazione:
@@ -172,7 +176,8 @@ progetto DEV/TEST — Google Books va bene anche senza testo completo
 
 API per i manga:
 documentazione:
-    MangaDex (capitoli e lettura): https://api.mangadex.org/docs/
+    Jikan (MyAnimeList): https://docs.api.jikan.moe/
+    Comick Source API: https://comick-source-api.notaspider.dev/
 
 API per news/giornali:
 documentazione:
@@ -182,17 +187,23 @@ documentazione:
 ---
 Dettagli pratici per integrazione (richiami, formato risposta, errori)
 
-- MangaDex (Manga)
-    - Base URL: https://api.mangadex.org
-    - Come chiamare: GET /manga?title=<term>&includes[]=author&includes[]=artist&includes[]=cover_art
-        Esempio: https://api.mangadex.org/manga?title=one%20piece&includes[]=author&includes[]=artist&includes[]=cover_art
-    - Forma risposta: JSON con `data` (array di risorse), `pagination`, `attributes` e `relationships`.
-        Esempio ridotto: {"data":[{"id":"...","attributes":{"title":{"en":"..."}}}],"pagination":{"total":5}}
-    - Feed capitoli: GET /manga/{id}/feed?translatedLanguage[]=it&translatedLanguage[]=en&order[chapter]=asc
-    - Lettura pagine: GET /at-home/server/{chapterId}
-    - Cover: https://uploads.mangadex.org/covers/:manga-id/:cover-filename.512.jpg
+- Jikan (Manga metadata/ratings)
+    - Base URL: https://api.jikan.moe/v4
+    - Come chiamare: GET /manga?q=<term> oppure GET /manga/{id}
+        Esempio: https://api.jikan.moe/v4/manga?q=one%20piece
+    - Forma risposta: JSON con `data` (array) o record singolo; campi tipici `mal_id`, `title`, `images`, `score`, `favorites`, `synopsis`.
+        Esempio ridotto: {"data":[{"mal_id":1,"title":"...","score":8.7}]}
+    - Errori comuni: 404 Not Found, 429 Too Many Requests, 500 Server Error.
+    - Note: API non ufficiale di MyAnimeList; ottima per rating pubblici e metadata; non fornisce capitoli.
+
+- Comick Source API (Manga chapters)
+    - Base URL: https://comick-source-api.notaspider.dev
+    - Come chiamare: POST /api/search (query, source), POST /api/chapters (url, source)
+        Esempio: POST https://comick-source-api.notaspider.dev/api/search {"query":"solo leveling","source":"mangapark"}
+    - Forma risposta: `results[]` con `id`, `title`, `url`, `coverImage`, `latestChapter`; `chapters[]` con `number`, `title`, `url`.
+    - Endpoints utili: GET /api/sources, GET /api/frontpage, GET /api/health
     - Errori comuni: 400 Bad Request, 404 Not Found, 429 Too Many Requests, 500 Server Error.
-    - Note: API pubblica e gratuita; credit obbligatorio a MangaDex e ai gruppi scanlation; niente ads o servizi a pagamento.
+    - Note: aggrega fonti esterne; usare mapping per titolo/URL; adatto per dev/test (stabilita variabile).
 
 - Open Library (Books metadata)
     - Base URL: https://openlibrary.org
@@ -270,7 +281,7 @@ Flusso comune:
 Oggetto normalizzato comune:
 - `id`: identificativo interno o esterno
 - `type`: `book`, `comic`, `manga`, `news`
-- `source`: `db`, `openlibrary`, `googlebooks`, `gutendex`, `mangadex`, `guardian`, `gdelt`
+- `source`: `db`, `openlibrary`, `googlebooks`, `gutendex`, `jikan`, `comick`, `guardian`, `gdelt`
 - `title`
 - `subtitle`
 - `authors`
@@ -321,19 +332,25 @@ Server route suggerita per i libri
 
 2. MANGA
 
-API consigliata: MangaDex.
-I manga sono divisi in capitoli, quindi la pagina principale è il Manga con la lista dei capitoli; il reader può aprire il capitolo interno oppure rimandare alla fonte esterna.
+API consigliate: Jikan (metadata + rating) e Comick Source API (capitoli/lettura).
+I manga sono divisi in capitoli, quindi la pagina principale mostra metadata e rating da Jikan e la lista capitoli da Comick; il reader puo aprire il capitolo interno oppure rimandare alla fonte esterna.
 
-MangaDex
-- Request: `GET /manga?title=<term>&limit=<n>` oppure `GET /manga/<id>`
-- Input principale: titolo, filtri, pagina, id MangaDex
-- Response: `data[]`, `pagination`, `relationships`, con titolo, copertina, synopsis, generi, autori, stato e ultimo capitolo
-- Feed capitoli: `GET /manga/<id>/feed?translatedLanguage[]=it&translatedLanguage[]=en&order[chapter]=asc`
-- Input principale feed: lingua, ordine capitoli, paginazione
-- Response feed: `data[]` con `chapter`, `volume`, `translatedLanguage`, `publishAt`, `pages`
-- Download pagine: `GET /at-home/server/<chapterId>` per ottenere baseUrl, hash e immagini
-- Uso nel sito: fonte principale per schede manga, capitoli, lettura e reader
-- Pagina dettaglio: copertina, metadati, capitoli, lingua, lettura progressiva, link al reader
+Jikan (MyAnimeList)
+- Request: `GET /manga?q=<term>` oppure `GET /manga/<id>`
+- Input principale: titolo o `mal_id`
+- Response: `data[]` con `title`, `images`, `score`, `favorites`, `synopsis`, `genres`
+- Uso nel sito: ricerca catalogo, rating pubblico, metadati
+- Pagina dettaglio: copertina, sinossi, rating, tag
+
+Comick Source API
+- Request: `POST /api/search` (query, source) e `POST /api/chapters` (url, source)
+- Input principale: titolo (per cercare), url della fonte (per capitoli)
+- Response: `results[]` e `chapters[]`
+- Uso nel sito: lista capitoli e lettura
+- Pagina dettaglio: elenco capitoli, link/reader
+
+Nota mapping Jikan <-> Comick
+- Match per titolo principale + titoli alternativi; salvare entrambi gli `external_id` (Jikan `mal_id` + URL/ID Comick) in catalog_items.
 
 Server route suggerita per i manga
 - `/api/manga/index.get.ts`: ricerca e lista catalogo
@@ -460,3 +477,21 @@ UI COMMENTI
 - Lista commenti: avatar, username, badge ruolo, data, testo, rating (se usato).
 - Stato vuoto: "Nessun commento ancora".
 - Paginazione o "Carica altri".
+
+New request: https://localhost:3000/api/manga/home?sections=top&titles=Popolari from page /api/manga/home?sections=top&titles=Popolari             7:58:06 AM
+
+[7:58:06 AM]  ERROR  Error fetching section Popolari: RequestInit: Expected signal ("URLSearchParams { 'limit' => '12', 'page' => '1', 'filter' => 'bypopularity' }") to be an instance of AbortSignal.
+
+    at node:internal/deps/undici/undici:15845:13
+
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+
+    at async fetchJikanJson (.nuxt/dev/index.mjs:3680:18)
+
+    at async fetchCachedJikanJson (.nuxt/dev/index.mjs:3700:21)
+
+    at async Object.handler (.nuxt/dev/index.mjs:5473:21)
+
+
+
+da questo errore

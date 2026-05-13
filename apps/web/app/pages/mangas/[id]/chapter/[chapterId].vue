@@ -13,7 +13,7 @@
 
       <div class="flex flex-wrap gap-2">
         <NuxtLink :to="`/mangas/${mangaId}`" class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200">Torna al manga</NuxtLink>
-        <a v-if="chapterUrl" :href="chapterUrl" target="_blank" rel="noopener noreferrer" class="rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700">Apri su MangaDex</a>
+        <a v-if="chapterUrl" :href="chapterUrl" target="_blank" rel="noopener noreferrer" class="rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700">Apri su Comick</a>
       </div>
     </div>
 
@@ -22,14 +22,11 @@
     <div v-else-if="!reader" class="mt-6 text-slate-500">Capitolo non disponibile.</div>
     <div v-else class="mt-6 space-y-6">
       <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
-        <p><strong>Qualità:</strong> {{ reader.quality }}</p>
-        <p><strong>Pagine:</strong> {{ reader.pages.length }}</p>
-        <p v-if="reader.volume"><strong>Volume:</strong> {{ reader.volume }}</p>
-        <p v-if="reader.language"><strong>Lingua:</strong> {{ reader.language }}</p>
-        <p v-if="reader.hash"><strong>Hash capitolo:</strong> {{ reader.hash }}</p>
+        <p><strong>Fonte:</strong> {{ reader.source || 'comick' }}</p>
+        <p><strong>Pagine disponibili:</strong> {{ reader.pagesCount ?? reader.pages?.length ?? 0 }}</p>
       </div>
 
-      <div class="flex flex-wrap items-center gap-3 text-sm text-slate-600">
+      <div v-if="reader.pages?.length" class="flex flex-wrap items-center gap-3 text-sm text-slate-600">
         <span class="font-semibold text-slate-700">Dimensione</span>
         <input
           v-model.number="zoom"
@@ -43,7 +40,7 @@
         <span class="tabular-nums text-slate-500">{{ zoom }}%</span>
       </div>
 
-      <div v-if="reader.pages.length" >
+      <div v-if="reader.pages?.length">
         <article
           v-for="page in reader.pages"
           :key="page.filename"
@@ -61,7 +58,7 @@
       </div>
 
       <div v-else class="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-500">
-        Nessuna immagine disponibile per questo capitolo.
+        Lettura immagini non disponibile. Usa il pulsante "Apri su Comick" per continuare.
       </div>
     </div>
   </section>
@@ -93,13 +90,18 @@ watch(chapterId, async () => {
 
 const reader = computed(() => data.value || null)
 const chapterLabel = computed(() => {
+  if (route.query.number) return String(route.query.number)
   if (!reader.value) return ''
   return String(reader.value.chapter || reader.value.chapterId || '')
 })
-const chapterTitle = computed(() => String(reader.value?.title || ''))
-const chapterUrl = computed(() => `https://mangadex.org/chapter/${encodeURIComponent(chapterId.value)}`)
+const chapterTitle = computed(() => String(route.query.title || reader.value?.title || ''))
+const chapterUrl = computed(() => {
+  if (reader.value?.chapterUrl) return String(reader.value.chapterUrl)
+  if (route.query.url) return String(route.query.url)
+  return ''
+})
 
 useHead(() => ({
-  title: reader.value?.chapterId ? `Capitolo ${reader.value.chapterId} • AgarthaRead` : 'Reader capitolo'
+  title: chapterLabel.value ? `Capitolo ${chapterLabel.value} • AgarthaRead` : 'Reader capitolo'
 }))
 </script>

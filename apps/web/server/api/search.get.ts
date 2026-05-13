@@ -1,5 +1,5 @@
 import { getQuery } from 'h3'
-import { fetchMangaDexJson, normalizeMangaDexHomeItem } from '../utils/mangaDex'
+import { fetchCachedJikanJson, normalizeJikanHomeItem } from '../utils/jikan'
 
 type SearchType = 'books' | 'manga' | 'news'
 
@@ -87,27 +87,36 @@ export default defineEventHandler(async (event) => {
 
   if (type === 'manga') {
     const params = new URLSearchParams()
-    params.set('title', q)
+    params.set('q', q)
+    params.set('page', String(page))
     params.set('limit', String(pageSize))
-    params.set('offset', String((page - 1) * pageSize))
-    params.append('includes[]', 'author')
-    params.append('includes[]', 'artist')
-    params.append('includes[]', 'cover_art')
-    params.append('availableTranslatedLanguage[]', 'it')
-    params.append('availableTranslatedLanguage[]', 'en')
 
-    const mangaDexJson = await fetchMangaDexJson('/manga', params)
-    const items = (mangaDexJson.data || []).map((manga: any) => normalizeMangaDexHomeItem(manga))
-    const total = Number(mangaDexJson.total || 0)
+    try {
+      const cacheKey = `jikan:search:${q}:${page}:${pageSize}`
+      const jikanJson = await fetchCachedJikanJson(cacheKey, '/manga', params, 10 * 60 * 1000)
+      const items = (jikanJson.data || []).map((manga: any) => normalizeJikanHomeItem(manga))
+      const total = Number(jikanJson.pagination?.items?.total || 0)
+      const hasNextPage = Boolean(jikanJson.pagination?.has_next_page)
 
-    return {
-      items,
-      page,
-      pageSize,
-      total,
-      hasMore: (page - 1) * pageSize + items.length < total,
-      type
-    } satisfies SearchPayload
+      return {
+        items,
+        page,
+        pageSize,
+        total,
+        hasMore: hasNextPage || ((page - 1) * pageSize + items.length < total),
+        type
+      } satisfies SearchPayload
+    } catch (error) {
+      return {
+        items: [],
+        page,
+        pageSize,
+        total: 0,
+        hasMore: false,
+        type,
+        notice: 'Jikan non disponibile'
+      } satisfies SearchPayload
+    }
   }
 
   const key = process.env.GUARDIAN_KEY || ''

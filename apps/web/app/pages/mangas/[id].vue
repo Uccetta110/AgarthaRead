@@ -16,6 +16,7 @@
               <p><strong>Autore:</strong> {{ item.authors.join(', ') || 'Sconosciuto' }}</p>
               <p><strong>Lingua:</strong> {{ item.language || 'N/A' }}</p>
               <p><strong>Pubblicato:</strong> {{ item.publishedAt || 'N/A' }}</p>
+              <p><strong>Rating:</strong> {{ item.rating ?? 'N/A' }}</p>
               <p><strong>Fonte:</strong> {{ item.source }}</p>
             </div>
           </div>
@@ -43,12 +44,20 @@
             <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
               <h2 class="text-xl font-semibold text-slate-900">Capitoli</h2>
               <p class="mt-2 text-sm text-slate-500">Capitoli caricati: {{ item.chapterCount || chapters.length }}</p>
+              <p v-if="item.chaptersNotice" class="mt-2 text-sm text-amber-600">{{ item.chaptersNotice }}</p>
 
               <div v-if="chapters.length" class="mt-4 space-y-3">
                 <NuxtLink
                   v-for="chapter in chapters"
                   :key="chapter.id"
-                  :to="`/mangas/${id}/chapter/${chapter.id}`"
+                  :to="{
+                    path: `/mangas/${id}/chapter/${chapter.id}`,
+                    query: {
+                      number: chapter.chapter ?? '',
+                      title: chapter.title ?? '',
+                      url: chapter.contentUrl ?? ''
+                    }
+                  }"
                   class="flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300 hover:bg-slate-50"
                 >
                   <div>
