@@ -3,6 +3,39 @@ import { getCache, setCache } from './simpleCache'
 const MANGADEX_API_BASE = 'https://api.mangadex.org'
 const MANGADEX_COVER_BASE = 'https://uploads.mangadex.org/covers'
 
+const MANGADEX_LANGUAGE_ALIASES: Record<string, string> = {
+  'en-au': 'en',
+  'en-ca': 'en',
+  'en-gb': 'en',
+  'en-us': 'en',
+  'zh-cn': 'zh',
+  'zh-hk': 'zh',
+  'zh-tw': 'zh'
+}
+
+const MANGADEX_LANGUAGE_LABELS: Record<string, string> = {
+  ar: 'Arabic',
+  ca: 'Catalan',
+  de: 'German',
+  el: 'Greek',
+  en: 'English',
+  es: 'Spanish',
+  fr: 'French',
+  he: 'Hebrew',
+  hi: 'Hindi',
+  id: 'Indonesian',
+  it: 'Italiano',
+  ja: 'Japanese',
+  pl: 'Polish',
+  pt: 'Portuguese',
+  'pt-br': 'Portuguese (Brazil)',
+  ru: 'Russian',
+  th: 'Thai',
+  uk: 'Ukrainian',
+  vi: 'Vietnamese',
+  zh: 'Chinese'
+}
+
 type Relationship = {
   id?: string
   type?: string
@@ -21,13 +54,13 @@ type MangaDexChapter = {
   relationships?: Relationship[]
 }
 
-export function pickLocalizedText(source: unknown, preferredLocales: string[] = ['en', 'it']) {
+export function pickLocalizedText(source: unknown, preferredLocales: string[] = ['en', 'it']): string {
   if (!source) return ''
   if (typeof source === 'string') return source.trim()
 
   if (Array.isArray(source)) {
     for (const value of source) {
-      const selected = pickLocalizedText(value, preferredLocales)
+      const selected: string = pickLocalizedText(value, preferredLocales)
       if (selected) return selected
     }
     return ''
@@ -71,6 +104,32 @@ export function extractMangaDexTags(tags: any[] = []) {
   return tags
     .map((tag) => pickLocalizedText(tag?.attributes?.name) || tag?.attributes?.name?.en || tag?.id || '')
     .filter(Boolean)
+}
+
+export function normalizeMangaDexLanguageCode(language?: string | null): string {
+  const raw = String(language || '').trim().toLowerCase()
+  if (!raw) return ''
+  return MANGADEX_LANGUAGE_ALIASES[raw] || raw
+}
+
+export function getMangaDexLanguageLabel(language?: string | null): string {
+  const normalized = normalizeMangaDexLanguageCode(language)
+  if (!normalized) return ''
+  return MANGADEX_LANGUAGE_LABELS[normalized] || normalized.toUpperCase()
+}
+
+export function summarizeMangaDexLanguages(chapters: MangaDexChapter[] = []) {
+  const counts = new Map<string, number>()
+
+  for (const chapter of chapters) {
+    const code = normalizeMangaDexLanguageCode(chapter?.attributes?.translatedLanguage)
+    if (!code) continue
+    counts.set(code, (counts.get(code) || 0) + 1)
+  }
+
+  return Array.from(counts.entries())
+    .map(([code, count]) => ({ code, label: getMangaDexLanguageLabel(code), count }))
+    .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label))
 }
 
 export async function resolveMangaDexTagIds(tagNames: string[] = []) {
@@ -125,7 +184,7 @@ export function normalizeMangaDexChapter(chapter: MangaDexChapter) {
     title: attributes.title || '',
     chapter: attributes.chapter || null,
     volume: attributes.volume || null,
-    language: attributes.translatedLanguage || null,
+    language: normalizeMangaDexLanguageCode(attributes.translatedLanguage || null) || null,
     publishedAt: attributes.publishAt || attributes.createdAt || null,
     pages: Number(attributes.pages || 0) || null,
     contentUrl: `https://mangadex.org/chapter/${chapter.id}`
@@ -176,6 +235,35 @@ export async function fetchMangaDexJson(path: string, params?: URLSearchParams) 
   }
 
   return await response.json()
+}
+
+export function extractMangaDexIdFromContentPath(contentPath?: string | null) {
+  const raw = String(contentPath || '').trim()
+  if (!raw) return null
+  const match = raw.match(/^mangadex:([a-z0-9-]+)$/i)
+  return match?.[1] || null
+}
+
+export async function fetchAllMangaDexFeedChapters(mangaId: string, limit = 100) {
+  const chapters: MangaDexChapter[] = []
+  let offset = 0
+
+  while (true) {
+    const params = new URLSearchParams()
+    params.set('limit', String(limit))
+    params.set('offset', String(offset))
+    params.set('order[chapter]', 'asc')
+
+    const responseJson = await fetchMangaDexJson(`/manga/${encodeURIComponent(mangaId)}/feed`, params)
+    const batch = Array.isArray(responseJson?.data) ? responseJson.data : []
+    chapters.push(...batch)
+
+    const total = Number(responseJson?.total || responseJson?.result?.total || 0)
+    if (batch.length < limit || (total && chapters.length >= total)) break
+    offset += limit
+  }
+
+  return chapters
 }
 
 type MangaDexAtHomeResponse = {

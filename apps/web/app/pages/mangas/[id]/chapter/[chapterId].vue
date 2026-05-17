@@ -13,7 +13,7 @@
 
       <div class="flex flex-wrap gap-2">
         <NuxtLink :to="`/mangas/${mangaId}`" class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200">Torna al manga</NuxtLink>
-        <a v-if="chapterUrl" :href="chapterUrl" target="_blank" rel="noopener noreferrer" class="rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700">Apri su Comick</a>
+        <a v-if="chapterUrl" :href="chapterUrl" target="_blank" rel="noopener noreferrer" class="rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700">Apri su MangaDex</a>
       </div>
     </div>
 
@@ -22,7 +22,7 @@
     <div v-else-if="!reader" class="mt-6 text-slate-500">Capitolo non disponibile.</div>
     <div v-else class="mt-6 space-y-6">
       <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
-        <p><strong>Fonte:</strong> {{ reader.source || 'comick' }}</p>
+        <p><strong>Fonte:</strong> {{ reader.source || 'mangadex' }}</p>
         <p><strong>Pagine disponibili:</strong> {{ reader.pagesCount ?? reader.pages?.length ?? 0 }}</p>
       </div>
 
@@ -58,7 +58,7 @@
       </div>
 
       <div v-else class="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-500">
-        Lettura immagini non disponibile. Usa il pulsante "Apri su Comick" per continuare.
+        {{ reader?.unavailableReason || 'Lettura immagini non disponibile. Usa il pulsante "Apri su MangaDex" per continuare.' }}
       </div>
     </div>
   </section>

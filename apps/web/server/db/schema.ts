@@ -330,8 +330,15 @@ export const userLists = mysqlTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
     name: varchar("name", { length: 100 }).notNull(),
+    description: text("description"),
+    coverImage: varchar("cover_image", { length: 512 }),
+    isPublic: int("is_public").notNull().default(0),
+    tags: varchar("tags", { length: 512 }),
     isSystem: int("is_system").notNull().default(0),
     createdAt: datetime("created_at", { mode: "date" })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: datetime("updated_at", { mode: "date" })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
   },
@@ -356,6 +363,7 @@ export const userListItems = mysqlTable(
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
+    position: int("position", { unsigned: true }).notNull().default(0),
     addedAt: datetime("added_at", { mode: "date" })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),

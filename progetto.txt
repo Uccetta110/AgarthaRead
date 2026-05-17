@@ -157,15 +157,13 @@ Categoria	API	                                Costo                       Serve 
 Libri	    Open Library	                    Gratis	                    ricerca, autori, ISBN, copertine	                rate limit, non pensata come backend ad alto traffico
 Libri	    Gutendex	                        Gratis	                    testo completo dei libri di Project Gutenberg	    solo pubblico dominio; per uso lungo meglio self-host
 Libri	    Google Books	                    Gratis con API key	        catalogo più ampio, preview, copertine	            non dà il testo completo
-Manga	    Jikan (MyAnimeList)	            Gratis	                    ricerca, rating pubblici, popularity	            niente chapters (solo metadata)
-Manga	    Comick Source API	               Gratis	                    capitoli e fonti di lettura	                    API non ufficiale; stabilita variabile
+Manga	    Jikan (MyAnimeList)	                Gratis	                    ricerca, rating pubblici, popularity	            niente chapters (solo metadata)
+Manga	    Comick Source API	                Gratis	                    capitoli e fonti di lettura	                    API non ufficiale; stabilita variabile
+Manga       MangaDex                            Gratis                      url delle immagini e capitoli (fondamentale)
+Manga       AniList                             Gratis                      GraphQL, relazioni, tags, media, ranking, recommendations
 News	    GDELT	                            Gratis e open data	        news globali, ricerca multilingua, aggregazione	    meglio per aggregare che per avere il testo completo di una testata
 News	    The Guardian Open Platform	        Gratis con developer key	article text, tag, sezioni	                        non commerciale, 500 richieste al giorno
 News	    NewsAPI	                            Gratis solo per dev/test	headline e ricerca rapida articoli	                100 richieste al giorno, ritardo di 24 ore, niente full article content
-
-(non utilizzate)
-Manga	    MangaDex	                        Gratis e pubblica	        manga, capitoli, cover	                            credit obbligatorio e niente ads/servizi a pagamento
-MangaDex (capitoli e lettura): https://api.mangadex.org/docs/
 
 API per i libri:
 documentazione:
@@ -176,13 +174,25 @@ progetto DEV/TEST — Google Books va bene anche senza testo completo
 
 API per i manga:
 documentazione:
-    Jikan (MyAnimeList): https://docs.api.jikan.moe/
-    Comick Source API: https://comick-source-api.notaspider.dev/
+    Jikan (MyAnimeList): https://docs.api.jikan.moe/ oppure AniList: https://docs.anilist.co/guide/introduction
+    MangaDex: https://api.mangadex.org/docs/
 
 API per news/giornali:
 documentazione:
         The Guardian Open Platform: https://open-platform.theguardian.com/
         GDELT (analytics, big data): https://www.gdeltproject.org/data.html
+
+*** (non utilizzate)
+- Comick Source API (Manga chapters)
+    - Base URL: https://comick-source-api.notaspider.dev
+    - Come chiamare: POST /api/search (query, source), POST /api/chapters (url, source)
+        Esempio: POST https://comick-source-api.notaspider.dev/api/search {"query":"solo leveling","source":"mangapark"}
+    - Forma risposta: `results[]` con `id`, `title`, `url`, `coverImage`, `latestChapter`; `chapters[]` con `number`, `title`, `url`.
+    - Endpoints utili: GET /api/sources, GET /api/frontpage, GET /api/health
+    - Errori comuni: 400 Bad Request, 404 Not Found, 429 Too Many Requests, 500 Server Error.
+    - Note: aggrega fonti esterne; usare mapping per titolo/URL; adatto per dev/test (stabilita variabile).
+
+***
 
 ---
 Dettagli pratici per integrazione (richiami, formato risposta, errori)
@@ -196,14 +206,64 @@ Dettagli pratici per integrazione (richiami, formato risposta, errori)
     - Errori comuni: 404 Not Found, 429 Too Many Requests, 500 Server Error.
     - Note: API non ufficiale di MyAnimeList; ottima per rating pubblici e metadata; non fornisce capitoli.
 
-- Comick Source API (Manga chapters)
-    - Base URL: https://comick-source-api.notaspider.dev
-    - Come chiamare: POST /api/search (query, source), POST /api/chapters (url, source)
-        Esempio: POST https://comick-source-api.notaspider.dev/api/search {"query":"solo leveling","source":"mangapark"}
-    - Forma risposta: `results[]` con `id`, `title`, `url`, `coverImage`, `latestChapter`; `chapters[]` con `number`, `title`, `url`.
-    - Endpoints utili: GET /api/sources, GET /api/frontpage, GET /api/health
-    - Errori comuni: 400 Bad Request, 404 Not Found, 429 Too Many Requests, 500 Server Error.
-    - Note: aggrega fonti esterne; usare mapping per titolo/URL; adatto per dev/test (stabilita variabile).
+
+- MangaDex (Per i chapters e url immagini)
+- Base Url https://api.mangadex.org/
+- ricerca Manga GET /manga                                              esempio: https://api.mangadex.org/manga?title=one piece
+Risposta: 
+{
+  "data": [
+    {
+      "id": "32d76dba-...",
+      "attributes": {
+        "title": {
+          "en": "One Piece"
+        }
+      }
+    }
+  ]
+}
+- Ottieni i capitoli GET /manga/{mangaId}/feed                          esempio: https://api.mangadex.org/manga/32d76dba-.../feed
+Risposta: 
+{
+  "data": [
+    {
+      "id": "chapter-id-123",
+      "attributes": {
+        "chapter": "1",
+        "title": "Romance Dawn"
+      }
+    }
+  ]
+}
+- Ottieni il server immagini (@Home) GET /at-home/server/{chapterId}    esempio: https://api.mangadex.org/at-home/server/chapter-id-123
+Risposta tipica:
+{
+  "baseUrl": "https://uploads.mangadex.org",
+  "chapter": {
+    "hash": "abcd1234",
+    "data": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ],
+    "dataSaver": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ]
+  }
+}
+- Costruire URL immagini    Qualità normale: {baseUrl}/data/{hash}/{filename}                   esempio: https://uploads.mangadex.org/data/abcd1234/1.jpg
+                            Data Saver (compressione): {baseUrl}/data-saver/{hash}/{filename}   esempio: https://uploads.mangadex.org/data-saver/abcd1234/1.jpg
+
+Problemi comuni:
+1. Troppe immagini insieme, NON fare Promise.all(images.map(load)) per 50 pagine.
+I CDN: rate-limitano, chiudono connessioni, alcune immagini falliscono
+Meglio: lazy loading, caricare progressivamente, virtual scrolling
+
+2. Hotlink / CORS
+Alcuni browser: bloccano immagini, timeoutano, Meglio usare backend proxy.
 
 - Open Library (Books metadata)
     - Base URL: https://openlibrary.org
@@ -332,24 +392,10 @@ Server route suggerita per i libri
 
 2. MANGA
 
-API consigliate: Jikan (metadata + rating) e Comick Source API (capitoli/lettura).
+API consigliate: Jikan o AniList (metadata, rating, recommendations...) e MangaDex (Capitoli, url Immagini)
 I manga sono divisi in capitoli, quindi la pagina principale mostra metadata e rating da Jikan e la lista capitoli da Comick; il reader puo aprire il capitolo interno oppure rimandare alla fonte esterna.
 
-Jikan (MyAnimeList)
-- Request: `GET /manga?q=<term>` oppure `GET /manga/<id>`
-- Input principale: titolo o `mal_id`
-- Response: `data[]` con `title`, `images`, `score`, `favorites`, `synopsis`, `genres`
-- Uso nel sito: ricerca catalogo, rating pubblico, metadati
-- Pagina dettaglio: copertina, sinossi, rating, tag
-
-Comick Source API
-- Request: `POST /api/search` (query, source) e `POST /api/chapters` (url, source)
-- Input principale: titolo (per cercare), url della fonte (per capitoli)
-- Response: `results[]` e `chapters[]`
-- Uso nel sito: lista capitoli e lettura
-- Pagina dettaglio: elenco capitoli, link/reader
-
-Nota mapping Jikan <-> Comick
+Nota mapping Jikan/AniList <-> MangaDex
 - Match per titolo principale + titoli alternativi; salvare entrambi gli `external_id` (Jikan `mal_id` + URL/ID Comick) in catalog_items.
 
 Server route suggerita per i manga
@@ -478,20 +524,70 @@ UI COMMENTI
 - Stato vuoto: "Nessun commento ancora".
 - Paginazione o "Carica altri".
 
-New request: https://localhost:3000/api/manga/home?sections=top&titles=Popolari from page /api/manga/home?sections=top&titles=Popolari             7:58:06 AM
+- - - - - - - - - - - - - - - - -
+Gli utenti possono salvare gli oggetti in delle liste 
+    - Tutti gli utenti hanno di partenza una lista dei preferiti per oggetto, dove si vedono tutti gli oggetti a cui un'utente ha messo like
+    - Nella pagina lista ci sara un opzione creare una nuova lista e anche nella sezione salva (quando clicchi "salva" nella pagina di un oggetto, ti si aprirà una card dove potrai scegliere dove salvare l'oggetto oppure creare una nuova lista)
+    - ora quando passi sopra ad un itemcard, in alto a destra app   arirà un piccolo bottone del like per mettere like all'oggetto e in alto a destra un piccolo bottone per salvare l'oggetto
+    - Gli utenti possono scegliere se le loro liste possono essere viste nelle impostazioni (preferenze di privacy) dagli altri utenti, e possono anche scegliere nelle singole liste se queste sono pubbliche o private 
+    - Gli utenti possono cambiare il nome alla propria lista, la cover (scegliendo tra assets/images/listCovers), il tag (possono creare dei tag, stringhe da massimo 20 caratteri, da dare a più liste così da poterle visualizzare meglio), etc
+    - La lista di liste può essere ordinata per nome, data creazione, numero salvati, tag, etc
 
-[7:58:06 AM]  ERROR  Error fetching section Popolari: RequestInit: Expected signal ("URLSearchParams { 'limit' => '12', 'page' => '1', 'filter' => 'bypopularity' }") to be an instance of AbortSignal.
+Dettagli tecnici per le "liste" (requisiti funzionali e API)
 
-    at node:internal/deps/undici/undici:15845:13
+- **DB (tabelle principali):**
+  - `user_lists` (id, user_id, title, description, cover_image, is_public BOOLEAN, tags JSON/CSV, created_at, updated_at)
+  - `user_list_items` (id, list_id, item_type, external_provider, external_id, added_at, position INT)
+  - Indici: `user_lists(user_id)`, `user_list_items(list_id)`, `user_list_items(external_provider, external_id)`
 
-    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+- **API server routes (server/api):**
+  - `GET /api/lists` — lista delle liste dell'utente (con filtro `public=true` per liste pubbliche)
+  - `POST /api/lists` — crea nuova lista (body: title, description?, cover_image?, is_public?, tags[])
+  - `GET /api/lists/[id]` — dettaglio lista + paginazione items
+  - `PUT /api/lists/[id]` — aggiorna metadata lista (title, cover, privacy, tags)
+  - `DELETE /api/lists/[id]` — elimina lista (solo owner)
+  - `POST /api/lists/[id]/items` — aggiungi item a lista (body: item_type, external_provider, external_id)
+  - `DELETE /api/lists/[id]/items/[itemId]` — rimuovi item da lista
+  - `POST /api/lists/[id]/reorder` — riordina item (body: array di itemId/position)
 
-    at async fetchJikanJson (.nuxt/dev/index.mjs:3680:18)
+- **Comportamento UI / flusso utente:**
+  - Modal/inline card per scegliere la lista di destinazione quando si clicca "salva" su un oggetto.
+  - Possibilità di creare una nuova lista dalla stessa card.
+  - Ogni utente ha una lista `Preferiti` creata automaticamente; quando un utente mette like a un oggetto, opzionalmente viene aggiunto anche ai Preferiti (configurabile).
+  - Nella pagina "Le mie liste" mostrare: titolo, cover, numero elementi, visibilità (pubblica/privata), tag principali.
+  - Dettaglio lista: paginazione degli item, filtri per `type` (book/manga/comic/news), ordinamenti (posizione, data aggiunta, titolo).
 
-    at async fetchCachedJikanJson (.nuxt/dev/index.mjs:3700:21)
+- **Validazioni e limiti:**
+  - `tags`: stringa max 20 caratteri; massimo N tag per lista (es. 10).
+  - `title` lista: max 100 caratteri.
+  - Limite consigliato: max 50 liste per utente, max 1000 items per lista (configurabile).
+  - Solo il proprietario può modificare/riordinare/eliminare la lista; le liste pubbliche sono leggibili da altri utenti.
 
-    at async Object.handler (.nuxt/dev/index.mjs:5473:21)
+- **Privacy e permessi:**
+  - Impostazione globale in profilo per default delle nuove liste (public/private).
+  - Le singole liste sovrascrivono l'impostazione globale.
+  - Utenti non confermati: possono creare e salvare in liste, ma non possono mettere Like o Commentare (coerente con le regole già indicate).
+
+- **Integrazione con catalog_items:**
+  - Quando un oggetto API viene visualizzato e viene upsertato in `catalog_items`, non duplicare l'inserimento in `user_list_items`: usare `external_provider + external_id` per riferirsi all'item.
+
+- **API client-side (UI examples):**
+  - `POST /api/lists` { title, is_public }
+  - `POST /api/lists/123/items` { item_type: 'manga', external_provider: 'anilist', external_id: '98765' }
+
+- **Extra utilità:**
+  - Endpoint per esportare/ condividere lista pubblica (es. `/api/lists/[id]/export` — JSON o link pubblico).
+  - Copertura con test: endpoint CRUD liste + operazioni items + permessi.
 
 
-
-da questo errore
+- - - - - - - - - - - - - - - - -
+Azioni utenti:
+Utenti appena registrati (non confermata l'email)
+    - possono salvare oggetti nelle liste 
+    - possono cambiare le proprie preferenza dalle impostazioni 
+    - Non possono mettere Like o lasciare Commenti 
+Utenti confermati 
+    - Ora possono mettere like e lasciare commenti 
+    - Possono richiedere all'Admin o ad un manager di diventare Artisti certificati 
+Artisti (confermati da Admin o manager)
+    - Possono creare oggetti 

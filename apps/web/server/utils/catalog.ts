@@ -15,6 +15,7 @@ type ExternalCatalogInput = {
   language?: string | null
   coverUrl?: string | null
   contentFormat?: ContentFormat
+  contentPath?: string | null
 }
 
 const DEFAULT_LANGUAGE_CODE = 'und'
@@ -97,6 +98,7 @@ export async function upsertExternalCatalogItem(db: Db, input: ExternalCatalogIn
   const languageCode = normalizeLanguageCode(input.language)
   const description = input.description?.trim() || null
   const contentFormat = input.contentFormat || DEFAULT_CONTENT_FORMAT
+  const contentPath = input.contentPath?.trim() || null
 
   const existingTranslation = (await db
     .select()
@@ -115,6 +117,7 @@ export async function upsertExternalCatalogItem(db: Db, input: ExternalCatalogIn
       .set({
         title,
         description,
+        contentPath,
         contentFormat
       })
       .where(eq(catalogItemTranslations.id, existingTranslation.id))
@@ -124,6 +127,7 @@ export async function upsertExternalCatalogItem(db: Db, input: ExternalCatalogIn
       languageCode,
       title,
       description,
+      contentPath,
       contentFormat
     })
   }

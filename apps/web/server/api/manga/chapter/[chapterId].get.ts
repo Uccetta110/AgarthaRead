@@ -1,5 +1,5 @@
 import { getCache, setCache } from '../../../utils/simpleCache'
-import { decodeComickChapterKey } from '../../../utils/comick'
+import { resolveMangaDexChapterPages } from '../../../utils/mangaDex'
 
 function normalizeChapterId(paramsId: string | string[] | undefined) {
   const rawId = Array.isArray(paramsId) ? paramsId.join('/') : String(paramsId || '')
@@ -12,18 +12,39 @@ export default defineEventHandler(async (event) => {
   const cached = getCache(cacheKey)
   if (cached) return cached
 
-  const decoded = decodeComickChapterKey(chapterId)
-  const chapterUrl = decoded.type === 'url' ? decoded.value : null
+  try {
+    const pagesResult = await resolveMangaDexChapterPages(chapterId)
 
-  const payload = {
-    chapterId,
-    source: 'flamecomics',
-    chapterUrl,
-    pages: [],
-    pagesCount: 0,
-    readerAvailable: false
+    const payload = {
+      chapterId,
+      source: 'mangadex',
+      chapterUrl: `https://mangadex.org/chapter/${encodeURIComponent(chapterId)}`,
+      baseUrl: pagesResult.baseUrl,
+      hash: pagesResult.hash,
+      quality: pagesResult.quality,
+      pages: pagesResult.pages,
+      pagesCount: pagesResult.pages.length,
+      readerAvailable: true,
+      unavailableReason: null
+    }
+
+    setCache(cacheKey, payload, 10 * 60 * 1000)
+    return payload
+  } catch (error: any) {
+    const statusCode = Number(error?.statusCode || error?.cause?.statusCode || 0)
+    const payload = {
+      chapterId,
+      source: 'mangadex',
+      chapterUrl: `https://mangadex.org/chapter/${encodeURIComponent(chapterId)}`,
+      pages: [],
+      pagesCount: 0,
+      readerAvailable: false,
+      unavailableReason: statusCode === 404
+        ? 'Questo capitolo non espone immagini su MangaDex.'
+        : 'Impossibile caricare le immagini del capitolo.'
+    }
+
+    setCache(cacheKey, payload, 2 * 60 * 1000)
+    return payload
   }
-
-  setCache(cacheKey, payload, 10 * 60 * 1000)
-  return payload
 })

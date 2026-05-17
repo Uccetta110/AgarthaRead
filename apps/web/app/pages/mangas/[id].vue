@@ -16,7 +16,7 @@
               <p><strong>Autore:</strong> {{ item.authors.join(', ') || 'Sconosciuto' }}</p>
               <p><strong>Lingua:</strong> {{ item.language || 'N/A' }}</p>
               <p><strong>Pubblicato:</strong> {{ item.publishedAt || 'N/A' }}</p>
-              <p><strong>Rating:</strong> {{ item.rating ?? 'N/A' }}</p>
+              <p><strong>Rating:</strong> {{ item.rating ?? 'N/A' }}/100</p>
               <p><strong>Fonte:</strong> {{ item.source }}</p>
             </div>
           </div>
@@ -31,6 +31,23 @@
               <div class="mt-6 flex flex-wrap gap-3">
                 <button class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">Salva</button>
                 <button class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200">Leggi</button>
+                <label class="relative">
+                  <span class="sr-only">Lingua capitoli</span>
+                  <select
+                    v-model="selectedLanguage"
+                    class="appearance-none rounded-full border border-slate-200 bg-white px-4 py-2 pr-10 text-sm font-semibold text-slate-700 shadow-sm outline-none transition hover:border-slate-300 focus:border-blue-500"
+                  >
+                    <option value="">Tutte le lingue</option>
+                    <option
+                      v-for="language in languageOptions"
+                      :key="language.code"
+                      :value="language.code"
+                    >
+                      {{ language.label }}{{ language.count ? ` (${language.count})` : '' }}
+                    </option>
+                  </select>
+                  <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400">▾</span>
+                </label>
                 <LikeButton
                   :item-id="item.internalId || null"
                   :initial-liked="item.isLiked"
@@ -55,7 +72,8 @@
                     query: {
                       number: chapter.chapter ?? '',
                       title: chapter.title ?? '',
-                      url: chapter.contentUrl ?? ''
+                      url: chapter.contentUrl ?? '',
+                      lang: selectedLanguage
                     }
                   }"
                   class="flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300 hover:bg-slate-50"
@@ -104,14 +122,145 @@
   </div>
 </template>
 
-<script setup>
-import { computed } from 'vue'
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+
+const LANGUAGE_LABELS: Record<string, string> = {
+  ar: 'Arabic',
+  ca: 'Catalan',
+  de: 'German',
+  el: 'Greek',
+  en: 'English',
+  es: 'Spanish',
+  fr: 'French',
+  he: 'Hebrew',
+  hi: 'Hindi',
+  id: 'Indonesian',
+  it: 'Italiano',
+  ja: 'Japanese',
+  pl: 'Polish',
+  pt: 'Portuguese',
+  'pt-br': 'Portuguese (Brazil)',
+  ru: 'Russian',
+  th: 'Thai',
+  uk: 'Ukrainian',
+  vi: 'Vietnamese',
+  zh: 'Chinese'
+}
+
+const LANGUAGE_ALIASES: Record<string, string> = {
+  'en-au': 'en',
+  'en-ca': 'en',
+  'en-gb': 'en',
+  'en-us': 'en',
+  'zh-cn': 'zh',
+  'zh-hk': 'zh',
+  'zh-tw': 'zh'
+}
+
+function normalizeLanguageCode(value?: string | null) {
+  const raw = String(value || '').trim().toLowerCase()
+  if (!raw) return ''
+  return LANGUAGE_ALIASES[raw] || raw
+}
+
+function getLanguageLabel(value?: string | null) {
+  const code = normalizeLanguageCode(value)
+  if (!code) return ''
+  return LANGUAGE_LABELS[code] || code.toUpperCase()
+}
+
+type MangaChapter = {
+  id: string
+  title?: string
+  chapter?: string | number | null
+  volume?: string | number | null
+  language?: string | null
+  publishedAt?: string | null
+  contentUrl?: string | null
+}
+
+type MangaDetail = {
+  id?: string
+  title: string
+  subtitle: string
+  authors: string[]
+  description: string
+  coverUrl?: string | null
+  contentUrl?: string | null
+  language?: string | null
+  publishedAt?: string | null
+  rating?: number | null
+  source?: string
+  tags: string[]
+  internalId?: number | null
+  isLiked?: boolean
+  likesCount?: number
+  canLike?: boolean
+  chapterCount?: number | null
+  chaptersNotice?: string | null
+  bodyHtml?: string | null
+  commentsCount?: number
+  canComment?: boolean
+  availableLanguages: string[]
+  availableLanguageCounts?: Array<{ code: string; label: string; count: number }>
+  selectedLanguage?: string | null
+  chapters: MangaChapter[]
+}
 
 const route = useRoute()
+const router = useRouter()
 const id = computed(() => String(route.params.id || ''))
-const { data, error, pending } = useFetch(() => id.value ? `/api/manga/${encodeURIComponent(id.value)}` : null, { server: false })
-const item = computed(() => data.value || null)
-const chapters = computed(() => item.value?.chapters || [])
+const selectedLanguage = ref(String(route.query.lang || route.query.language || '').trim().toLowerCase())
+const requestUrl = computed(() => {
+  const base = `/api/manga/${encodeURIComponent(id.value)}`
+  return selectedLanguage.value ? `${base}?lang=${encodeURIComponent(selectedLanguage.value)}` : base
+})
+
+const { data, error, pending } = useFetch(
+  requestUrl,
+  { server: false, watch: [selectedLanguage] }
+)
+
+const item = computed<MangaDetail>(() => ({
+  title: '',
+  subtitle: '',
+  authors: [],
+  description: '',
+  tags: [],
+  availableLanguages: [],
+  availableLanguageCounts: [],
+  chapters: [],
+  ...(data.value as Partial<MangaDetail> || {})
+}))
+const chapters = computed<MangaChapter[]>(() => item.value.chapters || [])
+const languageOptions = computed(() => {
+  const counts = Array.isArray(item.value.availableLanguageCounts) ? item.value.availableLanguageCounts : []
+
+  return counts.map((entry) => ({
+    code: entry.code,
+    label: entry.label || getLanguageLabel(entry.code),
+    count: entry.count
+  }))
+})
+
+watch(
+  () => route.query.lang,
+  (value) => {
+    const next = normalizeLanguageCode(String(value || '').trim())
+    if (next && next !== selectedLanguage.value) {
+      selectedLanguage.value = next
+    }
+    if (!next && selectedLanguage.value) {
+      selectedLanguage.value = ''
+    }
+  }
+)
+
+watch(selectedLanguage, async (value, previousValue) => {
+  if (!value || value === previousValue) return
+  await router.replace({ query: { ...route.query, lang: value } })
+})
 
 useHead(() => ({ title: item.value?.title ? `${item.value.title} • AgarthaRead` : 'Dettaglio manga' }))
 </script>

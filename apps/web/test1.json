@@ -1,0 +1,529 @@
+{
+  "result": "ok",
+  "response": "collection",
+  "data": [
+    {
+      "id": "29ea1332-8840-431c-a211-cdf811a7673a",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "3",
+        "title": "\"\u0e42\u0e0b\u0e42\u0e25\u0e19\u0e31\u0e01\u0e25\u0e48\u0e32\u0e42\u0e08\u0e23\u0e2a\u0e25\u0e31\u0e14 \u0e2d\u0e2d\u0e01\u0e42\u0e23\u0e07\"",
+        "translatedLanguage": "th",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1006152",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:46:33+00:00",
+        "createdAt": "2022-03-14T01:46:33+00:00",
+        "updatedAt": "2022-10-07T19:17:47+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "c70441ac-9a23-496e-a106-dd61c672c304",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "2",
+        "title": "\"\u0e0a\u0e32\u0e22\u0e1c\u0e39\u0e49\u0e19\u0e31\u0e49\u0e19\u0e0a\u0e37\u0e48\u0e2d\u0e25\u0e39\u0e1f\u0e35\u0e48\"",
+        "translatedLanguage": "th",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1006151",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:46:26+00:00",
+        "createdAt": "2022-03-14T01:46:26+00:00",
+        "updatedAt": "2022-10-07T19:17:47+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "9ed2e548-0676-4d70-8e60-dc0ef32d2c7d",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "2",
+        "title": "Dialah - \"Luffy Si Topi Jerami\"",
+        "translatedLanguage": "id",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1008832",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:41:35+00:00",
+        "createdAt": "2022-03-14T01:41:35+00:00",
+        "updatedAt": "2022-10-07T19:17:42+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "8675cc6c-0370-4d31-abfd-fdd30306aac2",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "1",
+        "title": "Romance Dawn - Awal Petualangan -",
+        "translatedLanguage": "id",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1008831",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:41:28+00:00",
+        "createdAt": "2022-03-14T01:41:28+00:00",
+        "updatedAt": "2022-10-07T19:17:41+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "971dbe40-cd02-48ea-9073-b1a0062a5943",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "2",
+        "title": "Luffy, l'homme au chapeau de paille",
+        "translatedLanguage": "fr",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/7000037",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:45:44+00:00",
+        "createdAt": "2022-03-14T01:45:43+00:00",
+        "updatedAt": "2022-10-07T19:17:46+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "dd75dd48-f94e-434a-9bbe-f4a55253168a",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "3",
+        "title": "Zoro le \"Chasseur de pirates\"",
+        "translatedLanguage": "fr",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/7000038",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:45:50+00:00",
+        "createdAt": "2022-03-14T01:45:50+00:00",
+        "updatedAt": "2022-10-07T19:17:46+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "fb79ee5f-617f-4697-a94a-f6c8ee226e86",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "1",
+        "title": "Romance Dawn - \u00c0 l'aube d'une grande aventure",
+        "translatedLanguage": "fr",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/7000036",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:45:36+00:00",
+        "createdAt": "2022-03-14T01:45:36+00:00",
+        "updatedAt": "2022-10-07T19:17:45+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "98d526cf-47b4-484f-8df5-b335ea87274c",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "3",
+        "title": "Kemunculan Zoro \"Si Pemburu Bajak Laut\"",
+        "translatedLanguage": "id",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1008833",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:41:41+00:00",
+        "createdAt": "2022-03-14T01:41:41+00:00",
+        "updatedAt": "2022-10-07T19:17:42+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "ae821952-1751-4bf7-9058-65d130cf9180",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "1",
+        "title": "\"ROMANCE DAWN -\u0e23\u0e38\u0e48\u0e07\u0e2a\u0e32\u0e07\u0e02\u0e2d\u0e07\u0e01\u0e32\u0e23\u0e1c\u0e08\u0e0d\u0e20\u0e31\u0e22-\"",
+        "translatedLanguage": "th",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1006150",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:46:19+00:00",
+        "createdAt": "2022-03-14T01:46:19+00:00",
+        "updatedAt": "2022-10-07T19:17:46+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "01de8763-e4c9-4fd1-ab1b-41955d837517",
+      "type": "chapter",
+      "attributes": {
+        "volume": "107",
+        "chapter": "1079",
+        "title": "La tripulaci\u00f3 d'un Emperador del Mar, els Pirates del P\u00e8l-Roig",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T14:23:32+00:00",
+        "readableAt": "2025-06-29T14:23:32+00:00",
+        "createdAt": "2025-06-29T14:23:31+00:00",
+        "updatedAt": "2025-06-29T14:24:12+00:00",
+        "version": 3,
+        "pages": 13
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "01e27b34-0ae5-46ce-b57b-f23d7c0f3141",
+      "type": "chapter",
+      "attributes": {
+        "volume": "84",
+        "chapter": "843",
+        "title": "En Vinsmoke Sanji",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T16:51:23+00:00",
+        "readableAt": "2025-06-29T16:51:23+00:00",
+        "createdAt": "2025-06-29T16:51:23+00:00",
+        "updatedAt": "2025-06-29T16:51:30+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "046a5680-16f1-47aa-b30e-49329e1d3c9e",
+      "type": "chapter",
+      "attributes": {
+        "volume": "82",
+        "chapter": "826",
+        "title": "0 i 4",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:39:49+00:00",
+        "readableAt": "2025-06-29T19:39:49+00:00",
+        "createdAt": "2025-06-29T19:39:48+00:00",
+        "updatedAt": "2025-06-29T19:40:02+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "046db72c-85b1-4b39-a98a-399643c34aca",
+      "type": "chapter",
+      "attributes": {
+        "volume": "79",
+        "chapter": "792",
+        "title": "\u062c\u064e\u062b\u0648\u0645",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T12:37:21+00:00",
+        "readableAt": "2025-07-15T12:37:21+00:00",
+        "createdAt": "2025-07-15T12:37:21+00:00",
+        "updatedAt": "2025-07-15T12:37:39+00:00",
+        "version": 3,
+        "pages": 14
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "45abf28d-5997-4788-ad9f-e31e3ae0c509",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "3",
+        "title": "Enter Zolo: Pirate Hunter",
+        "translatedLanguage": "en",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1000488",
+        "isUnavailable": false,
+        "publishAt": "2025-10-22T01:10:01+00:00",
+        "readableAt": "2025-10-22T01:10:01+00:00",
+        "createdAt": "2025-10-22T01:10:01+00:00",
+        "updatedAt": "2025-10-22T01:10:01+00:00",
+        "version": 2,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "e9fb431b-5a4d-4bf8-9c4a-0510c5eca6d0",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "1",
+        "title": "Romance Dawn",
+        "translatedLanguage": "en",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1000486",
+        "isUnavailable": false,
+        "publishAt": "2025-10-22T01:09:56+00:00",
+        "readableAt": "2025-10-22T01:09:56+00:00",
+        "createdAt": "2025-10-22T01:09:56+00:00",
+        "updatedAt": "2025-10-22T01:09:56+00:00",
+        "version": 2,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "0171a0c5-c867-4f6b-a82b-929c2fa88fac",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "2",
+        "title": "They Call Him \u2018Straw Hat Luffy\u2019",
+        "translatedLanguage": "en",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1000487",
+        "isUnavailable": false,
+        "publishAt": "2025-10-22T01:09:59+00:00",
+        "readableAt": "2025-10-22T01:09:59+00:00",
+        "createdAt": "2025-10-22T01:09:58+00:00",
+        "updatedAt": "2025-10-22T01:09:59+00:00",
+        "version": 2,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "44271463-7146-4b7a-ad02-4883aea604c9",
+      "type": "chapter",
+      "attributes": {
+        "volume": "99",
+        "chapter": "1004",
+        "title": "Kibi dango",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T15:02:53+00:00",
+        "readableAt": "2025-06-29T15:02:53+00:00",
+        "createdAt": "2025-06-29T15:02:52+00:00",
+        "updatedAt": "2025-06-29T15:03:36+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "42279733-d732-433f-9d7f-de582703b4ae",
+      "type": "chapter",
+      "attributes": {
+        "volume": "76",
+        "chapter": "763",
+        "title": "Declaraci\u00f3 d'humanitat",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T18:45:16+00:00",
+        "readableAt": "2025-06-29T18:45:16+00:00",
+        "createdAt": "2025-06-29T18:45:15+00:00",
+        "updatedAt": "2025-06-29T18:45:27+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "3eebccd7-4f33-4038-9087-655451fad458",
+      "type": "chapter",
+      "attributes": {
+        "volume": "99",
+        "chapter": "997",
+        "title": "Flames",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T15:31:43+00:00",
+        "readableAt": "2025-06-29T15:31:43+00:00",
+        "createdAt": "2025-06-29T15:31:43+00:00",
+        "updatedAt": "2025-06-29T15:32:35+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "1b78a57f-c736-483d-a78a-f538748bead9",
+      "type": "chapter",
+      "attributes": {
+        "volume": "81",
+        "chapter": "813",
+        "title": "Una invitaci\u00f3 per prendre el te",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:34:50+00:00",
+        "readableAt": "2025-06-29T19:34:50+00:00",
+        "createdAt": "2025-06-29T19:34:49+00:00",
+        "updatedAt": "2025-06-29T19:35:05+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    }
+  ],
+  "limit": 20,
+  "offset": 0,
+  "total": 864
+}

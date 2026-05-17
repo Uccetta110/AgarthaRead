@@ -3,7 +3,7 @@
     <button
       class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
       :disabled="isDisabled"
-      @click="toggleLike"
+      @click.stop.prevent="toggleLike"
       type="button"
     >
       <span>{{ liked ? 'Ti piace' : 'Like' }}</span>
@@ -44,7 +44,7 @@ watch(() => props.initialCount, (value) => {
 })
 
 const canInteract = computed(() => props.canLike !== false)
-const isDisabled = computed(() => loading.value || !props.itemId)
+const isDisabled = computed(() => loading.value || !props.itemId || !canInteract.value)
 
 const helperText = computed(() => {
   if (!user.value) return 'Accedi per mettere like'
@@ -83,7 +83,18 @@ async function toggleLike() {
       await navigateTo('/auth/login')
       return
     }
-    errorMessage.value = 'Errore durante il like'
+
+    if (error?.statusCode === 403) {
+      errorMessage.value = error?.statusMessage || error?.data?.statusMessage || 'Devi completare la lettura per mettere like'
+      return
+    }
+
+    if (error?.statusCode === 400 || error?.statusCode === 404) {
+      errorMessage.value = error?.statusMessage || error?.data?.statusMessage || 'Impossibile aggiornare il like'
+      return
+    }
+
+    errorMessage.value = error?.statusMessage || error?.data?.statusMessage || 'Errore durante il like'
   } finally {
     loading.value = false
   }

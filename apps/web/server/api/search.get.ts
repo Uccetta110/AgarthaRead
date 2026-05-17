@@ -1,5 +1,5 @@
 import { getQuery } from 'h3'
-import { fetchCachedJikanJson, normalizeJikanHomeItem } from '../utils/jikan'
+import { searchAniListManga, normalizeAniListHomeItem } from '../utils/aniList'
 
 type SearchType = 'books' | 'manga' | 'news'
 
@@ -86,24 +86,17 @@ export default defineEventHandler(async (event) => {
   }
 
   if (type === 'manga') {
-    const params = new URLSearchParams()
-    params.set('q', q)
-    params.set('page', String(page))
-    params.set('limit', String(pageSize))
-
     try {
-      const cacheKey = `jikan:search:${q}:${page}:${pageSize}`
-      const jikanJson = await fetchCachedJikanJson(cacheKey, '/manga', params, 10 * 60 * 1000)
-      const items = (jikanJson.data || []).map((manga: any) => normalizeJikanHomeItem(manga))
-      const total = Number(jikanJson.pagination?.items?.total || 0)
-      const hasNextPage = Boolean(jikanJson.pagination?.has_next_page)
+      const results = await searchAniListManga(q, page, pageSize, 'SCORE_DESC')
+      const items = (results || []).map((manga: any) => normalizeAniListHomeItem(manga))
+      const total = items.length
 
       return {
         items,
         page,
         pageSize,
         total,
-        hasMore: hasNextPage || ((page - 1) * pageSize + items.length < total),
+        hasMore: items.length === pageSize,
         type
       } satisfies SearchPayload
     } catch (error) {
@@ -114,7 +107,7 @@ export default defineEventHandler(async (event) => {
         total: 0,
         hasMore: false,
         type,
-        notice: 'Jikan non disponibile'
+        notice: 'AniList non disponibile'
       } satisfies SearchPayload
     }
   }

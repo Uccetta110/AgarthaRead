@@ -1,41 +1,10 @@
 import { and, eq, sql } from 'drizzle-orm'
 import { getDb } from '../../../db/client'
 import { catalogItems, itemLikes, readingProgress, userListItems, userLists } from '../../../db/schema'
+import { getDefaultFavoritesListName, getOrCreateDefaultFavoritesList } from '../../../utils/defaultLists'
 import { requireSessionUser } from '../../../utils/session'
 
 const READING_THRESHOLD = 10
-const FAVORITES_LIST_NAME = 'Preferiti'
-
-async function getOrCreateFavoritesList(db: ReturnType<typeof getDb>, userId: number) {
-  const existing = (await db
-    .select()
-    .from(userLists)
-    .where(and(eq(userLists.userId, userId), eq(userLists.name, FAVORITES_LIST_NAME)))
-    .limit(1))[0]
-
-  if (existing) return existing.id
-
-  await db.insert(userLists).values({
-    userId,
-    name: FAVORITES_LIST_NAME,
-    isSystem: 1
-  })
-
-  const created = (await db
-    .select()
-    .from(userLists)
-    .where(and(eq(userLists.userId, userId), eq(userLists.name, FAVORITES_LIST_NAME)))
-    .limit(1))[0]
-
-  if (!created) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Impossibile creare la lista preferiti'
-    })
-  }
-
-  return created.id
-}
 
 export default defineEventHandler(async (event) => {
   const user = await requireSessionUser(event)
@@ -92,10 +61,11 @@ export default defineEventHandler(async (event) => {
       .delete(itemLikes)
       .where(and(eq(itemLikes.userId, user.id), eq(itemLikes.itemId, itemId)))
 
+    const listName = getDefaultFavoritesListName(item.type)
     const list = (await db
       .select()
       .from(userLists)
-      .where(and(eq(userLists.userId, user.id), eq(userLists.name, FAVORITES_LIST_NAME)))
+      .where(and(eq(userLists.userId, user.id), eq(userLists.name, listName)))
       .limit(1))[0]
 
     if (list) {
@@ -109,7 +79,7 @@ export default defineEventHandler(async (event) => {
       itemId
     })
 
-    const listId = await getOrCreateFavoritesList(db, user.id)
+    const listId = await getOrCreateDefaultFavoritesList(db, user.id, item.type)
     await db.insert(userListItems).values({
       listId,
       itemId

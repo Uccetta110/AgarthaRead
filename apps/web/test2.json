@@ -1,0 +1,2609 @@
+{
+  "result": "ok",
+  "response": "collection",
+  "data": [
+    {
+      "id": "29ea1332-8840-431c-a211-cdf811a7673a",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "3",
+        "title": "\"\u0e42\u0e0b\u0e42\u0e25\u0e19\u0e31\u0e01\u0e25\u0e48\u0e32\u0e42\u0e08\u0e23\u0e2a\u0e25\u0e31\u0e14 \u0e2d\u0e2d\u0e01\u0e42\u0e23\u0e07\"",
+        "translatedLanguage": "th",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1006152",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:46:33+00:00",
+        "createdAt": "2022-03-14T01:46:33+00:00",
+        "updatedAt": "2022-10-07T19:17:47+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "c70441ac-9a23-496e-a106-dd61c672c304",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "2",
+        "title": "\"\u0e0a\u0e32\u0e22\u0e1c\u0e39\u0e49\u0e19\u0e31\u0e49\u0e19\u0e0a\u0e37\u0e48\u0e2d\u0e25\u0e39\u0e1f\u0e35\u0e48\"",
+        "translatedLanguage": "th",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1006151",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:46:26+00:00",
+        "createdAt": "2022-03-14T01:46:26+00:00",
+        "updatedAt": "2022-10-07T19:17:47+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "9ed2e548-0676-4d70-8e60-dc0ef32d2c7d",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "2",
+        "title": "Dialah - \"Luffy Si Topi Jerami\"",
+        "translatedLanguage": "id",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1008832",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:41:35+00:00",
+        "createdAt": "2022-03-14T01:41:35+00:00",
+        "updatedAt": "2022-10-07T19:17:42+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "8675cc6c-0370-4d31-abfd-fdd30306aac2",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "1",
+        "title": "Romance Dawn - Awal Petualangan -",
+        "translatedLanguage": "id",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1008831",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:41:28+00:00",
+        "createdAt": "2022-03-14T01:41:28+00:00",
+        "updatedAt": "2022-10-07T19:17:41+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "971dbe40-cd02-48ea-9073-b1a0062a5943",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "2",
+        "title": "Luffy, l'homme au chapeau de paille",
+        "translatedLanguage": "fr",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/7000037",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:45:44+00:00",
+        "createdAt": "2022-03-14T01:45:43+00:00",
+        "updatedAt": "2022-10-07T19:17:46+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "dd75dd48-f94e-434a-9bbe-f4a55253168a",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "3",
+        "title": "Zoro le \"Chasseur de pirates\"",
+        "translatedLanguage": "fr",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/7000038",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:45:50+00:00",
+        "createdAt": "2022-03-14T01:45:50+00:00",
+        "updatedAt": "2022-10-07T19:17:46+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "fb79ee5f-617f-4697-a94a-f6c8ee226e86",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "1",
+        "title": "Romance Dawn - \u00c0 l'aube d'une grande aventure",
+        "translatedLanguage": "fr",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/7000036",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:45:36+00:00",
+        "createdAt": "2022-03-14T01:45:36+00:00",
+        "updatedAt": "2022-10-07T19:17:45+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "98d526cf-47b4-484f-8df5-b335ea87274c",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "3",
+        "title": "Kemunculan Zoro \"Si Pemburu Bajak Laut\"",
+        "translatedLanguage": "id",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1008833",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:41:41+00:00",
+        "createdAt": "2022-03-14T01:41:41+00:00",
+        "updatedAt": "2022-10-07T19:17:42+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "ae821952-1751-4bf7-9058-65d130cf9180",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "1",
+        "title": "\"ROMANCE DAWN -\u0e23\u0e38\u0e48\u0e07\u0e2a\u0e32\u0e07\u0e02\u0e2d\u0e07\u0e01\u0e32\u0e23\u0e1c\u0e08\u0e0d\u0e20\u0e31\u0e22-\"",
+        "translatedLanguage": "th",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1006150",
+        "isUnavailable": false,
+        "publishAt": "2037-12-31T15:00:00+00:00",
+        "readableAt": "2022-03-14T01:46:19+00:00",
+        "createdAt": "2022-03-14T01:46:19+00:00",
+        "updatedAt": "2022-10-07T19:17:46+00:00",
+        "version": 3,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "01de8763-e4c9-4fd1-ab1b-41955d837517",
+      "type": "chapter",
+      "attributes": {
+        "volume": "107",
+        "chapter": "1079",
+        "title": "La tripulaci\u00f3 d'un Emperador del Mar, els Pirates del P\u00e8l-Roig",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T14:23:32+00:00",
+        "readableAt": "2025-06-29T14:23:32+00:00",
+        "createdAt": "2025-06-29T14:23:31+00:00",
+        "updatedAt": "2025-06-29T14:24:12+00:00",
+        "version": 3,
+        "pages": 13
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "01e27b34-0ae5-46ce-b57b-f23d7c0f3141",
+      "type": "chapter",
+      "attributes": {
+        "volume": "84",
+        "chapter": "843",
+        "title": "En Vinsmoke Sanji",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T16:51:23+00:00",
+        "readableAt": "2025-06-29T16:51:23+00:00",
+        "createdAt": "2025-06-29T16:51:23+00:00",
+        "updatedAt": "2025-06-29T16:51:30+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "046a5680-16f1-47aa-b30e-49329e1d3c9e",
+      "type": "chapter",
+      "attributes": {
+        "volume": "82",
+        "chapter": "826",
+        "title": "0 i 4",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:39:49+00:00",
+        "readableAt": "2025-06-29T19:39:49+00:00",
+        "createdAt": "2025-06-29T19:39:48+00:00",
+        "updatedAt": "2025-06-29T19:40:02+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "046db72c-85b1-4b39-a98a-399643c34aca",
+      "type": "chapter",
+      "attributes": {
+        "volume": "79",
+        "chapter": "792",
+        "title": "\u062c\u064e\u062b\u0648\u0645",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T12:37:21+00:00",
+        "readableAt": "2025-07-15T12:37:21+00:00",
+        "createdAt": "2025-07-15T12:37:21+00:00",
+        "updatedAt": "2025-07-15T12:37:39+00:00",
+        "version": 3,
+        "pages": 14
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "45abf28d-5997-4788-ad9f-e31e3ae0c509",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "3",
+        "title": "Enter Zolo: Pirate Hunter",
+        "translatedLanguage": "en",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1000488",
+        "isUnavailable": false,
+        "publishAt": "2025-10-22T01:10:01+00:00",
+        "readableAt": "2025-10-22T01:10:01+00:00",
+        "createdAt": "2025-10-22T01:10:01+00:00",
+        "updatedAt": "2025-10-22T01:10:01+00:00",
+        "version": 2,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "e9fb431b-5a4d-4bf8-9c4a-0510c5eca6d0",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "1",
+        "title": "Romance Dawn",
+        "translatedLanguage": "en",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1000486",
+        "isUnavailable": false,
+        "publishAt": "2025-10-22T01:09:56+00:00",
+        "readableAt": "2025-10-22T01:09:56+00:00",
+        "createdAt": "2025-10-22T01:09:56+00:00",
+        "updatedAt": "2025-10-22T01:09:56+00:00",
+        "version": 2,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "0171a0c5-c867-4f6b-a82b-929c2fa88fac",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "2",
+        "title": "They Call Him \u2018Straw Hat Luffy\u2019",
+        "translatedLanguage": "en",
+        "externalUrl": "https:\/\/mangaplus.shueisha.co.jp\/viewer\/1000487",
+        "isUnavailable": false,
+        "publishAt": "2025-10-22T01:09:59+00:00",
+        "readableAt": "2025-10-22T01:09:59+00:00",
+        "createdAt": "2025-10-22T01:09:58+00:00",
+        "updatedAt": "2025-10-22T01:09:59+00:00",
+        "version": 2,
+        "pages": 0
+      },
+      "relationships": [
+        {
+          "id": "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "74d95af1-7492-4fca-bc44-10c9142703e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "44271463-7146-4b7a-ad02-4883aea604c9",
+      "type": "chapter",
+      "attributes": {
+        "volume": "99",
+        "chapter": "1004",
+        "title": "Kibi dango",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T15:02:53+00:00",
+        "readableAt": "2025-06-29T15:02:53+00:00",
+        "createdAt": "2025-06-29T15:02:52+00:00",
+        "updatedAt": "2025-06-29T15:03:36+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "42279733-d732-433f-9d7f-de582703b4ae",
+      "type": "chapter",
+      "attributes": {
+        "volume": "76",
+        "chapter": "763",
+        "title": "Declaraci\u00f3 d'humanitat",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T18:45:16+00:00",
+        "readableAt": "2025-06-29T18:45:16+00:00",
+        "createdAt": "2025-06-29T18:45:15+00:00",
+        "updatedAt": "2025-06-29T18:45:27+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "3eebccd7-4f33-4038-9087-655451fad458",
+      "type": "chapter",
+      "attributes": {
+        "volume": "99",
+        "chapter": "997",
+        "title": "Flames",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T15:31:43+00:00",
+        "readableAt": "2025-06-29T15:31:43+00:00",
+        "createdAt": "2025-06-29T15:31:43+00:00",
+        "updatedAt": "2025-06-29T15:32:35+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "1b78a57f-c736-483d-a78a-f538748bead9",
+      "type": "chapter",
+      "attributes": {
+        "volume": "81",
+        "chapter": "813",
+        "title": "Una invitaci\u00f3 per prendre el te",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:34:50+00:00",
+        "readableAt": "2025-06-29T19:34:50+00:00",
+        "createdAt": "2025-06-29T19:34:49+00:00",
+        "updatedAt": "2025-06-29T19:35:05+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "118781dc-ee12-4b32-8382-cc4aac860819",
+      "type": "chapter",
+      "attributes": {
+        "volume": "102",
+        "chapter": "1032",
+        "title": "L'estimada katana de l'Oden",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T14:48:08+00:00",
+        "readableAt": "2025-06-29T14:48:08+00:00",
+        "createdAt": "2025-06-29T14:48:07+00:00",
+        "updatedAt": "2025-06-29T14:48:59+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "18e05904-945d-435c-8506-237205397f28",
+      "type": "chapter",
+      "attributes": {
+        "volume": "112",
+        "chapter": "1135",
+        "title": "Copes de l'amistat",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-04T13:40:22+00:00",
+        "readableAt": "2025-06-04T13:40:22+00:00",
+        "createdAt": "2025-06-04T13:40:22+00:00",
+        "updatedAt": "2025-06-29T15:02:01+00:00",
+        "version": 4,
+        "pages": 14
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "1e3f3061-c13a-430e-bd08-24abe921ef48",
+      "type": "chapter",
+      "attributes": {
+        "volume": "65",
+        "chapter": "641",
+        "title": "Tu qu\u00e8 ets?",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:19:50+00:00",
+        "readableAt": "2025-06-29T17:19:50+00:00",
+        "createdAt": "2025-06-29T17:19:49+00:00",
+        "updatedAt": "2025-06-29T17:21:11+00:00",
+        "version": 3,
+        "pages": 20
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "286369aa-8b26-4470-a3f9-a3c46fd173f5",
+      "type": "chapter",
+      "attributes": {
+        "volume": "62",
+        "chapter": "612",
+        "title": "Guiats pel taur\u00f3 que vam salvar",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:05:47+00:00",
+        "readableAt": "2025-06-29T17:05:47+00:00",
+        "createdAt": "2025-06-29T17:05:46+00:00",
+        "updatedAt": "2025-06-29T17:07:20+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "2ce4a3f1-af74-4e29-b3c5-1055b90a5f1b",
+      "type": "chapter",
+      "attributes": {
+        "volume": "69",
+        "chapter": "688",
+        "title": "Mocha",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:35:51+00:00",
+        "readableAt": "2025-06-29T17:35:51+00:00",
+        "createdAt": "2025-06-29T17:35:50+00:00",
+        "updatedAt": "2025-06-29T17:36:01+00:00",
+        "version": 3,
+        "pages": 19
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "2cf7e4fc-d78b-427c-8700-222463204461",
+      "type": "chapter",
+      "attributes": {
+        "volume": "108",
+        "chapter": "1100",
+        "title": "Gr\u00e0cies, Bonney",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-20T16:59:03+00:00",
+        "readableAt": "2025-06-20T16:59:03+00:00",
+        "createdAt": "2025-06-20T16:59:02+00:00",
+        "updatedAt": "2025-06-29T15:20:46+00:00",
+        "version": 4,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "2ebf434c-44a3-4d79-914b-3d5c80196bfc",
+      "type": "chapter",
+      "attributes": {
+        "volume": null,
+        "chapter": "1123",
+        "title": "\u0936\u0942\u0928\u094d\u092f \u092a\u0916\u0935\u093e\u0921\u093c\u093e ",
+        "translatedLanguage": "hi",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-21T20:40:37+00:00",
+        "readableAt": "2025-06-21T20:40:37+00:00",
+        "createdAt": "2025-06-21T20:40:36+00:00",
+        "updatedAt": "2025-06-21T20:41:25+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "34314451-dbeb-40cd-89c8-bb2c474a2446",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "47f29c98-660d-483e-96c5-67fe6d82897a", "type": "user" }
+      ]
+    },
+    {
+      "id": "287f911b-34ce-412a-94fb-8e82c324f434",
+      "type": "chapter",
+      "attributes": {
+        "volume": "106",
+        "chapter": "1067",
+        "title": "\u0623\u0631\u0634\u064a\u0641 \u0628\u0627\u0646\u0643",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T04:08:14+00:00",
+        "readableAt": "2025-07-15T04:08:14+00:00",
+        "createdAt": "2025-07-15T04:08:13+00:00",
+        "updatedAt": "2025-07-15T04:08:56+00:00",
+        "version": 3,
+        "pages": 15
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "27115244-d98d-43f7-81c6-ec054b5089bd",
+      "type": "chapter",
+      "attributes": {
+        "volume": "84",
+        "chapter": "839",
+        "title": "Mai no oblidar\u00e9 el deute que tinc amb tu",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T16:49:43+00:00",
+        "readableAt": "2025-06-29T16:49:43+00:00",
+        "createdAt": "2025-06-29T16:49:42+00:00",
+        "updatedAt": "2025-06-29T16:49:57+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "256a42b4-46fe-49fe-8887-08909c5fe32c",
+      "type": "chapter",
+      "attributes": {
+        "volume": "75",
+        "chapter": "747",
+        "title": "L'oficial executiu Pica",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T18:38:37+00:00",
+        "readableAt": "2025-06-29T18:38:37+00:00",
+        "createdAt": "2025-06-29T18:38:36+00:00",
+        "updatedAt": "2025-06-29T18:38:51+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "25aa681d-ec33-4d6c-882a-d82ad903af00",
+      "type": "chapter",
+      "attributes": {
+        "volume": "73",
+        "chapter": "730",
+        "title": "Tres cartes",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:48:18+00:00",
+        "readableAt": "2025-06-29T17:48:18+00:00",
+        "createdAt": "2025-06-29T17:48:18+00:00",
+        "updatedAt": "2025-06-29T17:48:28+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "1815da5a-d5d7-4ea1-9e24-171eba32295b",
+      "type": "chapter",
+      "attributes": {
+        "volume": "76",
+        "chapter": "762",
+        "title": "La ciutat blanca",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T18:43:58+00:00",
+        "readableAt": "2025-06-29T18:43:58+00:00",
+        "createdAt": "2025-06-29T18:43:58+00:00",
+        "updatedAt": "2025-06-29T18:44:09+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "0e731d38-6f1c-40ca-8193-76711ca4be1c",
+      "type": "chapter",
+      "attributes": {
+        "volume": "79",
+        "chapter": "791",
+        "title": "\u0623\u0646\u0642\u0627\u0636",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T12:36:50+00:00",
+        "readableAt": "2025-07-15T12:36:50+00:00",
+        "createdAt": "2025-07-15T12:36:49+00:00",
+        "updatedAt": "2025-07-15T12:37:10+00:00",
+        "version": 3,
+        "pages": 15
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "1fd24052-01f7-4950-8ea9-fa2b145b5984",
+      "type": "chapter",
+      "attributes": {
+        "volume": "72",
+        "chapter": "718",
+        "title": "\u062c\u064a\u0634 \u0631\u064a\u0643\u0648 \u0627\u0644\u0645\u0644\u0643\u064a \u0641\u064a \u062d\u0642\u0644 \u0627\u0644\u0632\u0647\u0648\u0631",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T11:31:18+00:00",
+        "readableAt": "2025-07-15T11:31:18+00:00",
+        "createdAt": "2025-07-15T11:31:18+00:00",
+        "updatedAt": "2025-07-15T11:31:39+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "0ea85d4b-d075-4545-a9f3-566fc8e749c9",
+      "type": "chapter",
+      "attributes": {
+        "volume": "94",
+        "chapter": "950",
+        "title": "\u062d\u0644\u0645 \u0627\u0644\u062c\u0646\u0648\u062f",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2019-07-26T11:03:59+00:00",
+        "readableAt": "2019-07-26T11:03:59+00:00",
+        "createdAt": "2019-07-26T11:03:59+00:00",
+        "updatedAt": "2025-11-05T18:36:51+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "55c139d5-a221-4ce1-a2c3-35fb20e4aa7a",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "5fb20af7-fb3b-4b8c-8d80-b07888e28180", "type": "user" }
+      ]
+    },
+    {
+      "id": "06e0325c-07ca-42f4-acbc-b76968bdacb5",
+      "type": "chapter",
+      "attributes": {
+        "volume": "63",
+        "chapter": "616",
+        "title": "L'aniversari de la venjan\u00e7a",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:08:17+00:00",
+        "readableAt": "2025-06-29T17:08:17+00:00",
+        "createdAt": "2025-06-29T17:08:17+00:00",
+        "updatedAt": "2025-06-29T17:10:00+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "05e4dc97-50bb-4337-a064-df442ca9afdc",
+      "type": "chapter",
+      "attributes": {
+        "volume": "98",
+        "chapter": "985",
+        "title": "El pla per la Nova Onigashima",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T15:33:36+00:00",
+        "readableAt": "2025-06-29T15:33:36+00:00",
+        "createdAt": "2025-06-29T15:33:36+00:00",
+        "updatedAt": "2025-06-29T15:34:24+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "061a221c-1c56-49ad-8ac6-0ac0c37cd097",
+      "type": "chapter",
+      "attributes": {
+        "volume": "76",
+        "chapter": "759",
+        "title": "\u0627\u0644\u062e\u0637\u0629 \u0627\u0644\u0633\u0631\u064a\u064e\u0651\u0629",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T12:18:57+00:00",
+        "readableAt": "2025-07-15T12:18:57+00:00",
+        "createdAt": "2025-07-15T12:18:57+00:00",
+        "updatedAt": "2025-07-15T12:19:16+00:00",
+        "version": 3,
+        "pages": 15
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "04b516a6-ad8f-40b8-b04b-216125d98882",
+      "type": "chapter",
+      "attributes": {
+        "volume": "84",
+        "chapter": "841",
+        "title": "Cap a l'East Blue",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T16:50:09+00:00",
+        "readableAt": "2025-06-29T16:50:09+00:00",
+        "createdAt": "2025-06-29T16:50:09+00:00",
+        "updatedAt": "2025-06-29T16:50:23+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "417eb603-ecf4-44a4-a628-34ac99cc7f6e",
+      "type": "chapter",
+      "attributes": {
+        "volume": "79",
+        "chapter": "791",
+        "title": "Runes",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:27:35+00:00",
+        "readableAt": "2025-06-29T19:27:35+00:00",
+        "createdAt": "2025-06-29T19:27:35+00:00",
+        "updatedAt": "2025-06-29T19:27:51+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "4a05a201-ffe9-4006-82c3-243a442e0594",
+      "type": "chapter",
+      "attributes": {
+        "volume": "111",
+        "chapter": "1129",
+        "title": "Nines vivents",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-04T14:04:34+00:00",
+        "readableAt": "2025-06-04T14:04:34+00:00",
+        "createdAt": "2025-06-04T14:04:34+00:00",
+        "updatedAt": "2025-06-29T15:04:00+00:00",
+        "version": 4,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "4a228b2a-f346-496d-a788-7ba5354d23a0",
+      "type": "chapter",
+      "attributes": {
+        "volume": "111",
+        "chapter": "1132",
+        "title": "Aventures a Elbaf",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-04T13:48:07+00:00",
+        "readableAt": "2025-06-04T13:48:07+00:00",
+        "createdAt": "2025-06-04T13:48:06+00:00",
+        "updatedAt": "2025-06-29T15:03:29+00:00",
+        "version": 4,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "4a491cab-4279-4105-bcf5-77c20b5f3067",
+      "type": "chapter",
+      "attributes": {
+        "volume": "82",
+        "chapter": "824",
+        "title": "Petits jocs de pirata",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:39:14+00:00",
+        "readableAt": "2025-06-29T19:39:14+00:00",
+        "createdAt": "2025-06-29T19:39:13+00:00",
+        "updatedAt": "2025-06-29T19:39:29+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "138e6e58-0b8a-403c-9131-190f7bda15e4",
+      "type": "chapter",
+      "attributes": {
+        "volume": "86",
+        "chapter": "860",
+        "title": "La festa comen\u00e7a a les 10 h",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T16:43:53+00:00",
+        "readableAt": "2025-06-29T16:43:53+00:00",
+        "createdAt": "2025-06-29T16:43:52+00:00",
+        "updatedAt": "2025-06-29T16:44:03+00:00",
+        "version": 3,
+        "pages": 13
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "22c379c5-d6cc-45ca-a561-b9e355ee20e5",
+      "type": "chapter",
+      "attributes": {
+        "volume": "78",
+        "chapter": "782",
+        "title": "\u0628\u0637\u0644 \u0627\u0644\u0634\u0631",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T12:31:09+00:00",
+        "readableAt": "2025-07-15T12:31:09+00:00",
+        "createdAt": "2025-07-15T12:31:08+00:00",
+        "updatedAt": "2025-07-15T12:31:30+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "2e43eb49-3cbe-41a3-86fc-1d5f6aed3519",
+      "type": "chapter",
+      "attributes": {
+        "volume": "64",
+        "chapter": "633",
+        "title": "Aliat o enemic?",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:16:12+00:00",
+        "readableAt": "2025-06-29T17:16:12+00:00",
+        "createdAt": "2025-06-29T17:16:12+00:00",
+        "updatedAt": "2025-06-29T17:17:26+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "39de9059-6040-4938-a2b1-c5db6c529a18",
+      "type": "chapter",
+      "attributes": {
+        "volume": "106",
+        "chapter": "1066",
+        "title": "\u0625\u0631\u0627\u062f\u0629 \u0623\u0648\u0647\u0627\u0631\u0627",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T04:07:56+00:00",
+        "readableAt": "2025-07-15T04:07:56+00:00",
+        "createdAt": "2025-07-15T04:07:56+00:00",
+        "updatedAt": "2025-07-15T04:08:44+00:00",
+        "version": 3,
+        "pages": 15
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "36f6208a-c5eb-4ba3-a1ae-8d2c39bf25a8",
+      "type": "chapter",
+      "attributes": {
+        "volume": "66",
+        "chapter": "649",
+        "title": "El ball dels besucs i les palaies",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:23:18+00:00",
+        "readableAt": "2025-06-29T17:23:18+00:00",
+        "createdAt": "2025-06-29T17:23:18+00:00",
+        "updatedAt": "2025-06-29T17:24:42+00:00",
+        "version": 3,
+        "pages": 19
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "37d0687a-d8f8-477d-8a69-da85c2299fb6",
+      "type": "chapter",
+      "attributes": {
+        "volume": "64",
+        "chapter": "629",
+        "title": "L'antic Guerrer del Mar obstaculitza el pas",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:14:11+00:00",
+        "readableAt": "2025-06-29T17:14:11+00:00",
+        "createdAt": "2025-06-29T17:14:10+00:00",
+        "updatedAt": "2025-06-29T17:15:28+00:00",
+        "version": 3,
+        "pages": 19
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "37f49395-58dd-4f6a-a5bc-f128df77f6ea",
+      "type": "chapter",
+      "attributes": {
+        "volume": "96",
+        "chapter": "973",
+        "title": "El clan Kozuki",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T15:45:45+00:00",
+        "readableAt": "2025-06-29T15:45:45+00:00",
+        "createdAt": "2025-06-29T15:45:44+00:00",
+        "updatedAt": "2025-06-29T15:46:12+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "3c0b5065-db39-45e1-acf5-b6a14c9dd888",
+      "type": "chapter",
+      "attributes": {
+        "volume": "82",
+        "chapter": "825",
+        "title": "La tira c\u00f2mica del World Economic Times",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:39:31+00:00",
+        "readableAt": "2025-06-29T19:39:31+00:00",
+        "createdAt": "2025-06-29T19:39:31+00:00",
+        "updatedAt": "2025-06-29T19:39:41+00:00",
+        "version": 3,
+        "pages": 14
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "3d6b3718-7296-49fa-a80e-deaabfcaeb23",
+      "type": "chapter",
+      "attributes": {
+        "volume": "73",
+        "chapter": "728",
+        "title": "Trag\u00e8dies",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:47:39+00:00",
+        "readableAt": "2025-06-29T17:47:39+00:00",
+        "createdAt": "2025-06-29T17:47:38+00:00",
+        "updatedAt": "2025-06-29T17:47:52+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "3bb147aa-7d0d-4584-bbf6-939a9e5d1b60",
+      "type": "chapter",
+      "attributes": {
+        "volume": "107",
+        "chapter": "1080",
+        "title": "L'heroi llegendari",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-20T17:10:45+00:00",
+        "readableAt": "2025-06-20T17:10:45+00:00",
+        "createdAt": "2025-06-20T17:10:41+00:00",
+        "updatedAt": "2025-06-29T15:31:58+00:00",
+        "version": 4,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "3bcc9198-edf1-42f3-bb17-8be0222500e6",
+      "type": "chapter",
+      "attributes": {
+        "volume": "86",
+        "chapter": "859",
+        "title": "El pla per assassinar un dels Quatre Emperadors",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T16:43:34+00:00",
+        "readableAt": "2025-06-29T16:43:34+00:00",
+        "createdAt": "2025-06-29T16:43:33+00:00",
+        "updatedAt": "2025-06-29T16:43:41+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "3915a858-8cf6-41ac-bfa5-1c433a665b28",
+      "type": "chapter",
+      "attributes": {
+        "volume": "101",
+        "chapter": "1025",
+        "title": "Els dracs bessons",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T14:55:18+00:00",
+        "readableAt": "2025-06-29T14:55:18+00:00",
+        "createdAt": "2025-06-29T14:55:18+00:00",
+        "updatedAt": "2025-06-29T14:55:59+00:00",
+        "version": 3,
+        "pages": 15
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "383fed37-61c6-4d03-93bf-8722749b40fa",
+      "type": "chapter",
+      "attributes": {
+        "volume": "80",
+        "chapter": "796",
+        "title": "\u0642\u0631\u0627\u0631 \u062c\u0646\u062f\u064a-\u0633\u0627\u0646",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T12:39:47+00:00",
+        "readableAt": "2025-07-15T12:39:47+00:00",
+        "createdAt": "2025-07-15T12:39:46+00:00",
+        "updatedAt": "2025-07-15T12:39:59+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "3b6506c0-418d-4a40-aa5d-21481a765257",
+      "type": "chapter",
+      "attributes": {
+        "volume": "104",
+        "chapter": "1049",
+        "title": "El m\u00f3n que haur\u00edem de tenir",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T14:36:31+00:00",
+        "readableAt": "2025-06-29T14:36:31+00:00",
+        "createdAt": "2025-06-29T14:36:30+00:00",
+        "updatedAt": "2025-06-29T14:37:28+00:00",
+        "version": 3,
+        "pages": 14
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "3b7cb893-2f50-4368-9dcb-7c76313fcd0f",
+      "type": "chapter",
+      "attributes": {
+        "volume": "110",
+        "chapter": "1121",
+        "title": "En les marees dels temps",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-20T16:51:46+00:00",
+        "readableAt": "2025-06-20T16:51:46+00:00",
+        "createdAt": "2025-06-20T16:51:45+00:00",
+        "updatedAt": "2025-06-29T15:10:49+00:00",
+        "version": 4,
+        "pages": 15
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "3b86a015-53e0-402f-8b2a-911ddbfe9636",
+      "type": "chapter",
+      "attributes": {
+        "volume": "88",
+        "chapter": "885",
+        "title": "\u00c9s la Br\u00fbl\u00e9e!!",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T16:34:05+00:00",
+        "readableAt": "2025-06-29T16:34:05+00:00",
+        "createdAt": "2025-06-29T16:34:04+00:00",
+        "updatedAt": "2025-06-29T16:34:25+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "084079cd-b83e-447d-9297-7afe6597b6dc",
+      "type": "chapter",
+      "attributes": {
+        "volume": "101",
+        "chapter": "1017",
+        "title": "L'ordre",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T14:53:03+00:00",
+        "readableAt": "2025-06-29T14:53:03+00:00",
+        "createdAt": "2025-06-29T14:53:02+00:00",
+        "updatedAt": "2025-06-29T14:53:44+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "08515385-21fa-4719-ad28-41b11ffff501",
+      "type": "chapter",
+      "attributes": {
+        "volume": "83",
+        "chapter": "834",
+        "title": "El meu somni",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:44:22+00:00",
+        "readableAt": "2025-06-29T19:44:22+00:00",
+        "createdAt": "2025-06-29T19:44:22+00:00",
+        "updatedAt": "2025-06-29T19:44:33+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "19542e27-3415-47fb-8643-69ba4ffe161a",
+      "type": "chapter",
+      "attributes": {
+        "volume": "82",
+        "chapter": "821",
+        "title": "Entesos",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:38:21+00:00",
+        "readableAt": "2025-06-29T19:38:21+00:00",
+        "createdAt": "2025-06-29T19:38:21+00:00",
+        "updatedAt": "2025-06-29T19:38:29+00:00",
+        "version": 3,
+        "pages": 19
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "198863d9-1a1d-408e-8629-c14583844416",
+      "type": "chapter",
+      "attributes": {
+        "volume": "70",
+        "chapter": "696",
+        "title": "\u0645\u0635\u0627\u0644\u062d \u0645\u0634\u062a\u0631\u0643\u0629",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T04:28:13+00:00",
+        "readableAt": "2025-07-15T04:28:13+00:00",
+        "createdAt": "2025-07-15T04:28:13+00:00",
+        "updatedAt": "2025-07-15T04:28:31+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "11397aeb-fd26-4ac5-a907-42b28535b61f",
+      "type": "chapter",
+      "attributes": {
+        "volume": null,
+        "chapter": "1165",
+        "title": "\u0397\u03c7\u03ce.",
+        "translatedLanguage": "el",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-11-14T11:38:42+00:00",
+        "readableAt": "2025-11-14T11:38:42+00:00",
+        "createdAt": "2025-11-14T11:38:41+00:00",
+        "updatedAt": "2025-11-14T11:39:17+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "d5ecf92f-d3ad-4761-95c4-76a7729fafca",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "a668f4ae-0adf-4222-ad48-cbfe5eaea63a", "type": "user" }
+      ]
+    },
+    {
+      "id": "0c95cc30-e2bf-428c-afd8-ac553d124a52",
+      "type": "chapter",
+      "attributes": {
+        "volume": "110",
+        "chapter": "1117",
+        "title": "Hi ha",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-20T16:48:43+00:00",
+        "readableAt": "2025-06-20T16:48:43+00:00",
+        "createdAt": "2025-06-20T16:48:42+00:00",
+        "updatedAt": "2025-06-29T15:11:42+00:00",
+        "version": 4,
+        "pages": 15
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "20d8942e-9eba-4dfe-a46a-5f894db7034c",
+      "type": "chapter",
+      "attributes": {
+        "volume": "105",
+        "chapter": "1065",
+        "title": "\u0623\u0641\u0631\u0627\u062f \u0641\u064a\u063a\u0627\u0628\u0627\u0646\u0643 \u0627\u0644\u0633\u062a\u0629",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T04:07:24+00:00",
+        "readableAt": "2025-07-15T04:07:24+00:00",
+        "createdAt": "2025-07-15T04:07:24+00:00",
+        "updatedAt": "2025-07-15T04:08:19+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "20ebd4a6-c601-44bc-b0ec-44b1aab7cde8",
+      "type": "chapter",
+      "attributes": {
+        "volume": "77",
+        "chapter": "774",
+        "title": "Leo, el cap dels guerrers Tontatta",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:21:00+00:00",
+        "readableAt": "2025-06-29T19:21:00+00:00",
+        "createdAt": "2025-06-29T19:20:59+00:00",
+        "updatedAt": "2025-06-29T19:21:16+00:00",
+        "version": 3,
+        "pages": 14
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "1ae056f7-7be3-41f5-b37c-6a7dc4bed2fe",
+      "type": "chapter",
+      "attributes": {
+        "volume": "71",
+        "chapter": "705",
+        "title": "En Maynard el Perseguidor",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:40:46+00:00",
+        "readableAt": "2025-06-29T17:40:46+00:00",
+        "createdAt": "2025-06-29T17:40:46+00:00",
+        "updatedAt": "2025-06-29T17:41:02+00:00",
+        "version": 3,
+        "pages": 20
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "1ae07b49-7171-404d-95b4-15a59176ccf8",
+      "type": "chapter",
+      "attributes": {
+        "volume": "87",
+        "chapter": "876",
+        "title": "La Pudding apareix casualment!",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T16:37:35+00:00",
+        "readableAt": "2025-06-29T16:37:35+00:00",
+        "createdAt": "2025-06-29T16:37:27+00:00",
+        "updatedAt": "2025-06-29T16:37:49+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "24012ada-fe64-41bf-8fdb-89d2ecf27a1b",
+      "type": "chapter",
+      "attributes": {
+        "volume": "66",
+        "chapter": "648",
+        "title": "El cam\u00ed que connecta amb el sol",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:22:55+00:00",
+        "readableAt": "2025-06-29T17:22:55+00:00",
+        "createdAt": "2025-06-29T17:22:55+00:00",
+        "updatedAt": "2025-06-29T17:24:08+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "25d3e741-5e27-40d5-8d2d-53a7ca1b7bbd",
+      "type": "chapter",
+      "attributes": {
+        "volume": "72",
+        "chapter": "717",
+        "title": "Els oblidats de Dressrosa",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:44:02+00:00",
+        "readableAt": "2025-06-29T17:44:02+00:00",
+        "createdAt": "2025-06-29T17:44:02+00:00",
+        "updatedAt": "2025-06-29T17:44:21+00:00",
+        "version": 3,
+        "pages": 19
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "2acabdfc-eb1b-489b-99fc-2d10209a264d",
+      "type": "chapter",
+      "attributes": {
+        "volume": "99",
+        "chapter": "1000",
+        "title": "Ruffy Barret de Palla",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T15:01:44+00:00",
+        "readableAt": "2025-06-29T15:01:44+00:00",
+        "createdAt": "2025-06-29T15:01:35+00:00",
+        "updatedAt": "2025-06-29T15:02:35+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "2b10dcb1-fe50-4c35-b55a-52e5f3c234e4",
+      "type": "chapter",
+      "attributes": {
+        "volume": "78",
+        "chapter": "777",
+        "title": "\u0632\u0648\u0631\u0648 \u0636\u062f\u0651 \u0628\u064a\u0643\u0627",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T12:28:26+00:00",
+        "readableAt": "2025-07-15T12:28:26+00:00",
+        "createdAt": "2025-07-15T12:28:26+00:00",
+        "updatedAt": "2025-07-15T12:28:49+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "2bd8c569-ba55-4e55-b4f5-a24b695a2077",
+      "type": "chapter",
+      "attributes": {
+        "volume": "78",
+        "chapter": "784",
+        "title": "\u0627\u0644\u0645\u0633\u062a\u0648\u0649 \u0627\u0644\u0631\u0627\u0628\u0639",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T12:32:20+00:00",
+        "readableAt": "2025-07-15T12:32:20+00:00",
+        "createdAt": "2025-07-15T12:32:20+00:00",
+        "updatedAt": "2025-07-15T12:32:44+00:00",
+        "version": 3,
+        "pages": 15
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "28e1aebe-dabd-4e43-8e12-66bf6f3e589f",
+      "type": "chapter",
+      "attributes": {
+        "volume": "64",
+        "chapter": "627",
+        "title": "T'ho agraeixo de tot cor",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:13:22+00:00",
+        "readableAt": "2025-06-29T17:13:22+00:00",
+        "createdAt": "2025-06-29T17:13:22+00:00",
+        "updatedAt": "2025-06-29T17:14:37+00:00",
+        "version": 3,
+        "pages": 19
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "357dbc92-ffe9-40f7-ad0f-bd70182f6e5f",
+      "type": "chapter",
+      "attributes": {
+        "volume": "66",
+        "chapter": "654",
+        "title": "Gam (grup redu\u00eft)",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:25:10+00:00",
+        "readableAt": "2025-06-29T17:25:10+00:00",
+        "createdAt": "2025-06-29T17:25:10+00:00",
+        "updatedAt": "2025-06-29T17:25:25+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "342bc9e0-b8bf-4959-99db-9c29cf61d990",
+      "type": "chapter",
+      "attributes": {
+        "volume": "107",
+        "chapter": "1088",
+        "title": "L'\u00faltima lli\u00e7\u00f3",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-20T17:16:11+00:00",
+        "readableAt": "2025-06-20T17:16:11+00:00",
+        "createdAt": "2025-06-20T17:16:10+00:00",
+        "updatedAt": "2025-06-29T15:27:51+00:00",
+        "version": 4,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "31a7c9f1-e7e6-432f-a1b4-e0d5784316ba",
+      "type": "chapter",
+      "attributes": {
+        "volume": "62",
+        "chapter": "606",
+        "title": "Aventures pel mar profund",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:01:57+00:00",
+        "readableAt": "2025-06-29T17:01:57+00:00",
+        "createdAt": "2025-06-29T17:01:56+00:00",
+        "updatedAt": "2025-06-29T17:03:11+00:00",
+        "version": 3,
+        "pages": 14
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "337b5605-f98a-45a5-940b-d45015a2515c",
+      "type": "chapter",
+      "attributes": {
+        "volume": "111",
+        "chapter": "1131",
+        "title": "Loki al regne dels morts",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-04T13:50:29+00:00",
+        "readableAt": "2025-06-04T13:50:29+00:00",
+        "createdAt": "2025-06-04T13:50:28+00:00",
+        "updatedAt": "2025-06-29T15:03:34+00:00",
+        "version": 4,
+        "pages": 15
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "0666cc72-154b-4541-881e-17aa9ff0816c",
+      "type": "chapter",
+      "attributes": {
+        "volume": "72",
+        "chapter": "717",
+        "title": "\u0645\u0646\u0633\u064a\u0651 \u062f\u0631\u064a\u0633\u0631\u0648\u0632\u0627",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T04:40:31+00:00",
+        "readableAt": "2025-07-15T04:40:31+00:00",
+        "createdAt": "2025-07-15T04:40:31+00:00",
+        "updatedAt": "2025-07-15T04:40:47+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "0c29df6c-f775-4854-91a3-e14d5b2622fc",
+      "type": "chapter",
+      "attributes": {
+        "volume": "85",
+        "chapter": "849",
+        "title": "En Chorm\u00e0 al M\u00f3n de mirall",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T16:46:28+00:00",
+        "readableAt": "2025-06-29T16:46:28+00:00",
+        "createdAt": "2025-06-29T16:46:27+00:00",
+        "updatedAt": "2025-06-29T16:46:37+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "014196ad-a48b-4c41-96b6-280f1384f5cf",
+      "type": "chapter",
+      "attributes": {
+        "volume": "91",
+        "chapter": "915",
+        "title": "El barri de Bakura",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T15:58:52+00:00",
+        "readableAt": "2025-06-29T15:58:52+00:00",
+        "createdAt": "2025-06-29T15:58:52+00:00",
+        "updatedAt": "2025-06-29T15:59:14+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "0a53395e-85cc-4cb9-8f7e-2fbcc1c9b945",
+      "type": "chapter",
+      "attributes": {
+        "volume": "66",
+        "chapter": "651",
+        "title": "La veu del Nou M\u00f3n",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:24:04+00:00",
+        "readableAt": "2025-06-29T17:24:04+00:00",
+        "createdAt": "2025-06-29T17:24:03+00:00",
+        "updatedAt": "2025-06-29T17:25:18+00:00",
+        "version": 3,
+        "pages": 19
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "0582fe2e-07b5-4a4a-9631-fb09d83e30f9",
+      "type": "chapter",
+      "attributes": {
+        "volume": "102",
+        "chapter": "1033",
+        "title": "Shimotzuki Kozaburo",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T14:48:20+00:00",
+        "readableAt": "2025-06-29T14:48:20+00:00",
+        "createdAt": "2025-06-29T14:48:19+00:00",
+        "updatedAt": "2025-06-29T14:49:13+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "05ae55d9-124a-4749-9dc3-9b46a1be8359",
+      "type": "chapter",
+      "attributes": {
+        "volume": "95",
+        "chapter": "964",
+        "title": "L'aventura de l'Oden",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T15:48:55+00:00",
+        "readableAt": "2025-06-29T15:48:55+00:00",
+        "createdAt": "2025-06-29T15:48:55+00:00",
+        "updatedAt": "2025-06-29T15:49:15+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "08cfdbfa-3f9f-489a-acca-8a1ca32bbd1d",
+      "type": "chapter",
+      "attributes": {
+        "volume": "103",
+        "chapter": "1041",
+        "title": "Komurasaki",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T14:43:37+00:00",
+        "readableAt": "2025-06-29T14:43:37+00:00",
+        "createdAt": "2025-06-29T14:43:37+00:00",
+        "updatedAt": "2025-06-29T14:44:29+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "43cf19ff-42ca-48aa-8812-5120c63d2ec0",
+      "type": "chapter",
+      "attributes": {
+        "volume": "77",
+        "chapter": "770",
+        "title": "La llan\u00e7a d'Elbaf",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:18:25+00:00",
+        "readableAt": "2025-06-29T19:18:25+00:00",
+        "createdAt": "2025-06-29T19:18:24+00:00",
+        "updatedAt": "2025-06-29T19:18:35+00:00",
+        "version": 3,
+        "pages": 14
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "4125046e-6050-41fa-8484-7b7fa2a44fc2",
+      "type": "chapter",
+      "attributes": {
+        "volume": "90",
+        "chapter": "905",
+        "title": "Quin m\u00f3n tan bonic!",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T16:28:45+00:00",
+        "readableAt": "2025-06-29T16:28:45+00:00",
+        "createdAt": "2025-06-29T16:28:44+00:00",
+        "updatedAt": "2025-06-29T16:29:10+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "479feb3b-7dd8-4079-abc9-ca74715866b6",
+      "type": "chapter",
+      "attributes": {
+        "volume": "103",
+        "chapter": "1046",
+        "title": "Raizo",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T14:45:50+00:00",
+        "readableAt": "2025-06-29T14:45:50+00:00",
+        "createdAt": "2025-06-29T14:45:50+00:00",
+        "updatedAt": "2025-06-29T14:46:41+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "488d62f9-9b8f-481f-8622-5cac1ce4193b",
+      "type": "chapter",
+      "attributes": {
+        "volume": "106",
+        "chapter": "1071",
+        "title": "L'heroi entra en acci\u00f3",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T14:27:32+00:00",
+        "readableAt": "2025-06-29T14:27:32+00:00",
+        "createdAt": "2025-06-29T14:27:32+00:00",
+        "updatedAt": "2025-06-29T14:28:26+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "461ade2b-3b5a-4212-b64a-71142b11815e",
+      "type": "chapter",
+      "attributes": {
+        "volume": "107",
+        "chapter": "1084",
+        "title": "L'intent d'assassinat d'un Drac Celestial",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-20T17:13:40+00:00",
+        "readableAt": "2025-06-20T17:13:40+00:00",
+        "createdAt": "2025-06-20T17:13:39+00:00",
+        "updatedAt": "2025-06-29T15:30:31+00:00",
+        "version": 5,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "4bf3fb69-702e-4b4e-882a-769a729afcf6",
+      "type": "chapter",
+      "attributes": {
+        "volume": "74",
+        "chapter": "739",
+        "title": "\u0627\u0644\u0642\u0627\u0626\u062f",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T12:06:49+00:00",
+        "readableAt": "2025-07-15T12:06:49+00:00",
+        "createdAt": "2025-07-15T12:06:49+00:00",
+        "updatedAt": "2025-07-15T12:07:14+00:00",
+        "version": 3,
+        "pages": 19
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "4fd3e0b8-8ebb-4b5a-9a51-dc437faf2422",
+      "type": "chapter",
+      "attributes": {
+        "volume": "88",
+        "chapter": "884",
+        "title": "Qui \u00e9s?",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T16:33:47+00:00",
+        "readableAt": "2025-06-29T16:33:47+00:00",
+        "createdAt": "2025-06-29T16:33:47+00:00",
+        "updatedAt": "2025-06-29T16:34:09+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "4df26eb0-695b-48b1-af3e-9266b0a06239",
+      "type": "chapter",
+      "attributes": {
+        "volume": "108",
+        "chapter": "1092",
+        "title": "L'atac furi\u00f3s d'en Kuma, el Tir\u00e0, a la Terra Santa",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-20T17:18:21+00:00",
+        "readableAt": "2025-06-20T17:18:21+00:00",
+        "createdAt": "2025-06-20T17:18:21+00:00",
+        "updatedAt": "2025-06-29T15:25:00+00:00",
+        "version": 4,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "4e3835d7-59ec-4c8d-9b87-4b8294de8a79",
+      "type": "chapter",
+      "attributes": {
+        "volume": "112",
+        "chapter": "1142",
+        "title": "El que em fa m\u00e9s por",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-04T13:15:04+00:00",
+        "readableAt": "2025-06-04T13:15:04+00:00",
+        "createdAt": "2025-06-04T13:15:03+00:00",
+        "updatedAt": "2025-06-29T14:58:31+00:00",
+        "version": 4,
+        "pages": 15
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "6133268f-1dfb-40b9-af5c-ccd758c4d92a",
+      "type": "chapter",
+      "attributes": {
+        "volume": "81",
+        "chapter": "812",
+        "title": "En Capone \"Gang\" Bege",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:34:32+00:00",
+        "readableAt": "2025-06-29T19:34:32+00:00",
+        "createdAt": "2025-06-29T19:34:31+00:00",
+        "updatedAt": "2025-06-29T19:34:44+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "60c169bd-05ba-4b22-b5f9-fa72f2709b0a",
+      "type": "chapter",
+      "attributes": {
+        "volume": "78",
+        "chapter": "781",
+        "title": "\u0631\u063a\u0628\u0629 \u0637\u0627\u0644 \u0627\u0646\u062a\u0638\u0627\u0631\u0647\u0627",
+        "translatedLanguage": "ar",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-07-15T12:30:34+00:00",
+        "readableAt": "2025-07-15T12:30:34+00:00",
+        "createdAt": "2025-07-15T12:30:33+00:00",
+        "updatedAt": "2025-07-15T12:30:58+00:00",
+        "version": 3,
+        "pages": 18
+      },
+      "relationships": [
+        {
+          "id": "f0524e24-ce78-4e03-b42b-6ced52634136",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "e3579d90-8097-4054-bd6e-79fbb114f304", "type": "user" }
+      ]
+    },
+    {
+      "id": "4f5cab24-59d1-4f89-9f29-7daa94f66d4f",
+      "type": "chapter",
+      "attributes": {
+        "volume": "64",
+        "chapter": "632",
+        "title": "Ja ho sabia",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T17:15:32+00:00",
+        "readableAt": "2025-06-29T17:15:32+00:00",
+        "createdAt": "2025-06-29T17:15:31+00:00",
+        "updatedAt": "2025-06-29T17:16:44+00:00",
+        "version": 3,
+        "pages": 17
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "7d05ea0b-aa26-461d-8095-ad97ecd3c396",
+      "type": "chapter",
+      "attributes": {
+        "volume": "83",
+        "chapter": "837",
+        "title": "En Ruffy contra el comandant Cracker",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T19:45:23+00:00",
+        "readableAt": "2025-06-29T19:45:23+00:00",
+        "createdAt": "2025-06-29T19:45:23+00:00",
+        "updatedAt": "2025-06-29T19:45:34+00:00",
+        "version": 3,
+        "pages": 16
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    },
+    {
+      "id": "813a92bb-821a-4b02-a661-c6049607282e",
+      "type": "chapter",
+      "attributes": {
+        "volume": "98",
+        "chapter": "989",
+        "title": "No crec que puguem perdre",
+        "translatedLanguage": "ca",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-06-29T15:35:56+00:00",
+        "readableAt": "2025-06-29T15:35:56+00:00",
+        "createdAt": "2025-06-29T15:35:55+00:00",
+        "updatedAt": "2025-06-29T15:36:15+00:00",
+        "version": 3,
+        "pages": 15
+      },
+      "relationships": [
+        {
+          "id": "ac77b807-c451-4f30-88d5-3c6e1d4ff2ff",
+          "type": "scanlation_group"
+        },
+        { "id": "a1c7c817-4e59-43b7-9365-09675a149a6f", "type": "manga" },
+        { "id": "bf87bf74-000b-42d5-a146-cc7bc1229a7c", "type": "user" }
+      ]
+    }
+  ],
+  "limit": 100,
+  "offset": 0,
+  "total": 864
+}

@@ -3,6 +3,7 @@ import crypto from 'node:crypto'
 import { and, eq, isNull, or } from 'drizzle-orm'
 import { getDb } from '../../db/client'
 import { authChallenges, users, userSessions } from '../../db/schema'
+import { ensureDefaultFavoritesLists } from '../../utils/defaultLists'
 import { sendEmail } from '../../utils/email'
 import { generateOtp, generateToken, hashValue } from '../../utils/otp'
 
@@ -109,6 +110,8 @@ export default defineEventHandler(async (event) => {
     expires: sessionExpiresAt,
     maxAge: 7 * 24 * 60 * 60
   })
+
+  await ensureDefaultFavoritesLists(db, user.id)
 
   await db
     .delete(authChallenges)

@@ -1,6 +1,6 @@
 import { getCache, setCache } from '../../utils/simpleCache'
 import { getQuery } from 'h3'
-import { fetchCachedJikanJson, normalizeJikanHomeItem } from '../../utils/jikan'
+import { searchAniListManga, normalizeAniListHomeItem } from '../../utils/aniList'
 
 function parseQueryArray(value: unknown): string[] {
   if (Array.isArray(value)) {
@@ -41,42 +41,17 @@ export default defineEventHandler(async (event) => {
   for (const s of sectionsDef) {
     try {
       const normalizedKey = String(s.key || '').trim().toLowerCase()
-      const params = new URLSearchParams()
-      params.set('limit', '12')
-      params.set('page', '1')
-
       const isTop = ['top', 'popular', 'popolari'].includes(normalizedKey)
-      let path = '/manga'
-      if (isTop) {
-        path = '/top/manga'
-        params.set('filter', 'bypopularity')
-      } else if (normalizedKey) {
-        params.set('q', normalizedKey)
-        params.set('order_by', 'score')
-        params.set('sort', 'desc')
+      const searchQuery = isTop ? null : normalizedKey || null
+      let results: any[] = []
+      try {
+        results = await searchAniListManga(searchQuery, 1, 12, isTop ? 'POPULARITY_DESC' : 'SCORE_DESC')
+      } catch (err) {
+        console.warn('AniList search failed for section', s.title, err)
+        results = []
       }
 
-      let jikanJson: any
-      try {
-        const cacheKey = `jikan:home:${path}:${params.toString()}`
-        jikanJson = await fetchCachedJikanJson(cacheKey, path, params, 30 * 60 * 1000)
-      } catch (err: any) {
-        const statusCode = err?.statusCode || err?.cause?.statusCode
-        if (statusCode === 404 || statusCode === 400) {
-          const fallbackParams = new URLSearchParams()
-          fallbackParams.set('limit', '12')
-          fallbackParams.set('page', '1')
-          if (!isTop && normalizedKey) {
-            fallbackParams.set('q', normalizedKey)
-          }
-          const fallbackPath = isTop ? '/top/manga' : '/manga'
-          const fallbackCacheKey = `jikan:home:${fallbackPath}:${fallbackParams.toString()}`
-          jikanJson = await fetchCachedJikanJson(fallbackCacheKey, fallbackPath, fallbackParams, 30 * 60 * 1000)
-        } else {
-          throw err
-        }
-      }
-      const items = (jikanJson.data || []).slice(0, 12).map((manga: any) => normalizeJikanHomeItem(manga))
+      const items = (results || []).slice(0, 12).map((manga: any) => normalizeAniListHomeItem(manga))
 
       sections.push({ title: s.title, items })
     } catch (err) {
