@@ -10,6 +10,14 @@
 
         <div class="mt-4">
           <button class="bg-sky-600 text-white px-3 py-1 rounded mr-2" @click="saveOrder">Salva ordine</button>
+          <a
+            :href="exportUrl"
+            class="inline-flex items-center rounded bg-slate-100 px-3 py-1 text-slate-700 hover:bg-slate-200"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Esporta JSON
+          </a>
         </div>
 
         <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -59,6 +67,7 @@ type ListResponse = {
 const route = useRoute()
 const list = ref<ListRecord | null>(null)
 const items = ref<ListItemRecord[]>([])
+const exportUrl = computed(() => `/api/lists/${encodeURIComponent(String(route.params.id))}/export`)
 
 function itemRoute(item: ListItemRecord) {
   const type = String(item.type || 'book').toLowerCase()
