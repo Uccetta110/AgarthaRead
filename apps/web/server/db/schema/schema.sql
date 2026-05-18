@@ -104,8 +104,10 @@ CREATE TABLE IF NOT EXISTS catalog_items (
   currency CHAR(3) NOT NULL DEFAULT 'EUR',
   isbn VARCHAR(32) NULL,
   source ENUM('internal', 'api') NOT NULL DEFAULT 'internal',
-  external_provider VARCHAR(100) NULL,
-  external_id VARCHAR(191) NULL,
+  search_provider VARCHAR(100) NULL,
+  search_id VARCHAR(191) NULL,
+  content_provider VARCHAR(100) NULL,
+  content_id VARCHAR(191) NULL,
   avg_rating DECIMAL(3,2) NULL,
   views_count INT UNSIGNED NOT NULL DEFAULT 0,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -114,7 +116,8 @@ CREATE TABLE IF NOT EXISTS catalog_items (
   KEY idx_catalog_items_type (type),
   KEY idx_catalog_items_publisher_id (publisher_id),
   KEY idx_catalog_items_source (source),
-  KEY idx_catalog_items_external (external_provider, external_id),
+  KEY idx_catalog_items_search (search_provider, search_id),
+  KEY idx_catalog_items_content (content_provider, content_id),
   CONSTRAINT fk_catalog_items_publisher
     FOREIGN KEY (publisher_id) REFERENCES publishers(id)
     ON DELETE SET NULL ON UPDATE CASCADE,

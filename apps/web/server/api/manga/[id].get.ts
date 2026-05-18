@@ -91,8 +91,13 @@ export default defineEventHandler(async (event) => {
       const payload = { ...cached }
       const itemId = await upsertExternalCatalogItem(db, {
         type: 'manga',
+        searchProvider: 'anilist',
+        searchId: String(payload.id || decodedId),
+        contentProvider: payload.mangaDexId ? 'mangadex' : 'anilist',
+        contentId: payload.mangaDexId ? String(payload.mangaDexId) : String(payload.id || decodedId),
         externalProvider: 'anilist',
         externalId: String(payload.id || decodedId),
+        releaseDate: payload.releaseDate || null,
         title: payload.title,
         description: payload.description,
         language: payload.language,
@@ -108,6 +113,12 @@ export default defineEventHandler(async (event) => {
 
       return {
         ...payload,
+        searchProvider: 'anilist',
+        searchId: String(payload.id || decodedId),
+        contentProvider: payload.mangaDexId ? 'mangadex' : 'anilist',
+        contentId: payload.mangaDexId ? String(payload.mangaDexId) : String(payload.id || decodedId),
+        externalProvider: 'anilist',
+        externalId: String(payload.id || decodedId),
         internalId: itemId,
         commentsCount: engagement.commentsCount,
         likesCount: engagement.likesCount,
@@ -158,8 +169,8 @@ export default defineEventHandler(async (event) => {
       and(
         eq(catalogItems.source, 'api'),
         eq(catalogItems.type, 'manga'),
-        eq(catalogItems.externalProvider, 'anilist'),
-        eq(catalogItems.externalId, String(aniMedia.id))
+        eq(catalogItems.searchProvider, 'anilist'),
+        eq(catalogItems.searchId, String(aniMedia.id))
       )
     )
     .limit(1))[0]
@@ -245,8 +256,13 @@ export default defineEventHandler(async (event) => {
   const payload = { ...payloadWithChapters }
   const itemId = await upsertExternalCatalogItem(db, {
     type: 'manga',
+    searchProvider: 'anilist',
+    searchId: String(aniMedia.id || decodedId),
+    contentProvider: mangaDexId ? 'mangadex' : 'anilist',
+    contentId: mangaDexId ? String(mangaDexId) : String(aniMedia.id || decodedId),
     externalProvider: 'anilist',
     externalId: String(aniMedia.id || decodedId),
+    releaseDate: payload.releaseDate || null,
     title: payload.title,
     description: payload.description,
     language: payload.language,
@@ -262,6 +278,12 @@ export default defineEventHandler(async (event) => {
 
   return {
     ...payload,
+    searchProvider: 'anilist',
+    searchId: String(aniMedia.id || decodedId),
+    contentProvider: mangaDexId ? 'mangadex' : 'anilist',
+    contentId: mangaDexId ? String(mangaDexId) : String(aniMedia.id || decodedId),
+    externalProvider: 'anilist',
+    externalId: String(aniMedia.id || decodedId),
     internalId: itemId,
     commentsCount: engagement.commentsCount,
     likesCount: engagement.likesCount,

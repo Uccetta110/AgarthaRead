@@ -76,6 +76,10 @@ export default defineEventHandler(async (event) => {
   const db = getDb()
   const itemId = await upsertExternalCatalogItem(db, {
     type: 'book',
+    searchProvider: 'openlibrary',
+    searchId: workKey,
+    contentProvider: 'openlibrary',
+    contentId: workKey,
     externalProvider: 'openlibrary',
     externalId: workKey,
     title: payload.title,
@@ -92,6 +96,12 @@ export default defineEventHandler(async (event) => {
 
   return {
     ...payload,
+    searchProvider: 'openlibrary',
+    searchId: workKey,
+    contentProvider: 'openlibrary',
+    contentId: workKey,
+    externalProvider: 'openlibrary',
+    externalId: workKey,
     internalId: itemId,
     commentsCount: engagement.commentsCount,
     likesCount: engagement.likesCount,

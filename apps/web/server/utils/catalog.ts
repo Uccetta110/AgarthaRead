@@ -8,8 +8,13 @@ type ContentFormat = 'txt' | 'html_like' | 'markdown' | 'image_sequence'
 
 type ExternalCatalogInput = {
   type: CatalogItemType
+  searchProvider?: string
+  searchId?: string
+  contentProvider?: string | null
+  contentId?: string | null
   externalProvider: string
   externalId: string
+  releaseDate?: string | Date | null
   title: string
   description?: string | null
   language?: string | null
@@ -34,44 +39,91 @@ function guessMimeType(url: string) {
   return 'image/jpeg'
 }
 
+function normalizeSourceValue(value?: string | null) {
+  return String(value ?? '').trim()
+}
+
+function normalizeReleaseDate(value?: string | Date | null) {
+  if (!value) return null
+  if (value instanceof Date) return value.toISOString().slice(0, 10)
+
+  const trimmed = String(value).trim()
+  if (!trimmed) return null
+  if (/^\d{4}$/.test(trimmed)) return `${trimmed}-01-01`
+  if (/^\d{4}-\d{2}$/.test(trimmed)) return `${trimmed}-01`
+
+  const parsed = new Date(trimmed)
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString().slice(0, 10)
+}
+
 export async function upsertExternalCatalogItem(db: Db, input: ExternalCatalogInput) {
-  const externalProvider = String(input.externalProvider || '').trim()
-  const externalId = String(input.externalId || '').trim()
+  const searchProvider = normalizeSourceValue(input.searchProvider || input.externalProvider)
+  const searchId = normalizeSourceValue(input.searchId || input.externalId)
+  const contentProvider = normalizeSourceValue(input.contentProvider) || searchProvider
+  const contentId = normalizeSourceValue(input.contentId) || searchId
+  const releaseDate = normalizeReleaseDate(input.releaseDate)
   const title = String(input.title || '').trim() || 'Titolo non disponibile'
 
-  if (!externalProvider || !externalId) {
+  if (!searchProvider || !searchId) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Dati sorgente non validi'
     })
   }
 
-  const existing = (await db
+  const existingBySearch = (await db
     .select()
     .from(catalogItems)
     .where(
       and(
         eq(catalogItems.source, 'api'),
         eq(catalogItems.type, input.type),
-        eq(catalogItems.externalProvider, externalProvider),
-        eq(catalogItems.externalId, externalId)
+        eq(catalogItems.searchProvider, searchProvider),
+        eq(catalogItems.searchId, searchId)
       )
     )
     .limit(1))[0]
+
+  const existingByContent = contentProvider && contentId && (contentProvider !== searchProvider || contentId !== searchId)
+    ? (await db
+        .select()
+        .from(catalogItems)
+        .where(
+          and(
+            eq(catalogItems.source, 'api'),
+            eq(catalogItems.type, input.type),
+            eq(catalogItems.contentProvider, contentProvider),
+            eq(catalogItems.contentId, contentId)
+          )
+        )
+        .limit(1))[0]
+    : null
+
+  const existing = existingBySearch ?? existingByContent
 
   if (!existing) {
     await db.insert(catalogItems).values({
       type: input.type,
       source: 'api',
-      externalProvider,
-      externalId,
+      searchProvider,
+      searchId,
+      contentProvider,
+      contentId,
+      releaseDate,
       price: '0.00',
       currency: 'EUR'
     })
   } else {
     await db
       .update(catalogItems)
-      .set({ updatedAt: new Date() })
+      .set({
+        searchProvider,
+        searchId,
+        contentProvider,
+        contentId,
+        releaseDate,
+        updatedAt: new Date()
+      })
       .where(eq(catalogItems.id, existing.id))
   }
 
@@ -82,8 +134,8 @@ export async function upsertExternalCatalogItem(db: Db, input: ExternalCatalogIn
       and(
         eq(catalogItems.source, 'api'),
         eq(catalogItems.type, input.type),
-        eq(catalogItems.externalProvider, externalProvider),
-        eq(catalogItems.externalId, externalId)
+        eq(catalogItems.searchProvider, searchProvider),
+        eq(catalogItems.searchId, searchId)
       )
     )
     .limit(1))[0]

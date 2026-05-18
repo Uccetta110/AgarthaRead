@@ -95,12 +95,44 @@ async function loadLists() {
 
 async function saveTo(listId) {
   try {
-    if (item.externalProvider && item.externalId) {
-      await $fetch(`/api/lists/${listId}/items`, { method: 'POST', body: { item_type: item.type || 'book', external_provider: item.externalProvider, external_id: item.externalId, title: item.title, coverUrl: item.cover || null } })
+    const searchProvider = item.searchProvider || item.externalProvider || null
+    const searchId = item.searchId || item.externalId || null
+    const contentProvider = item.contentProvider || searchProvider
+    const contentId = item.contentId || searchId
+
+    if (searchProvider && searchId) {
+      await $fetch(`/api/lists/${listId}/items`, {
+        method: 'POST',
+        body: {
+          item_type: item.type || 'book',
+          search_provider: searchProvider,
+          search_id: searchId,
+          content_provider: contentProvider,
+          content_id: contentId,
+          external_provider: searchProvider,
+          external_id: searchId,
+          releaseDate: item.releaseDate || item.publishedAt || null,
+          title: item.title,
+          coverUrl: item.cover || null
+        }
+      })
     } else if (item.id) {
       await $fetch(`/api/lists/${listId}/items`, { method: 'POST', body: { itemId: item.id } })
     } else {
-      await $fetch(`/api/lists/${listId}/items`, { method: 'POST', body: { item_type: item.type || 'book', external_provider: 'unknown', external_id: String(item.title).slice(0,100), title: item.title } })
+      await $fetch(`/api/lists/${listId}/items`, {
+        method: 'POST',
+        body: {
+          item_type: item.type || 'book',
+          search_provider: 'unknown',
+          search_id: String(item.title).slice(0, 100),
+          content_provider: 'unknown',
+          content_id: String(item.title).slice(0, 100),
+          external_provider: 'unknown',
+          external_id: String(item.title).slice(0, 100),
+          releaseDate: item.releaseDate || item.publishedAt || null,
+          title: item.title
+        }
+      })
     }
     closeSave()
   } catch (e) {

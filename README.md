@@ -87,5 +87,15 @@ docker compose logs mysql
 
 comando docker per vedere i dati all'interno di una tabella
 ```bash
-docker compose exec mysql mysql -u dev_user -p -e "SELECT * FROM agartharead.nome_tabella;"
+docker compose exec mysql mysql -udev_user -pdev_password -Dagartharead -e "SELECT * FROM agartharead.nome_tabella;"
+```
+
+comando per eliminare tutti i dati in una tabella
+```bash
+docker compose exec mysql mysql -udev_user -pdev_password -Dagartharead -e "DELETE FROM agartharead.nome_tabella;"
+```
+
+comando per cambiare i dati all'interno di una tabella
+```bash
+docker compose exec mysql mysql -udev_user -pdev_password -Dagartharead -e "UPDATE agartharead.nome_tabella SET colonna='nuovo_valore' WHERE condizione;"
 ```

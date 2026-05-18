@@ -19,6 +19,10 @@ export default defineEventHandler(async (event) => {
     const db = getDb()
     const itemId = await upsertExternalCatalogItem(db, {
       type: 'newspaper',
+      searchProvider: 'guardian',
+      searchId: decodedId,
+      contentProvider: 'guardian',
+      contentId: decodedId,
       externalProvider: 'guardian',
       externalId: decodedId,
       title: payload.title,
@@ -35,6 +39,12 @@ export default defineEventHandler(async (event) => {
 
     return {
       ...payload,
+      searchProvider: 'guardian',
+      searchId: decodedId,
+      contentProvider: 'guardian',
+      contentId: decodedId,
+      externalProvider: 'guardian',
+      externalId: decodedId,
       internalId: itemId,
       commentsCount: engagement.commentsCount,
       likesCount: engagement.likesCount,
@@ -136,6 +146,10 @@ export default defineEventHandler(async (event) => {
   const db = getDb()
   const itemId = await upsertExternalCatalogItem(db, {
     type: 'newspaper',
+    searchProvider: 'guardian',
+    searchId: decodedId,
+    contentProvider: 'guardian',
+    contentId: decodedId,
     externalProvider: 'guardian',
     externalId: decodedId,
     title: payload.title,
@@ -152,6 +166,12 @@ export default defineEventHandler(async (event) => {
 
   return {
     ...payload,
+    searchProvider: 'guardian',
+    searchId: decodedId,
+    contentProvider: 'guardian',
+    contentId: decodedId,
+    externalProvider: 'guardian',
+    externalId: decodedId,
     internalId: itemId,
     commentsCount: engagement.commentsCount,
     likesCount: engagement.likesCount,

@@ -1,0 +1,4 @@
+id	type	fulfillment_type	publisher_id	age_rating_min	release_date	price	currency	isbn	source	search_provider	search_id	content_provider	content_id	avg_rating	views_count	created_at	updated_at
+28	manga	digital	NULL	0	1997-01-01	0.00	EUR	NULL	api	anilist	30013	mangadex	a1c7c817-4e59-43b7-9365-09675a149a6f	NULL	6	2026-05-18 12:25:04	2026-05-18 12:27:50
+29	book	digital	NULL	0	NULL	0.00	EUR	NULL	api	openlibrary	/works/OL66554W	openlibrary	/works/OL66554W	NULL	1	2026-05-18 12:28:48	2026-05-18 12:28:48
+30	newspaper	digital	NULL	0	NULL	0.00	EUR	NULL	api	guardian	sample-0	guardian	sample-0	NULL	1	2026-05-18 12:28:54	2026-05-18 12:28:54

@@ -23,13 +23,20 @@ export default defineEventHandler(async (event) => {
   if (!itemId) {
     // expect external data
     const type = String(body?.item_type || 'book') as any
-    const externalProvider = String(body?.external_provider || '').trim()
-    const externalId = String(body?.external_id || '').trim()
-    if (!externalProvider || !externalId) throw createError({ statusCode: 400, statusMessage: 'Missing external source' })
+    const searchProvider = String(body?.search_provider || body?.searchProvider || body?.external_provider || body?.externalProvider || '').trim()
+    const searchId = String(body?.search_id || body?.searchId || body?.external_id || body?.externalId || '').trim()
+    const contentProvider = String(body?.content_provider || body?.contentProvider || '').trim()
+    const contentId = String(body?.content_id || body?.contentId || '').trim()
+    if (!searchProvider || !searchId) throw createError({ statusCode: 400, statusMessage: 'Missing external source' })
     itemId = await upsertExternalCatalogItem(db, {
       type,
-      externalProvider,
-      externalId,
+      searchProvider,
+      searchId,
+      contentProvider: contentProvider || undefined,
+      contentId: contentId || undefined,
+      externalProvider: searchProvider,
+      externalId: searchId,
+      releaseDate: body?.releaseDate || body?.publishedAt || null,
       title: String(body?.title || 'Untitled'),
       description: body?.description || null,
       language: body?.language || null,

@@ -146,8 +146,10 @@ export const catalogItems = mysqlTable(
     source: mysqlEnum("source", ["internal", "api"])
       .notNull()
       .default("internal"),
-    externalProvider: varchar("external_provider", { length: 100 }),
-    externalId: varchar("external_id", { length: 191 }),
+    searchProvider: varchar("search_provider", { length: 100 }),
+    searchId: varchar("search_id", { length: 191 }),
+    contentProvider: varchar("content_provider", { length: 100 }),
+    contentId: varchar("content_id", { length: 191 }),
     avgRating: decimal("avg_rating", { precision: 3, scale: 2 }),
     viewsCount: int("views_count").notNull().default(0),
     createdAt: datetime("created_at", { mode: "date" })
@@ -161,10 +163,8 @@ export const catalogItems = mysqlTable(
     index("idx_catalog_items_type").on(table.type),
     index("idx_catalog_items_publisher_id").on(table.publisherId),
     index("idx_catalog_items_source").on(table.source),
-    index("idx_catalog_items_external").on(
-      table.externalProvider,
-      table.externalId,
-    ),
+    index("idx_catalog_items_search").on(table.searchProvider, table.searchId),
+    index("idx_catalog_items_content").on(table.contentProvider, table.contentId),
   ],
 );
 

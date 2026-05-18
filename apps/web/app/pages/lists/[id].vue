@@ -14,11 +14,13 @@
 
         <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           <div v-for="item in items" :key="item.ulid" class="">
-            <ItemCard :item="{ title: item.title, cover: item.cover || item.storagePath, authors: [] }">
-              <template #actions>
-                <button class="text-sm text-red-600" @click="remove(item)">Rimuovi</button>
-              </template>
-            </ItemCard>
+            <NuxtLink :to="itemRoute(item)" class="block">
+              <ItemCard :item="{ title: item.title, cover: item.cover || item.storagePath, authors: [] }">
+                <template #actions>
+                  <button class="text-sm text-red-600" @click.stop="remove(item)">Rimuovi</button>
+                </template>
+              </ItemCard>
+            </NuxtLink>
           </div>
         </div>
       </div>
@@ -39,6 +41,11 @@ type ListRecord = {
 type ListItemRecord = {
   itemId: number
   ulid: string
+  type?: string
+  searchProvider?: string | null
+  searchId?: string | null
+  contentProvider?: string | null
+  contentId?: string | null
   title: string
   cover?: string | null
   storagePath?: string | null
@@ -52,6 +59,13 @@ type ListResponse = {
 const route = useRoute()
 const list = ref<ListRecord | null>(null)
 const items = ref<ListItemRecord[]>([])
+
+function itemRoute(item: ListItemRecord) {
+  const type = String(item.type || 'book').toLowerCase()
+  const base = type === 'manga' ? 'mangas' : type === 'newspaper' ? 'newspapers' : 'books'
+  const id = item.searchId || item.contentId || item.itemId
+  return `/${base}/${encodeURIComponent(String(id))}`
+}
 
 async function load() {
   const id = route.params.id

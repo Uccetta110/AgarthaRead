@@ -26,7 +26,10 @@ export default defineEventHandler(async (event) => {
 
   const defaultSections = [
     { title: 'Popolari', key: 'top' },
-    { title: 'Romantici', key: 'romance' }
+    { title: 'Avventura', key: 'adventure' },
+    { title: 'Shounen', key: 'shounen' },
+    { title: 'Isekai', key: 'isekai' },
+    { title: 'Comedy', key: 'comedy' },
   ]
 
   const sectionsDef = hasCustomSections

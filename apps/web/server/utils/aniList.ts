@@ -88,6 +88,17 @@ function extractTags(media: AniListMedia) {
   return Array.from(new Set([...genreNames, ...tagNames]))
 }
 
+function formatReleaseDate(startDate: any) {
+  const year = Number(startDate?.year)
+  if (!Number.isFinite(year) || year <= 0) return null
+
+  const month = Number(startDate?.month)
+  const day = Number(startDate?.day)
+  const normalizedMonth = Number.isFinite(month) && month >= 1 && month <= 12 ? String(month).padStart(2, '0') : '01'
+  const normalizedDay = Number.isFinite(day) && day >= 1 && day <= 31 ? String(day).padStart(2, '0') : '01'
+  return `${String(year).padStart(4, '0')}-${normalizedMonth}-${normalizedDay}`
+}
+
 export function collectAniListTitles(media: AniListMedia) {
   const titles = []
   if (media?.title) {
@@ -109,6 +120,7 @@ export function normalizeAniListHomeItem(media: AniListMedia) {
     cover: media?.coverImage?.large || media?.coverImage?.medium || null,
     contentUrl: media?.externalLinks?.find((l: any) => l.site === 'Anilist')?.url || `https://anilist.co/manga/${media.id}`,
     language: null,
+    releaseDate: formatReleaseDate(media?.startDate),
     publishedAt: media?.startDate?.year ? String(media.startDate.year) : null,
     tags: extractTags(media),
     chapterCount: typeof media.chapters === 'number' ? media.chapters : null
@@ -127,6 +139,7 @@ export function normalizeAniListDetail(media: AniListMedia) {
     coverUrl: media?.coverImage?.large || media?.coverImage?.medium || null,
     contentUrl: media?.externalLinks?.find((l: any) => l.site === 'Anilist')?.url || `https://anilist.co/manga/${media.id}`,
     language: null,
+    releaseDate: formatReleaseDate(media?.startDate),
     publishedAt: media?.startDate?.year ? String(media.startDate.year) : null,
     tags: extractTags(media),
     rating: media?.averageScore ?? media?.meanScore ?? null,
