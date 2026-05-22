@@ -21,7 +21,8 @@ export const users = mysqlTable("users", {
   username: varchar("username", { length: 50 }).notNull().unique(),
   passwordHash: varchar("password_hash", { length: 255 }),
   fullName: varchar("full_name", { length: 120 }).notNull(),
-  role: mysqlEnum("role", ["user", "admin", "author", "editor"])
+  bio: text("bio"),
+  role: mysqlEnum("role", ["user", "unconfirmed", "artist", "manager", "admin", "editor"])
     .notNull()
     .default("user"),
   countryCode: char("country_code", { length: 2 }).notNull(),
@@ -60,11 +61,52 @@ export const userPreferences = mysqlTable("user_preferences", {
     .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
   theme: varchar("theme", { length: 20 }),
   fontSize: int("font_size"),
+  imageSize: varchar("image_size", { length: 20 }).default("medium"),
   uiLanguage: varchar("ui_language", { length: 10 }),
+  accountPublic: int("account_public").notNull().default(1),
+  listsPublicByDefault: int("lists_public_by_default").notNull().default(0),
   updatedAt: datetime("updated_at", { mode: "date" })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const managerPermissions = mysqlTable(
+  "manager_permissions",
+  {
+    userId: int("user_id", { unsigned: true })
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    permissionCode: varchar("permission_code", { length: 8 }).notNull(),
+    grantedAt: datetime("granted_at", { mode: "date" })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    grantedBy: int("granted_by", { unsigned: true }),
+  },
+  (table) => [
+    uniqueIndex("uq_manager_permissions_user_perm").on(
+      table.userId,
+      table.permissionCode,
+    ),
+  ],
+);
+
+export const artistRequests = mysqlTable(
+  "artist_requests",
+  {
+    id: bigint("id", { mode: "number", unsigned: true }).autoincrement().primaryKey(),
+    userId: int("user_id", { unsigned: true })
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    status: mysqlEnum("status", ["pending", "approved", "rejected"]).notNull().default("pending"),
+    message: text("message"),
+    processedBy: int("processed_by", { unsigned: true }),
+    processedAt: datetime("processed_at", { mode: "date" }),
+    createdAt: datetime("created_at", { mode: "date" })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [index("idx_artist_requests_user_id").on(table.userId)],
+);
 
 export const userSessions = mysqlTable(
   "user_sessions",

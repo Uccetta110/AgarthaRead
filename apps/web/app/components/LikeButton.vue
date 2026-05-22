@@ -1,19 +1,19 @@
 <template>
   <div class="space-y-1">
     <button
-      class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+      class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950/70 dark:text-slate-100 dark:hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
       :disabled="isDisabled"
       @click.stop.prevent="toggleLike"
       type="button"
     >
       <span>{{ liked ? 'Ti piace' : 'Like' }}</span>
-      <span class="inline-flex min-w-[2ch] items-center justify-center rounded-full bg-slate-900 px-2 py-0.5 text-xs text-white">
+      <span class="inline-flex min-w-[2ch] items-center justify-center rounded-full bg-slate-900 px-2 py-0.5 text-xs text-white dark:bg-slate-100 dark:text-slate-950">
         {{ count }}
       </span>
     </button>
 
-    <p v-if="helperText" class="text-xs text-slate-500">{{ helperText }}</p>
-    <p v-if="errorMessage" class="text-xs text-red-600">{{ errorMessage }}</p>
+    <p v-if="helperText" class="text-xs text-slate-500 dark:text-slate-400">{{ helperText }}</p>
+    <p v-if="errorMessage" class="text-xs text-red-600 dark:text-red-300">{{ errorMessage }}</p>
   </div>
 </template>
 

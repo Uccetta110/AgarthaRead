@@ -1,7 +1,11 @@
 import { getQuery } from 'h3'
 import { searchAniListManga, normalizeAniListHomeItem } from '../utils/aniList'
+import { getDb } from '../db/client'
+import { getSessionUser } from '../utils/session'
+import { users, userPreferences } from '../db/schema'
+import { eq, sql, desc } from 'drizzle-orm'
 
-type SearchType = 'books' | 'manga' | 'news'
+type SearchType = 'books' | 'manga' | 'news' | 'users'
 
 type SearchPayload = {
   items: any[]
@@ -22,6 +26,7 @@ function toNumber(value: unknown, fallback: number) {
 
 function normalizeType(value: unknown): SearchType {
   const raw = String(value || '').trim().toLowerCase()
+  if (raw === 'users') return 'users' as SearchType
   if (raw === 'manga') return 'manga'
   if (raw === 'news') return 'news'
   return 'books'
@@ -110,6 +115,37 @@ export default defineEventHandler(async (event) => {
         notice: 'AniList non disponibile'
       } satisfies SearchPayload
     }
+  }
+
+  if (type === 'users') {
+    const db = getDb()
+    const sessionUser = await getSessionUser(event)
+    const privileged = !!sessionUser && (sessionUser.role === 'admin' || sessionUser.role === 'manager')
+    const pattern = `%${q}%`
+
+    const whereClause = privileged
+      ? sql`(users.username LIKE ${pattern} OR users.full_name LIKE ${pattern})`
+      : sql`(users.username LIKE ${pattern} OR users.full_name LIKE ${pattern}) AND COALESCE(user_preferences.account_public, 1) = 1`
+
+    const rows = await db
+      .select({ id: users.id, username: users.username, fullName: users.fullName, avatarDir: users.avatarDir })
+      .from(users)
+      .leftJoin(userPreferences, eq(userPreferences.userId, users.id))
+      .where(whereClause)
+      .orderBy(desc(users.id))
+      .limit(pageSize)
+
+    const items = rows.map((r: any) => ({ id: r.id, username: r.username, full_name: r.fullName, avatar: r.avatarDir }))
+    const total = items.length
+
+    return {
+      items,
+      page,
+      pageSize,
+      total,
+      hasMore: items.length === pageSize,
+      type
+    } satisfies SearchPayload
   }
 
   const key = process.env.GUARDIAN_KEY || ''

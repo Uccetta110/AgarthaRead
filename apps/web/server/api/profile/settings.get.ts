@@ -24,6 +24,7 @@ export default defineEventHandler(async (event) => {
       username: user.username,
       email: user.email,
       full_name: user.fullName,
+      bio: user.bio ?? null,
       birth_date: birthDate,
       email_verified_at: user.emailVerifiedAt,
       two_factor_method: user.twoFactorMethod,
@@ -32,7 +33,10 @@ export default defineEventHandler(async (event) => {
     preferences: {
       theme: preferences?.theme ?? 'light',
       font_size: preferences?.fontSize ?? 16,
-      ui_language: preferences?.uiLanguage ?? 'it'
+      ui_language: preferences?.uiLanguage ?? 'it',
+      image_size: preferences?.imageSize ?? 'medium',
+      account_public: preferences?.accountPublic === undefined ? 1 : Number(preferences.accountPublic),
+      lists_public_by_default: preferences?.listsPublicByDefault === undefined ? 0 : Number(preferences.listsPublicByDefault)
     }
   }
 })

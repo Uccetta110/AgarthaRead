@@ -1,38 +1,47 @@
 <template>
-    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-    <h1 class="text-2xl font-bold text-slate-900">Manga</h1>
-      <div v-if="error" class="mt-4 text-red-600">Errore: {{ error.message || error }}</div>
-      
-    <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
-      <div v-for="section in mangaSections" :key="section.title">
-        <CarouselItems type="mangas" :items="section.items">
-          <template #title>{{ section.title }}</template>
-        </CarouselItems>
+  <div class="space-y-8">
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Manga</h1>
+      <p class="mt-2 text-slate-600 dark:text-slate-300">Selezione in evidenza.</p>
+      <div v-if="error" class="mt-4 text-red-600 dark:text-red-300">Errore: {{ error.message || error }}</div>
+
+      <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
+        <div v-for="section in mangaSections" :key="section.title">
+          <CarouselItems type="mangas" :items="section.items">
+            <template #title>{{ section.title }}</template>
+          </CarouselItems>
+        </div>
       </div>
-    </div>
-    <h1 class="text-2xl font-bold text-slate-900">Libri</h1>
+    </section>
 
-    <div v-if="errorBooks" class="mt-4 text-red-600">Errore: {{ errorBooks.message || error }}</div>
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Libri</h1>
+      <p class="mt-2 text-slate-600 dark:text-slate-300">Catalogo libri in evidenza.</p>
+      <div v-if="errorBooks" class="mt-4 text-red-600 dark:text-red-300">Errore: {{ errorBooks.message || errorBooks }}</div>
 
-    <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
-      <div v-for="section in booksSections" :key="section.title">
-        <CarouselItems type="books" :items="section.items">
-          <template #title>{{ section.title }}</template>
-        </CarouselItems>
+      <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
+        <div v-for="section in booksSections" :key="section.title">
+          <CarouselItems type="books" :items="section.items">
+            <template #title>{{ section.title }}</template>
+          </CarouselItems>
+        </div>
       </div>
-    </div>
-    <h1 class="text-2xl font-bold text-slate-900">Manga</h1>
+    </section>
 
-    <div v-if="errorNews" class="mt-4 text-red-600">Errore: {{ errorNews.message || errorNews }}</div>
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Giornali</h1>
+      <p class="mt-2 text-slate-600 dark:text-slate-300">Notizie e articoli recenti.</p>
+      <div v-if="errorNews" class="mt-4 text-red-600 dark:text-red-300">Errore: {{ errorNews.message || errorNews }}</div>
 
-    <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
-      <div v-for="section in newsSections" :key="section.title">
-        <CarouselItems type="newspapers" :items="section.items">
-          <template #title>{{ section.title }}</template>
-        </CarouselItems>
+      <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
+        <div v-for="section in newsSections" :key="section.title">
+          <CarouselItems type="newspapers" :items="section.items">
+            <template #title>{{ section.title }}</template>
+          </CarouselItems>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <script setup>

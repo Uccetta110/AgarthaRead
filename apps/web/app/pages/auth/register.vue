@@ -1,71 +1,71 @@
 <template>
-  <div class="flex h-screen items-center justify-center">
-    <div class="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+  <div class="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-10 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div class="w-full max-w-md rounded-lg bg-white p-8 shadow-lg dark:bg-slate-900 dark:shadow-black/20">
       <h2 class="mb-6 text-center text-2xl font-bold">Registrazione</h2>
       <form @submit.prevent="onSubmit">
         <div class="mb-4">
-          <label for="fullName" class="mb-2 block text-sm font-medium text-gray-700">Nome</label>
+          <label for="fullName" class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Nome</label>
           <input
             id="fullName"
             v-model="form.fullName"
             type="text"
-            class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+            class="w-full rounded border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
             placeholder="Mario Rossi"
             required
           >
         </div>
 
         <div class="mb-4">
-          <label for="username" class="mb-2 block text-sm font-medium text-gray-700">Username</label>
+          <label for="username" class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Username</label>
           <input
             id="username"
             v-model="form.username"
             type="text"
-            class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+            class="w-full rounded border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
             placeholder="mariorossi"
             required
           >
         </div>
 
         <div class="mb-4">
-          <label for="email" class="mb-2 block text-sm font-medium text-gray-700">Email</label>
+          <label for="email" class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
           <input
             id="email"
             v-model="form.email"
             type="email"
-            class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+            class="w-full rounded border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
             placeholder="nome@dominio.it"
             required
           >
         </div>
 
         <div class="mb-6">
-          <label for="password" class="mb-2 block text-sm font-medium text-gray-700">Password</label>
+          <label for="password" class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
           <input
             id="password"
             v-model="form.password"
             type="password"
-            class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+            class="w-full rounded border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
             placeholder="Almeno 8 caratteri"
             required
           >
         </div>
 
-        <p v-if="errorMessage" class="mb-4 text-sm text-red-600">
+        <p v-if="errorMessage" class="mb-4 text-sm text-red-600 dark:text-red-300">
           {{ errorMessage }}
         </p>
 
         <button
           type="submit"
           :disabled="loading"
-          class="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-60"
+          class="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white disabled:opacity-60"
         >
           {{ loading ? 'Registrazione...' : 'Registrati' }}
         </button>
       </form>
 
-      <div class="mt-4 text-center text-sm text-slate-600">
-        Hai già un account? <NuxtLink to="/auth/login" class="font-medium text-blue-600 hover:underline">Accedi</NuxtLink>
+      <div class="mt-4 text-center text-sm text-slate-600 dark:text-slate-400">
+        Hai già un account? <NuxtLink to="/auth/login" class="font-medium text-blue-600 hover:underline dark:text-sky-400">Accedi</NuxtLink>
       </div>
     </div>
   </div>

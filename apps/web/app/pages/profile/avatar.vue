@@ -97,32 +97,32 @@ async function updateAvatar() {
 </script>
 
 <template>
-  <section class="max-w-4xl mx-auto px-4 py-8">
-    <h1 class="text-3xl font-semibold mb-4">Modifica il tuo avatar</h1>
-    <p class="text-neutral-600 mb-8">Scegli un avatar dalla lista e conferma per aggiornare il tuo profilo.</p>
+  <section class="mx-auto max-w-4xl px-4 py-8 text-slate-900 dark:text-slate-100">
+    <h1 class="mb-4 text-3xl font-semibold">Modifica il tuo avatar</h1>
+    <p class="mb-8 text-neutral-600 dark:text-slate-400">Scegli un avatar dalla lista e conferma per aggiornare il tuo profilo.</p>
 
     <div class="flex flex-col md:flex-row gap-8 mb-8">
-      <div class="flex-1 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
-        <p class="text-sm font-medium text-slate-500 mb-4">Avatar corrente</p>
+      <div class="flex-1 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+        <p class="mb-4 text-sm font-medium text-slate-500 dark:text-slate-400">Avatar corrente</p>
         <img
           :src="avatarSrc"
           :alt="`Avatar di ${username}`"
           class="w-40 h-40 rounded-full object-cover mx-auto"
         >
-        <p class="text-center mt-4 text-lg font-medium">{{ username }}</p>
-        <p class="text-center text-sm text-slate-500">{{ currentAvatarName }}</p>
+        <p class="mt-4 text-center text-lg font-medium">{{ username }}</p>
+        <p class="text-center text-sm text-slate-500 dark:text-slate-400">{{ currentAvatarName }}</p>
       </div>
 
-      <div class="flex-1 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <p class="text-sm font-medium text-slate-500 mb-4">Seleziona un nuovo avatar</p>
+      <div class="flex-1 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+        <p class="mb-4 text-sm font-medium text-slate-500 dark:text-slate-400">Seleziona un nuovo avatar</p>
         <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
           <button
             v-for="avatar in avatars"
             :key="avatar.name"
             type="button"
             :class="[
-              'rounded-2xl border p-2 transition duration-200 ease-in-out hover:border-slate-500 focus:outline-none',
-              avatar.name === selectedAvatar ? 'border-sky-500 bg-sky-50 shadow-sm' : 'border-slate-200 bg-white',
+              'rounded-2xl border p-2 transition duration-200 ease-in-out hover:border-slate-500 focus:outline-none dark:hover:border-slate-500',
+              avatar.name === selectedAvatar ? 'border-sky-500 bg-sky-50 shadow-sm dark:bg-sky-950/50' : 'border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-950/60',
             ]"
             @click="selectAvatar(avatar.name)"
           >
@@ -136,7 +136,7 @@ async function updateAvatar() {
 
         <div class="mt-6 flex flex-col gap-3">
           <button
-            class="inline-flex items-center justify-center rounded-full bg-sky-600 px-5 py-3 text-white shadow hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-50"
+            class="inline-flex items-center justify-center rounded-full bg-sky-600 px-5 py-3 text-white shadow hover:bg-sky-700 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
             type="button"
             :disabled="loading || !selectedAvatar"
             @click="updateAvatar"
@@ -144,8 +144,8 @@ async function updateAvatar() {
             {{ loading ? 'Aggiornamento...' : 'Aggiorna avatar' }}
           </button>
 
-          <p v-if="message" class="text-sm text-emerald-700">{{ message }}</p>
-          <p v-if="error" class="text-sm text-rose-700">{{ error }}</p>
+          <p v-if="message" class="text-sm text-emerald-700 dark:text-emerald-400">{{ message }}</p>
+          <p v-if="error" class="text-sm text-rose-700 dark:text-rose-400">{{ error }}</p>
         </div>
       </div>
     </div>

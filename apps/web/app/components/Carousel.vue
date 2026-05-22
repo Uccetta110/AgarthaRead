@@ -1,14 +1,14 @@
 <template>
   <div class="relative max-w-full">
     <div class="flex items-center justify-between">
-      <h2 class="text-xl font-semibold text-slate-900" v-if="title">{{ title }}</h2>
+      <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100" v-if="title">{{ title }}</h2>
       <slot name="actions" />
     </div>
     <div class="mt-3 relative">
-      <button v-if="showPrev" @click="scrollPrev" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-slate-700 rounded-full p-1 shadow flex items-center justify-center" aria-label="Prev">
+      <button v-if="showPrev" @click="scrollPrev" class="absolute left-0 top-1/2 z-20 flex items-center justify-center rounded-full bg-white/80 p-1 text-slate-700 shadow hover:bg-white dark:bg-slate-900/90 dark:text-slate-100 dark:hover:bg-slate-800" aria-label="Prev">
         ‹
       </button>
-      <button v-if="showNext" @click="scrollNext" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-slate-700 rounded-full p-1 shadow flex items-center justify-center" aria-label="Next">
+      <button v-if="showNext" @click="scrollNext" class="absolute right-0 top-1/2 z-20 flex items-center justify-center rounded-full bg-white/80 p-1 text-slate-700 shadow hover:bg-white dark:bg-slate-900/90 dark:text-slate-100 dark:hover:bg-slate-800" aria-label="Next">
         ›
       </button>
 
@@ -25,7 +25,7 @@
         </div>
       </div>
       <div ref="fakeScrollbar" class="mt-2 h-2 w-full relative">
-        <div ref="fakeThumb" class="absolute left-0 top-0 h-2 bg-slate-300 rounded-full transition-transform"></div>
+        <div ref="fakeThumb" class="absolute left-0 top-0 h-2 rounded-full bg-slate-300 transition-transform dark:bg-slate-600"></div>
       </div>
     </div>
   </div>

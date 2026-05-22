@@ -1,24 +1,24 @@
 <template>
-  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
     <NuxtRouteAnnouncer />
 
     <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
       <div>
-        <h1 class="text-2xl font-bold text-slate-900">Ricerca</h1>
-        <p v-if="query" class="mt-1 text-slate-600">Risultati per "{{ query }}"</p>
-        <p v-else class="mt-1 text-slate-500">Inserisci un termine di ricerca.</p>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Ricerca</h1>
+        <p v-if="query" class="mt-1 text-slate-600 dark:text-slate-300">Risultati per "{{ query }}"</p>
+        <p v-else class="mt-1 text-slate-500 dark:text-slate-400">Inserisci un termine di ricerca.</p>
       </div>
-      <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Tipo: {{ typeLabel }}</div>
+      <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Tipo: {{ typeLabel }}</div>
     </div>
 
-    <div v-if="notice" class="mt-3 text-sm text-yellow-600">{{ notice }}</div>
-    <div v-if="error" class="mt-4 text-red-600">Errore: {{ error }}</div>
+    <div v-if="notice" class="mt-3 text-sm text-yellow-600 dark:text-yellow-400">{{ notice }}</div>
+    <div v-if="error" class="mt-4 text-red-600 dark:text-red-300">Errore: {{ error }}</div>
 
-    <div v-else-if="!query" class="mt-6 text-slate-500">
+    <div v-else-if="!query" class="mt-6 text-slate-500 dark:text-slate-400">
       Usa la barra di ricerca in alto per iniziare.
     </div>
-    <div v-else-if="pending && items.length === 0" class="mt-6 text-slate-500">Caricamento risultati...</div>
-    <div v-else-if="items.length === 0" class="mt-6 text-slate-500">Nessun risultato trovato.</div>
+    <div v-else-if="pending && items.length === 0" class="mt-6 text-slate-500 dark:text-slate-400">Caricamento risultati...</div>
+    <div v-else-if="items.length === 0" class="mt-6 text-slate-500 dark:text-slate-400">Nessun risultato trovato.</div>
 
     <div v-else class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
       <NuxtLink
@@ -32,7 +32,7 @@
     </div>
 
     <div ref="sentinel" class="h-10" />
-    <div v-if="pending && items.length" class="mt-2 text-sm text-slate-500">Caricamento altri risultati...</div>
+    <div v-if="pending && items.length" class="mt-2 text-sm text-slate-500 dark:text-slate-400">Caricamento altri risultati...</div>
   </section>
 </template>
 
@@ -63,18 +63,21 @@ const type = computed(() => {
   const raw = String(route.query.type || '').toLowerCase()
   if (raw === 'manga') return 'manga'
   if (raw === 'news') return 'news'
+  if (raw === 'users') return 'users'
   return 'books'
 })
 
 const typeLabel = computed(() => {
   if (type.value === 'manga') return 'Manga'
   if (type.value === 'news') return 'News'
+  if (type.value === 'users') return 'Utenti'
   return 'Libri'
 })
 
 const routeType = computed(() => {
   if (type.value === 'manga') return 'mangas'
   if (type.value === 'news') return 'newspapers'
+  if (type.value === 'users') return 'users'
   return 'books'
 })
 
@@ -91,6 +94,7 @@ let observer: IntersectionObserver | null = null
 
 const itemRoute = (item: SearchItem) => {
   const id = item.id ?? item.key ?? item.title ?? ''
+  if (type.value === 'users') return `/users/${encodeURIComponent(String(id))}`
   return `/${routeType.value}/${encodeURIComponent(String(id))}`
 }
 

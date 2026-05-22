@@ -525,13 +525,7 @@ UI COMMENTI
 - Paginazione o "Carica altri".
 
 - - - - - - - - - - - - - - - - -
-Gli utenti possono salvare gli oggetti in delle liste 
-    - Tutti gli utenti hanno di partenza una lista dei preferiti per oggetto, dove si vedono tutti gli oggetti a cui un'utente ha messo like
-    - Nella pagina lista ci sara un opzione creare una nuova lista e anche nella sezione salva (quando clicchi "salva" nella pagina di un oggetto, ti si aprirà una card dove potrai scegliere dove salvare l'oggetto oppure creare una nuova lista)
-    - ora quando passi sopra ad un itemcard, in alto a destra app   arirà un piccolo bottone del like per mettere like all'oggetto e in alto a destra un piccolo bottone per salvare l'oggetto
-    - Gli utenti possono scegliere se le loro liste possono essere viste nelle impostazioni (preferenze di privacy) dagli altri utenti, e possono anche scegliere nelle singole liste se queste sono pubbliche o private 
-    - Gli utenti possono cambiare il nome alla propria lista, la cover (scegliendo tra assets/images/listCovers), il tag (possono creare dei tag, stringhe da massimo 20 caratteri, da dare a più liste così da poterle visualizzare meglio), etc
-    - La lista di liste può essere ordinata per nome, data creazione, numero salvati, tag, etc
+
 
 Dettagli tecnici per le "liste" (requisiti funzionali e API)
 
@@ -578,16 +572,15 @@ Dettagli tecnici per le "liste" (requisiti funzionali e API)
 - **Extra utilità:**
   - Endpoint per esportare/ condividere lista pubblica (es. `/api/lists/[id]/export` — JSON o link pubblico).
   - Copertura con test: endpoint CRUD liste + operazioni items + permessi.
+ 
+---
+Implementazioni completate (2026-05-22):
+- Search Users (UI + API): sezione ricerca utenti aggiunta e risultati rimandati alla pagina profilo.
+- Preferenze profilo: `image_size`, `account_public`, `lists_public_by_default` (API GET/POST + UI settings).
+- Campo `bio`: aggiunta la proprietà `bio` al profilo utente e visualizzazione in pagina pubblica.
+- Richieste artista: endpoint per richiesta artista e interfaccia admin per accettare/rifiutare; approvazione promuove a `artist`.
+- Salvataggi e liste: API `lists/contains`, indicatori `Salvato` in `ItemCard.vue`, miglioramenti modale con copertine/tag delle liste.
+- Badge artista nei commenti: `CommentsPanel.vue` mostra badge per ruolo `artist`.
+- Pagina profilo pubblica: `pages/users/[id].vue` implementata per profili pubblici e liste pubbliche.
 
-
-- - - - - - - - - - - - - - - - -
-Azioni utenti:
-Utenti appena registrati (non confermata l'email)
-    - possono salvare oggetti nelle liste 
-    - possono cambiare le proprie preferenza dalle impostazioni 
-    - Non possono mettere Like o lasciare Commenti 
-Utenti confermati 
-    - Ora possono mettere like e lasciare commenti 
-    - Possono richiedere all'Admin o ad un manager di diventare Artisti certificati 
-Artisti (confermati da Admin o manager)
-    - Possono creare oggetti 
+Queste voci sono state rimosse da `modificheDaFare.txt` secondo la regola #1.

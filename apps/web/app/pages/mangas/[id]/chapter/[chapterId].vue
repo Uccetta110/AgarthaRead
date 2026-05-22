@@ -1,33 +1,33 @@
 <template>
-  <section ref="chapterReaderTop" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+  <section ref="chapterReaderTop" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
     <NuxtRouteAnnouncer />
 
-    <div class="flex flex-col gap-3 border-b border-slate-200 pb-4 md:flex-row md:items-center md:justify-between">
+    <div class="flex flex-col gap-3 border-b border-slate-200 pb-4 dark:border-slate-700 md:flex-row md:items-center md:justify-between">
       <div>
-        <p class="text-sm text-slate-500">Reader capitolo</p>
-        <h1 class="text-2xl font-bold text-slate-900">
+        <p class="text-sm text-slate-500 dark:text-slate-400">Reader capitolo</p>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">
           Capitolo {{ chapterLabel || 'N/D' }}
           <span v-if="chapterTitle">- {{ chapterTitle }}</span>
         </h1>
       </div>
 
       <div class="flex flex-wrap gap-2">
-        <NuxtLink :to="`/mangas/${mangaId}`" class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200">Torna al manga</NuxtLink>
+        <NuxtLink :to="`/mangas/${mangaId}`" class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">Torna al manga</NuxtLink>
         <a v-if="chapterUrl" :href="chapterUrl" target="_blank" rel="noopener noreferrer" class="rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700">Apri su MangaDex</a>
       </div>
     </div>
 
-    <div v-if="error" class="mt-6 text-red-600">Errore: {{ error.message || error }}</div>
-    <div v-else-if="pending" class="mt-6 text-slate-500">Caricamento pagine capitolo...</div>
-    <div v-else-if="!reader" class="mt-6 text-slate-500">Capitolo non disponibile.</div>
+    <div v-if="error" class="mt-6 text-red-600 dark:text-red-300">Errore: {{ error.message || error }}</div>
+    <div v-else-if="pending" class="mt-6 text-slate-500 dark:text-slate-400">Caricamento pagine capitolo...</div>
+    <div v-else-if="!reader" class="mt-6 text-slate-500 dark:text-slate-400">Capitolo non disponibile.</div>
     <div v-else class="mt-6 space-y-6">
-      <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+      <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-300">
         <p><strong>Fonte:</strong> {{ reader.source || 'mangadex' }}</p>
         <p><strong>Pagine disponibili:</strong> {{ reader.pagesCount ?? reader.pages?.length ?? 0 }}</p>
       </div>
 
-      <div v-if="reader.pages?.length" class="flex flex-wrap items-center gap-3 text-sm text-slate-600">
-        <span class="font-semibold text-slate-700">Dimensione</span>
+      <div v-if="reader.pages?.length" class="flex flex-wrap items-center gap-3 text-sm text-slate-600 dark:text-slate-300">
+        <span class="font-semibold text-slate-700 dark:text-slate-200">Dimensione</span>
         <input
           v-model.number="zoom"
           type="range"
@@ -37,14 +37,14 @@
           aria-label="Dimensione immagini"
           class="w-40 accent-blue-600"
         >
-        <span class="tabular-nums text-slate-500">{{ zoom }}%</span>
+        <span class="tabular-nums text-slate-500 dark:text-slate-400">{{ zoom }}%</span>
       </div>
 
       <div v-if="reader.pages?.length">
         <article
           v-for="page in reader.pages"
           :key="page.filename"
-          class="overflow-hidden bg-white shadow-sm"
+          class="overflow-hidden bg-white shadow-sm dark:bg-slate-950"
         >
           <img
             :src="page.url"
@@ -57,7 +57,7 @@
         </article>
       </div>
 
-      <div v-else class="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-500">
+      <div v-else class="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-500 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-400">
         {{ reader?.unavailableReason || 'Lettura immagini non disponibile. Usa il pulsante "Apri su MangaDex" per continuare.' }}
       </div>
     </div>

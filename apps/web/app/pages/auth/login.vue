@@ -1,13 +1,13 @@
 <template>
-  <div class="flex h-screen items-center justify-center">
-    <div class="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+  <div class="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-10 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div class="w-full max-w-md rounded-lg bg-white p-8 shadow-lg dark:bg-slate-900 dark:shadow-black/20">
       <h2 class="mb-6 text-center text-2xl font-bold">
         {{ step === 'credentials' ? 'Login' : 'Verifica 2FA' }}
       </h2>
 
       <form v-if="step === 'credentials'" @submit.prevent="onSubmit">
         <div class="mb-4">
-          <label class="mb-2 block text-sm font-medium text-gray-700">
+          <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
             Accedi con
             <button type="button" class="mx-1 underline-offset-2 hover:underline" :class="accessMode === 'email' ? 'text-blue-600 underline' : 'text-gray-700'" @click="setAccessMode('email')">
               Email
@@ -19,23 +19,23 @@
           </label>
           <input v-model="form.identifier" :type="accessMode === 'email' ? 'email' : 'text'"
             :placeholder="accessMode === 'email' ? 'nome@dominio.it' : 'Il tuo username'"
-            class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
+            class="w-full rounded border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" required />
         </div>
 
         <div class="mb-4">
-          <label class="mb-2 block text-sm font-medium text-gray-700">
+          <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
             Password
           </label>
           <input v-model="form.password" type="password"
-            class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
+            class="w-full rounded border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" required />
         </div>
 
-        <p v-if="errorMessage" class="mb-4 text-sm text-red-600">
+        <p v-if="errorMessage" class="mb-4 text-sm text-red-600 dark:text-red-300">
           {{ errorMessage }}
         </p>
 
         <button type="submit" :disabled="loading"
-          class="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-60">
+          class="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white disabled:opacity-60">
           {{ loading ? 'Accesso...' : 'Login' }}
         </button>
       </form>
@@ -48,29 +48,29 @@
         </p>
 
         <div class="mb-4">
-          <label class="mb-2 block text-sm font-medium text-gray-700">
+          <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
             Codice 2FA
           </label>
           <input v-model="otpCode" inputmode="numeric" autocomplete="one-time-code"
-            class="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required />
+            class="w-full rounded border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" required />
         </div>
 
-        <p v-if="errorMessage" class="mb-4 text-sm text-red-600">
+        <p v-if="errorMessage" class="mb-4 text-sm text-red-600 dark:text-red-300">
           {{ errorMessage }}
         </p>
 
         <button type="submit" :disabled="loading"
-          class="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-60">
+          class="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white disabled:opacity-60">
           {{ loading ? 'Verifica...' : 'Conferma' }}
         </button>
 
-        <button type="button" class="mt-3 w-full rounded border border-slate-300 px-4 py-2 text-slate-600 hover:bg-slate-50" @click="resetLogin">
+        <button type="button" class="mt-3 w-full rounded border border-slate-300 px-4 py-2 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800" @click="resetLogin">
           Torna al login
         </button>
       </form>
 
-      <div v-if="step === 'credentials'" class="mt-4 text-center text-sm text-slate-600">
-        Non hai un account? <NuxtLink to="/auth/register" class="font-medium text-blue-600 hover:underline">Registrati</NuxtLink>
+      <div v-if="step === 'credentials'" class="mt-4 text-center text-sm text-slate-600 dark:text-slate-400">
+        Non hai un account? <NuxtLink to="/auth/register" class="font-medium text-blue-600 hover:underline dark:text-sky-400">Registrati</NuxtLink>
       </div>
     </div>
   </div>

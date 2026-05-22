@@ -11,12 +11,17 @@ export default defineEventHandler(async (event) => {
     theme?: string
     fontSize?: number
     uiLanguage?: string
+    imageSize?: string
+    accountPublic?: number
+    listsPublicByDefault?: number
+    bio?: string
   }>(event)
 
   const db = getDb()
   const updates: {
     fullName?: string
     birthDate?: Date
+    bio?: string | null
   } = {}
 
   if (typeof body?.fullName === 'string' && body.fullName.trim()) {
@@ -51,6 +56,9 @@ export default defineEventHandler(async (event) => {
     theme?: string | null
     fontSize?: number | null
     uiLanguage?: string | null
+    imageSize?: string | null
+    accountPublic?: number | null
+    listsPublicByDefault?: number | null
   } = {}
   if (typeof body?.theme === 'string') {
     prefUpdates.theme = body.theme.trim() || null
@@ -60,6 +68,18 @@ export default defineEventHandler(async (event) => {
   }
   if (typeof body?.uiLanguage === 'string') {
     prefUpdates.uiLanguage = body.uiLanguage.trim() || null
+  }
+  if (typeof body?.imageSize === 'string') {
+    prefUpdates.imageSize = body.imageSize.trim() || null
+  }
+  if (typeof body?.bio === 'string') {
+    updates.bio = body.bio.trim() || null
+  }
+  if (typeof body?.accountPublic === 'number') {
+    prefUpdates.accountPublic = body.accountPublic ? 1 : 0
+  }
+  if (typeof body?.listsPublicByDefault === 'number') {
+    prefUpdates.listsPublicByDefault = body.listsPublicByDefault ? 1 : 0
   }
 
   if (Object.keys(prefUpdates).length > 0) {
@@ -77,7 +97,10 @@ export default defineEventHandler(async (event) => {
         userId: user.id,
         theme,
         fontSize,
-        uiLanguage
+        uiLanguage,
+        imageSize: typeof prefUpdates.imageSize === 'string' ? prefUpdates.imageSize : null,
+        accountPublic: typeof prefUpdates.accountPublic === 'number' ? prefUpdates.accountPublic : 1,
+        listsPublicByDefault: typeof prefUpdates.listsPublicByDefault === 'number' ? prefUpdates.listsPublicByDefault : 0
       })
     }
   }
@@ -95,7 +118,10 @@ export default defineEventHandler(async (event) => {
     preferences: {
       theme: prefUpdates.theme ?? prefs?.theme ?? 'light',
       font_size: prefUpdates.fontSize ?? prefs?.fontSize ?? 16,
-      ui_language: prefUpdates.uiLanguage ?? prefs?.uiLanguage ?? 'it'
+      ui_language: prefUpdates.uiLanguage ?? prefs?.uiLanguage ?? 'it',
+      image_size: prefUpdates.imageSize ?? prefs?.imageSize ?? 'medium',
+      account_public: prefUpdates.accountPublic ?? prefs?.accountPublic ?? 1,
+      lists_public_by_default: prefUpdates.listsPublicByDefault ?? prefs?.listsPublicByDefault ?? 0
     }
   }
 })
