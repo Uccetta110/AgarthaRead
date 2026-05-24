@@ -11,7 +11,7 @@
       type="button"
       @click.stop.prevent="openSave"
       title="Salva"
-      class="pointer-events-none absolute right-2 top-2 rounded-full bg-white p-1 shadow opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 dark:bg-slate-100"
+      class="absolute right-2 top-2 rounded-full bg-white p-1 shadow opacity-100 transition-opacity duration-150 dark:bg-slate-100 md:pointer-events-none md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100 md:group-focus-within:pointer-events-auto md:group-focus-within:opacity-100"
     >
       <svg v-if="savedInLists.length === 0" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-sky-600" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a1 1 0 00-1 1v12l6-3 6 3V4a1 1 0 00-1-1H5z"/></svg>
       <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a1 1 0 00-1 1v12l6-3 6 3V4a1 1 0 00-1-1H5z"/></svg>

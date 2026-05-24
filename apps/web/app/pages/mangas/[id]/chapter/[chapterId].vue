@@ -1,17 +1,17 @@
 <template>
-  <section ref="chapterReaderTop" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+  <section ref="chapterReaderTop" class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 dark:border-slate-800 dark:bg-slate-900/80">
     <NuxtRouteAnnouncer />
 
     <div class="flex flex-col gap-3 border-b border-slate-200 pb-4 dark:border-slate-700 md:flex-row md:items-center md:justify-between">
       <div>
         <p class="text-sm text-slate-500 dark:text-slate-400">Reader capitolo</p>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">
+        <h1 class="text-xl font-bold text-slate-900 sm:text-2xl dark:text-slate-100">
           Capitolo {{ chapterLabel || 'N/D' }}
           <span v-if="chapterTitle">- {{ chapterTitle }}</span>
         </h1>
       </div>
 
-      <div class="flex flex-wrap gap-2">
+      <div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
         <NuxtLink :to="`/mangas/${mangaId}`" class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">Torna al manga</NuxtLink>
         <a v-if="chapterUrl" :href="chapterUrl" target="_blank" rel="noopener noreferrer" class="rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700">Apri su MangaDex</a>
       </div>
@@ -35,7 +35,7 @@
           max="100"
           step="5"
           aria-label="Dimensione immagini"
-          class="w-40 accent-blue-600"
+          class="w-32 sm:w-40 accent-blue-600"
         >
         <span class="tabular-nums text-slate-500 dark:text-slate-400">{{ zoom }}%</span>
       </div>

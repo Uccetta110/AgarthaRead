@@ -10,10 +10,11 @@ CREATE TABLE IF NOT EXISTS users (
   username VARCHAR(50) NOT NULL,
   password_hash VARCHAR(255) NULL,
   full_name VARCHAR(120) NOT NULL,
-  role ENUM('user', 'admin', 'author', 'editor') NOT NULL DEFAULT 'user',
+  bio TEXT NULL,
+  role ENUM('user','unconfirmed','artist','manager','admin','editor') NOT NULL DEFAULT 'user',
   country_code CHAR(2) NOT NULL,
   birth_date DATE NOT NULL,
-  avatar_dir VARCHAR(255) DEFAULT 'default.png',
+  avatar_dir VARCHAR(255) DEFAULT '1.png',
   email_verified_at DATETIME NULL,
   two_factor_method ENUM('none', 'email', 'totp') NOT NULL DEFAULT 'none',
   totp_secret VARCHAR(255) NULL,
@@ -23,7 +24,7 @@ CREATE TABLE IF NOT EXISTS users (
   PRIMARY KEY (id),
   UNIQUE KEY uq_users_email (email),
   UNIQUE KEY uq_users_username (username)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS user_languages (
   user_id INT UNSIGNED NOT NULL,
@@ -32,21 +33,24 @@ CREATE TABLE IF NOT EXISTS user_languages (
   CONSTRAINT fk_user_languages_user
     FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS user_preferences (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id INT UNSIGNED NOT NULL,
   theme VARCHAR(20) NULL,
   font_size TINYINT UNSIGNED NULL,
+  image_size VARCHAR(20) DEFAULT 'medium',
   ui_language VARCHAR(10) NULL,
+  account_public TINYINT(1) NOT NULL DEFAULT 1,
+  lists_public_by_default TINYINT(1) NOT NULL DEFAULT 0,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uq_user_preferences_user_id (user_id),
   CONSTRAINT fk_user_preferences_user
     FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS user_sessions (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -64,7 +68,7 @@ CREATE TABLE IF NOT EXISTS user_sessions (
   CONSTRAINT fk_user_sessions_user
     FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS auth_challenges (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -84,14 +88,14 @@ CREATE TABLE IF NOT EXISTS auth_challenges (
   CONSTRAINT fk_auth_challenges_user
     FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS publishers (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(150) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uq_publishers_name (name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS catalog_items (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -123,7 +127,7 @@ CREATE TABLE IF NOT EXISTS catalog_items (
     ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT chk_catalog_items_price_nonnegative CHECK (price >= 0),
   CONSTRAINT chk_catalog_items_age_nonnegative CHECK (age_rating_min >= 0)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS catalog_item_translations (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -139,7 +143,7 @@ CREATE TABLE IF NOT EXISTS catalog_item_translations (
   CONSTRAINT fk_catalog_item_translations_item
     FOREIGN KEY (item_id) REFERENCES catalog_items(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS series (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -148,7 +152,7 @@ CREATE TABLE IF NOT EXISTS series (
   PRIMARY KEY (id),
   KEY idx_series_type (type),
   KEY idx_series_name (name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS series_entries (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -167,7 +171,7 @@ CREATE TABLE IF NOT EXISTS series_entries (
   CONSTRAINT fk_series_entries_item
     FOREIGN KEY (item_id) REFERENCES catalog_items(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS item_media (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -183,7 +187,7 @@ CREATE TABLE IF NOT EXISTS item_media (
   CONSTRAINT fk_item_media_item
     FOREIGN KEY (item_id) REFERENCES catalog_items(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS authors (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -191,7 +195,7 @@ CREATE TABLE IF NOT EXISTS authors (
   role VARCHAR(60) NOT NULL,
   PRIMARY KEY (id),
   KEY idx_authors_full_name (full_name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS item_authors (
   item_id INT UNSIGNED NOT NULL,
@@ -204,14 +208,14 @@ CREATE TABLE IF NOT EXISTS item_authors (
   CONSTRAINT fk_item_authors_author
     FOREIGN KEY (author_id) REFERENCES authors(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS categories (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uq_categories_name (name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS item_categories (
   item_id INT UNSIGNED NOT NULL,
@@ -224,25 +228,31 @@ CREATE TABLE IF NOT EXISTS item_categories (
   CONSTRAINT fk_item_categories_category
     FOREIGN KEY (category_id) REFERENCES categories(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS user_lists (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id INT UNSIGNED NOT NULL,
   name VARCHAR(100) NOT NULL,
+  description TEXT NULL,
+  cover_image VARCHAR(512) NULL,
+  is_public TINYINT(1) NOT NULL DEFAULT 0,
+  tags VARCHAR(512) NULL,
   is_system TINYINT(1) NOT NULL DEFAULT 0,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uq_user_lists_user_name (user_id, name),
   CONSTRAINT fk_user_lists_user
     FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS user_list_items (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   list_id BIGINT UNSIGNED NOT NULL,
   item_id INT UNSIGNED NOT NULL,
+  position INT UNSIGNED NOT NULL DEFAULT 0,
   added_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY uq_user_list_items_list_item (list_id, item_id),
@@ -253,7 +263,34 @@ CREATE TABLE IF NOT EXISTS user_list_items (
   CONSTRAINT fk_user_list_items_item
     FOREIGN KEY (item_id) REFERENCES catalog_items(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS manager_permissions (
+  user_id INT UNSIGNED NOT NULL,
+  permission_code VARCHAR(8) NOT NULL,
+  granted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  granted_by INT UNSIGNED NULL,
+  PRIMARY KEY (user_id, permission_code),
+  KEY idx_manager_permissions_user (user_id),
+  CONSTRAINT fk_manager_permissions_user
+    FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS artist_requests (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id INT UNSIGNED NOT NULL,
+  status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
+  message TEXT NULL,
+  processed_by INT UNSIGNED NULL,
+  processed_at DATETIME NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_artist_requests_user_id (user_id),
+  CONSTRAINT fk_artist_requests_user
+    FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS library_items (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -270,7 +307,7 @@ CREATE TABLE IF NOT EXISTS library_items (
   CONSTRAINT fk_library_items_item
     FOREIGN KEY (item_id) REFERENCES catalog_items(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS orders (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -285,7 +322,7 @@ CREATE TABLE IF NOT EXISTS orders (
     FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT chk_orders_total_amount_nonnegative CHECK (total_amount >= 0)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS order_items (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -304,7 +341,7 @@ CREATE TABLE IF NOT EXISTS order_items (
     ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT chk_order_items_unit_price_nonnegative CHECK (unit_price >= 0),
   CONSTRAINT chk_order_items_quantity_positive CHECK (quantity > 0)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS payments (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -319,7 +356,7 @@ CREATE TABLE IF NOT EXISTS payments (
   CONSTRAINT fk_payments_order
     FOREIGN KEY (order_id) REFERENCES orders(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS item_licenses (
   item_id INT UNSIGNED NOT NULL,
@@ -329,7 +366,7 @@ CREATE TABLE IF NOT EXISTS item_licenses (
   CONSTRAINT fk_item_licenses_item
     FOREIGN KEY (item_id) REFERENCES catalog_items(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS comments (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -349,7 +386,7 @@ CREATE TABLE IF NOT EXISTS comments (
     FOREIGN KEY (item_id) REFERENCES catalog_items(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT chk_comments_rating_range CHECK (rating IS NULL OR (rating >= 1 AND rating <= 5))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS item_likes (
   user_id INT UNSIGNED NOT NULL,
@@ -363,7 +400,7 @@ CREATE TABLE IF NOT EXISTS item_likes (
   CONSTRAINT fk_item_likes_item
     FOREIGN KEY (item_id) REFERENCES catalog_items(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS highlights (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -383,7 +420,7 @@ CREATE TABLE IF NOT EXISTS highlights (
   CONSTRAINT fk_highlights_item
     FOREIGN KEY (item_id) REFERENCES catalog_items(id)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS reading_progress (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -403,7 +440,7 @@ CREATE TABLE IF NOT EXISTS reading_progress (
     FOREIGN KEY (item_id) REFERENCES catalog_items(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT chk_reading_progress_percentage_range CHECK (percentage >= 0 AND percentage <= 100)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO users (email, username, password_hash, full_name, role, country_code, birth_date) VALUES
 ('herobrinesonoio@gmail.com', 'the_admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Amministratore Sistema', 'admin', 'IT', '2007-01-23');

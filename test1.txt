@@ -1,0 +1,7 @@
+id	email	username	password_hash	full_name	role	country_code	birth_date	avatar_dir	email_verified_at	two_factor_method	totp_secret	totp_enabled_at	created_at	updated_at	bio
+1	herobrinesonoio@gmail.com	the_admin	$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi	Amministratore Sistema	admin	IT	2007-01-23	4.png	2026-05-11 17:49:24	totp	7JT4POOWXWJD4WZPVMYBDLFAZP3V47XK	2026-05-11 17:53:45	2026-05-11 17:31:45	2026-05-11 17:31:45	NULL
+2	testbot+2@example.com	testbot2	$2b$10$qtraGxYLCOFC6GRmkGIseeuXyuxD/XF7KAlyy22nxT4OcVfQ66mMS	Test Bot 2	user	IT	2000-01-01	1.png	NULL	none	NULL	NULL	2026-05-17 18:45:14	2026-05-17 18:45:14	NULL
+3	test_integration@example.com	test_integration	NULL	Test Integration	user	IT	2000-01-01	1.png	NULL	none	NULL	NULL	2026-05-17 18:49:46	2026-05-17 18:49:46	NULL
+5	testuser@example.com	testuser	NULL	Test User	artist	IT	1990-01-01	1.png	NULL	none	NULL	NULL	2026-05-22 13:55:52	2026-05-22 13:55:52	NULL
+6	admin@example.com	adminuser	NULL	Admin User	admin	IT	1985-01-01	1.png	NULL	none	NULL	NULL	2026-05-22 13:56:16	2026-05-22 13:56:16	NULL
+7	manager_candidate@example.com	managercand	NULL	Manager Candidate	manager	IT	1992-01-01	1.png	NULL	none	NULL	NULL	2026-05-22 13:56:16	2026-05-22 13:56:16	NULL

@@ -28,7 +28,7 @@ const itemRoute = (item: any) => {
       v-for="item of items"
       :key="item.id ?? item.key ?? item.title"
       :to="itemRoute(item)"
-      class="flex-shrink-0 w-48 md:w-56 lg:w-64 block"
+      class="block w-40 flex-shrink-0 sm:w-48 md:w-56 lg:w-64"
       :aria-label="`Apri ${item.title}`"
     >
       <ItemCard :item="item" />

@@ -94,13 +94,13 @@ function closeSidebar() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-100 text-slate-900 transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100">
+  <div class="min-h-screen overflow-x-hidden bg-slate-100 text-slate-900 transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100">
     <AppHeader />
 
     <div class="flex w-full min-h-screen">
       <SideNavBar :is-open="isSidebarOpen" @close="closeSidebar" />
 
-      <main class="flex-1 min-w-0 px-4 py-5 lg:px-8 lg:py-8">
+      <main class="flex-1 min-w-0 px-3 py-4 sm:px-4 sm:py-5 lg:px-8 lg:py-8">
         <div class="mb-4 lg:hidden">
           <button
             class="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"

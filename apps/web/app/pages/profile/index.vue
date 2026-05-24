@@ -36,9 +36,7 @@ async function logout() {
   <div>
     <NuxtRouteAnnouncer />
     <NuxtPage />
-    <div
-      class="mt-8 flex flex-col items-center gap-4 text-slate-900 dark:text-slate-100"
-    >
+    <div class="mt-8 flex flex-col items-center gap-4 px-3 text-slate-900 sm:px-0 dark:text-slate-100">
       <!-- Avatar -->
       <!-- immagine che fa da link a /avatar-->
       <img

@@ -1,5 +1,5 @@
 <template>
-  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+  <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 dark:border-slate-800 dark:bg-slate-900/80">
     <NuxtRouteAnnouncer />
 
     <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
@@ -20,7 +20,7 @@
     <div v-else-if="pending && items.length === 0" class="mt-6 text-slate-500 dark:text-slate-400">Caricamento risultati...</div>
     <div v-else-if="items.length === 0" class="mt-6 text-slate-500 dark:text-slate-400">Nessun risultato trovato.</div>
 
-    <div v-else class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+    <div v-else class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <NuxtLink
         v-for="item in items"
         :key="item.id ?? item.key ?? item.title"

@@ -115,7 +115,7 @@ async function updateAvatar() {
 
       <div class="flex-1 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
         <p class="mb-4 text-sm font-medium text-slate-500 dark:text-slate-400">Seleziona un nuovo avatar</p>
-        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <button
             v-for="avatar in avatars"
             :key="avatar.name"

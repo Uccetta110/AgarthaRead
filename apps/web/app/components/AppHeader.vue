@@ -1,21 +1,19 @@
 <template>
   <header class="border-b border-transparent bg-white text-slate-900 transition-colors duration-200 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100">
-    <div
-      class="grid w-full grid-cols-[1fr_minmax(320px,560px)_1fr] items-center gap-6 px-2 py-4"
-    >
+    <div class="flex w-full flex-col gap-3 px-3 py-3 sm:px-4 md:grid md:grid-cols-[1fr_minmax(320px,560px)_1fr] md:items-center md:gap-6 md:px-2 md:py-4">
       <NuxtLink
         to="/"
-        class="justify-self-start pl-2 text-2xl font-bold tracking-tight"
+        class="text-xl font-bold tracking-tight sm:text-2xl md:justify-self-start md:pl-2"
         >AgarthaRead</NuxtLink
       >
 
-      <div class="w-full justify-self-center">
+      <div class="w-full md:justify-self-center">
         <label for="header-search" class="sr-only">Cerca</label>
-        <div class="flex w-full items-stretch">
+        <div class="flex w-full flex-col sm:flex-row sm:items-stretch">
           <select
             v-model="searchScope"
             aria-label="Tipo di ricerca"
-            class="rounded-l-md border border-gray-300 bg-white px-3 text-sm text-gray-700 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+            class="w-full rounded-t-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 sm:w-auto sm:rounded-l-md sm:rounded-tr-none sm:border-b sm:border-r-0 sm:py-0"
           >
             <option value="books">Libri</option>
             <option value="manga">Manga</option>
@@ -27,15 +25,15 @@
             placeholder="Cerca libri, manga, giornali..."
             @input="handleInput"
             @keydown="handleKeyDown"
-            class="w-full rounded-r-md border border-l-0 border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-400"
+            class="w-full min-w-0 rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-400 sm:rounded-r-md sm:rounded-bl-none sm:border-l-0"
           />
         </div>
       </div>
 
-      <nav class="flex justify-self-end items-center gap-4 pr-2">
+      <nav class="flex flex-wrap items-center gap-2 sm:gap-3 md:justify-self-end md:gap-4 md:pr-2">
         <button
           type="button"
-          class="rounded-full border border-slate-300 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-700 transition hover:bg-slate-200 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+          class="rounded-full border border-slate-300 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-700 transition hover:bg-slate-200 sm:text-xs dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
           :aria-label="themeManager.isDark ? 'Passa al tema chiaro' : 'Passa al tema scuro'"
           @click="themeManager.toggleTheme"
         >
@@ -51,13 +49,13 @@
           height="80"
           @error="onAvatarError"
           @click="$router.push('/profile')"
-          class="rounded-full"
+          class="h-9 w-9 rounded-full sm:h-10 sm:w-10"
         />
         <!-- UserName-->
         <NuxtLink
           to="/profile"
           v-if="username"
-          class="text-sm text-slate-700 hover:text-slate-950 dark:text-slate-200 dark:hover:text-white"
+          class="hidden text-sm text-slate-700 hover:text-slate-950 sm:inline dark:text-slate-200 dark:hover:text-white"
         >
           {{ username }}
         </NuxtLink>

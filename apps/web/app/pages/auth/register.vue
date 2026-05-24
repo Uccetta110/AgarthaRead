@@ -1,6 +1,6 @@
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-10 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-    <div class="w-full max-w-md rounded-lg bg-white p-8 shadow-lg dark:bg-slate-900 dark:shadow-black/20">
+  <div class="flex min-h-screen items-center justify-center bg-slate-100 px-3 py-6 text-slate-900 sm:px-4 sm:py-10 dark:bg-slate-950 dark:text-slate-100">
+    <div class="w-full max-w-sm rounded-xl bg-white p-6 shadow-lg sm:max-w-md sm:p-8 dark:bg-slate-900 dark:shadow-black/20">
       <h2 class="mb-6 text-center text-2xl font-bold">Registrazione</h2>
       <form @submit.prevent="onSubmit">
         <div class="mb-4">

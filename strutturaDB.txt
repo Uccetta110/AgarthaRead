@@ -1,7 +1,3 @@
-struttura database
-ogni utente ha il suo id, per creare l'accound deve inserire un'email (con cui si fara la 2FA), potrà accedere tramite email o userName e con la password, oppure tramite un codice per email (potrà scegliere se resettare la password oppure accedere tramite un codice da 6 cifre mandato per email)
-ogni utente deve inserire il suo paese di residenza e le lingue che parla, la sua data di nascita (ci saranno dei libri con le restrizioni di età) e altro ...
-
 i libri saranno salvati con id, il titolo (bisogna trovare un modo per salvare ogni titolo in base alla lingua), l'autore/autori, la casa editrice, rating, visualizzazioni, data di pubblicazione, tipologia (triller, comico ...) e altro ...
 ci sarà una cartella dentro assets con dentro una directory per ogni libro, con all'interno la copertina e se ci sono le immagini all'interno dei libri, ed il contenuto dei libri, di cui sono ancora indeciso come salvare. stavo pensando di salvarli in semplici file di testo, salvandoli come se fossero un linguaggio di markup simile ad html, con <h1> <h2> <h3> per i titoli, i titoletti, le annotazioni... mentre il testo normale è lasciato cosi com'è. ci saranno cose come <pageEnd> per capire quando magari il testo dopo deve andare direttamente all'altra pagina. 
 per i libri con le immagini all'interno, penso di metterle sempre come se fossero il linguaggio di markup: <img src"nome immagine" size ...> tanto le immagini saranno nella stessa cartella. Penso di salvare in file diversi il contenuto di lingue diverse
@@ -19,35 +15,41 @@ gli utenti possono commentare, mettere like (che salverà in automatico nei Pref
 
 Diagramma ER aggiornato (coerente con la descrizione attuale)
 
-users
 - id (PK, int)
 - email (string, UNIQUE)
 - username (string, UNIQUE)
-- password_hash (string, NULL se login solo OTP)
+- password_hash (string, NULL)
 - full_name (string)
-- role (enum: user, admin, author, editor)
-- country_code (string)
+- bio (text, NULL)
+- role (enum: user, unconfirmed, artist, manager, admin, editor)
+- country_code (char(2))
 - birth_date (date)
- - avatar (string) # filename o identificatore dell'avatar selezionato (es. "avatar1.png").
- # Alternativa normalizzata: usare `avatar_id` (FK -> avatars.id) se si aggiunge la tabella `avatars`.
+- avatar_dir (string, default `1.png`)
+- email_verified_at (datetime, NULL)
+- two_factor_method (enum: none, email, totp)
+- totp_secret (string, NULL)
+- totp_enabled_at (datetime, NULL)
 - created_at (datetime)
-- updated_at (datetime)
+- updated_at (datetime, auto-update)
 
 user_languages
 - user_id (FK -> users.id)
 - language_code (string)
-- (user_id, language_code) (PK composita)
+- PK composta: (user_id, language_code)
 
 user_preferences
 - id (PK, int)
 - user_id (FK -> users.id, UNIQUE)
-- theme (string)
-- font_size (int)
-- ui_language (string)
-- updated_at (datetime)
+- theme (string, NULL)
+- font_size (int, NULL)
+- image_size (string, default `medium`)
+- ui_language (string, NULL)
+- account_public (bool/int, default 1)
+- lists_public_by_default (bool/int, default 0)
+- updated_at (datetime, auto-update)
 
 user_sessions
-- id (PK, int)
+- id (PK, bigint)
 - user_id (FK -> users.id)
 - session_token (string, UNIQUE)
 - ip (string)
@@ -57,16 +59,36 @@ user_sessions
 - created_at (datetime)
 
 auth_challenges
-- id (PK, int)
+- id (PK, bigint)
 - user_id (FK -> users.id)
-- purpose (enum: login, password_reset)
-- channel (enum: email)
+- purpose (enum: login, password_reset, email_verify, account_delete)
+- channel (enum: email, totp)
 - challenge_token_hash (string, UNIQUE)
+- otp_code_hash (string, NULL)
+- attempts (int, default 0)
 - expires_at (datetime)
 - consumed_at (datetime, NULL)
 - created_at (datetime)
-# Nota privacy: il codice OTP non viene mai salvato nel DB.
-# Verifica consigliata: OTP stateless con token firmato a scadenza breve.
+
+GESTIONE RUOLI E RICHIESTE
+
+manager_permissions
+- user_id (FK -> users.id)
+- permission_code (string)
+- granted_at (datetime)
+- granted_by (int, NULL)
+- PK composta: (user_id, permission_code)
+
+artist_requests
+- id (PK, bigint)
+- user_id (FK -> users.id)
+- status (enum: pending, approved, rejected)
+- message (text, NULL)
+- processed_by (int, NULL)
+- processed_at (datetime, NULL)
+- created_at (datetime)
+
+CATALOGO CONTENUTI
 
 publishers
 - id (PK, int)
@@ -80,7 +102,7 @@ catalog_items
 - age_rating_min (int, default 0)
 - release_date (date, NULL)
 - price (decimal)
-- currency (string)
+- currency (char(3), default `EUR`)
 - isbn (string, NULL)
 - source (enum: internal, api)
 - search_provider (string, NULL)
@@ -90,50 +112,27 @@ catalog_items
 - avg_rating (decimal, NULL)
 - views_count (int, default 0)
 - created_at (datetime)
-- updated_at (datetime)
+- updated_at (datetime, auto-update)
 
 catalog_item_translations
-- id (PK, int)
+- id (PK, bigint)
 - item_id (FK -> catalog_items.id)
 - language_code (string)
 - title (string)
 - description (text, NULL)
-- content_path (string, NULL) # file testo/markup per lingua
+- content_path (string, NULL)
 - content_format (enum: txt, html_like, markdown, image_sequence)
-- (item_id, language_code) (UNIQUE)
-
-series
-- id (PK, int)
-- name (string)
-- type (enum: comic, manga)
-
-series_entries
-- id (PK, int)
-- series_id (FK -> series.id)
-- item_id (FK -> catalog_items.id)
-- volume_no (decimal, NULL, ES 1, 2, 2.1, 2.5, 3)
-- chapter_no (int, NULL)
-- entry_order (int)
-- (series_id, item_id) (UNIQUE)
-
-item_media
-- id (PK, int)
-- item_id (FK -> catalog_items.id)
-- language_code (string, NULL)
-- media_type (enum: cover, page, image)
-- storage_path (string)
-- mime_type (string)
-- sort_order (int)
+- UNIQUE: (item_id, language_code)
 
 authors
 - id (PK, int)
 - full_name (string)
-- role (string, es scrittore)
+- role (string)
 
 item_authors
 - item_id (FK -> catalog_items.id)
 - author_id (FK -> authors.id)
-- (item_id, author_id) (PK composita)
+- PK composta: (item_id, author_id)
 
 categories
 - id (PK, int)
@@ -142,47 +141,83 @@ categories
 item_categories
 - item_id (FK -> catalog_items.id)
 - category_id (FK -> categories.id)
-- (item_id, category_id) (PK composita)
+- PK composta: (item_id, category_id)
+
+SERIE E MEDIA
+
+series
+- id (PK, int)
+- name (string)
+- type (enum: comic, manga)
+
+series_entries
+- id (PK, bigint)
+- series_id (FK -> series.id)
+- item_id (FK -> catalog_items.id)
+- volume_no (decimal, NULL)
+- chapter_no (int, NULL)
+- entry_order (int)
+- UNIQUE: (series_id, item_id)
+- UNIQUE: (series_id, entry_order)
+
+item_media
+- id (PK, bigint)
+- item_id (FK -> catalog_items.id)
+- language_code (string, NULL)
+- media_type (enum: cover, page, image)
+- storage_path (string)
+- mime_type (string)
+- sort_order (int, default 0)
+
+LISTE E BIBLIOTECA
 
 user_lists
-- id (PK, int)
+- id (PK, bigint)
 - user_id (FK -> users.id)
-- name (string) # es. Preferiti, Da leggere
-- is_system (bool)
+- name (string)
+- description (text, NULL)
+- cover_image (string, NULL)
+- is_public (bool/int, default 0)
+- tags (string, NULL)
+- is_system (bool/int, default 0)
 - created_at (datetime)
-- (user_id, name) (UNIQUE)
+- updated_at (datetime, auto-update)
+- UNIQUE: (user_id, name)
 
 user_list_items
-- id (PK, int)
+- id (PK, bigint)
 - list_id (FK -> user_lists.id)
 - item_id (FK -> catalog_items.id)
+- position (int, default 0)
 - added_at (datetime)
-- (list_id, item_id) (UNIQUE)
+- UNIQUE: (list_id, item_id)
 
 library_items
-- id (PK, int)
+- id (PK, bigint)
 - user_id (FK -> users.id)
 - item_id (FK -> catalog_items.id)
 - source (enum: saved, purchased)
 - added_at (datetime)
-- (user_id, item_id, source) (UNIQUE)
+- UNIQUE: (user_id, item_id, source)
+
+ORDINI E PAGAMENTI
 
 orders
-- id (PK, int)
+- id (PK, bigint)
 - user_id (FK -> users.id)
 - status (enum: pending, paid, failed, cancelled)
 - total_amount (decimal)
 - created_at (datetime)
 
 order_items
-- id (PK, int)
+- id (PK, bigint)
 - order_id (FK -> orders.id)
 - item_id (FK -> catalog_items.id)
 - unit_price (decimal)
-- quantity (int)
+- quantity (int, default 1)
 
 payments
-- id (PK, int)
+- id (PK, bigint)
 - order_id (FK -> orders.id)
 - provider (enum: stripe, simulated)
 - provider_tx_id (string, NULL)
@@ -192,27 +227,27 @@ payments
 item_licenses
 - item_id (PK + FK -> catalog_items.id)
 - available_copies (int)
-- updated_at (datetime)
-# Nota: usata solo per item fisici o con copie limitate.
-# Stato attuale MVP: tutti gli item sono digitali, quindi accesso online dopo pagamento.
+- updated_at (datetime, auto-update)
+
+INTERAZIONE UTENTE
 
 comments
-- id (PK, int)
+- id (PK, bigint)
 - user_id (FK -> users.id)
 - item_id (FK -> catalog_items.id)
 - body (text)
 - rating (int, NULL)
 - created_at (datetime)
-- updated_at (datetime)
+- updated_at (datetime, auto-update)
 
 item_likes
 - user_id (FK -> users.id)
 - item_id (FK -> catalog_items.id)
 - created_at (datetime)
-- (user_id, item_id) (PK composita)
+- PK composta: (user_id, item_id)
 
 highlights
-- id (PK, int)
+- id (PK, bigint)
 - user_id (FK -> users.id)
 - item_id (FK -> catalog_items.id)
 - language_code (string)
@@ -223,53 +258,43 @@ highlights
 - created_at (datetime)
 
 reading_progress
-- id (PK, int)
+- id (PK, bigint)
 - user_id (FK -> users.id)
 - item_id (FK -> catalog_items.id)
 - language_code (string)
-- locator (string) # pagina/capitolo/offset
+- locator (string)
 - percentage (decimal)
 - last_read_at (datetime)
-- (user_id, item_id) (UNIQUE)
+- UNIQUE: (user_id, item_id)
 
-avatars
-- id (PK, int)
-- filename (string, UNIQUE) # es. "avatar1.png"
-- storage (enum: assets, uploaded) # dove si trova (assets predefiniti o upload utente)
-- display_name (string, NULL)
-- is_active (bool, default true)
-- created_at (datetime)
+NOTE DI MODELLO
+- I contenuti testuali dei libri puntano a file gestiti da `catalog_item_translations.content_path`.
+- Per fumetti e manga la sequenza delle pagine sta in `item_media` con `media_type = page`.
+- `manager_permissions` serve per le capacità amministrative granulari dei manager.
+- `user_lists.is_public` decide se una lista è visibile pubblicamente.
+- Le liste di sistema come `Preferiti` e `Da leggere` possono essere marcate con `is_system = 1`.
 
--- Nota di design:
--- 1) Se gli avatar sono solo quelli in `assets/images/avatars`, è sufficiente salvare in `users.avatar` il nome/file.
--- 2) Se vuoi gestire avatar dinamici o upload utente, aggiungi `avatars` e salva `users.avatar_id` come FK verso `avatars.id`.
--- 3) L'API frontend dovrà inviare il valore corrispondente (filename o avatar_id) quando si salva la scelta.
-
-Relazioni principali
+RELAZIONI PRINCIPALI
 - users 1 -> N user_sessions
 - users 1 -> N auth_challenges
 - users 1 -> N user_languages
 - users 1 -> 1 user_preferences
-- users 1 -> N orders
-- users 1 -> N library_items
 - users 1 -> N user_lists
+- users 1 -> N library_items
 - users 1 -> N comments
 - users 1 -> N item_likes
 - users 1 -> N highlights
 - users 1 -> N reading_progress
+- users 1 -> N manager_permissions
+- users 1 -> N artist_requests
 - publishers 1 -> N catalog_items
 - catalog_items 1 -> N catalog_item_translations
 - catalog_items 1 -> N item_media
-- catalog_items N <-> N authors (via item_authors)
-- catalog_items N <-> N categories (via item_categories)
+- catalog_items 1 -> N item_authors
+- catalog_items 1 -> N item_categories
 - catalog_items 1 -> N comments
 - catalog_items 1 -> N item_likes
 - catalog_items 1 -> N highlights
 - catalog_items 1 -> N reading_progress
-- catalog_items 1 -> N order_items
+- catalog_items 1 -> N user_list_items
 - catalog_items 1 -> N library_items
-- catalog_items 0..1 -> 1 item_licenses (solo se fulfillment_type = physical)
-- series 1 -> N series_entries
-- catalog_items 1 -> N series_entries
-- orders 1 -> N order_items
-- orders 1 -> N payments

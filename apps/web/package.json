@@ -9,6 +9,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "db:seed:admin": "node server/db/seed-admin.mjs",
+    "db:seed:permissions": "node server/db/seed/seed_permissions.mjs",
     "db:generate": "drizzle-kit generate --config ./drizzle.config.ts",
     "db:push": "drizzle-kit push --config ./drizzle.config.ts"
   },

@@ -39,7 +39,7 @@ export const users = mysqlTable("users", {
     .default(sql`CURRENT_TIMESTAMP`),
   updatedAt: datetime("updated_at", { mode: "date" })
     .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+    .default(sql`CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`),
 });
 
 export const userLanguages = mysqlTable(
@@ -67,7 +67,7 @@ export const userPreferences = mysqlTable("user_preferences", {
   listsPublicByDefault: int("lists_public_by_default").notNull().default(0),
   updatedAt: datetime("updated_at", { mode: "date" })
     .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+    .default(sql`CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`),
 });
 
 export const managerPermissions = mysqlTable(
@@ -199,7 +199,7 @@ export const catalogItems = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP`),
     updatedAt: datetime("updated_at", { mode: "date" })
       .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+      .default(sql`CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`),
   },
   (table) => [
     index("idx_catalog_items_type").on(table.type),
@@ -382,7 +382,7 @@ export const userLists = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP`),
     updatedAt: datetime("updated_at", { mode: "date" })
       .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+      .default(sql`CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`),
   },
   (table) => [
     uniqueIndex("uq_user_lists_user_name").on(table.userId, table.name),
