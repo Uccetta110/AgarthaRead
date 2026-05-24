@@ -90,9 +90,11 @@ type RegisterResponse = {
     username: string
     email: string
     avatar_dir: string
+    role: 'user' | 'unconfirmed' | 'artist' | 'manager' | 'admin' | 'editor' | 'suspended' | 'banned'
     email_verified_at?: string | null
     two_factor_method?: 'none' | 'email' | 'totp'
     totp_enabled_at?: string | null
+    suspended_until?: string | null
   }
 }
 

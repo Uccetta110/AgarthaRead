@@ -149,9 +149,11 @@ export default defineEventHandler(async (event) => {
       username: user.username,
       email: user.email,
       avatar_dir: user.avatarDir,
+      role: 'user',
       email_verified_at: user.emailVerifiedAt,
       two_factor_method: user.twoFactorMethod,
-      totp_enabled_at: user.totpEnabledAt
+      totp_enabled_at: user.totpEnabledAt,
+      suspended_until: null
     }
   }
 })

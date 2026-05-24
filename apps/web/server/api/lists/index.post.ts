@@ -4,6 +4,7 @@ import { userLists } from '../../db/schema'
 
 export default defineEventHandler(async (event) => {
   const user = await requireSessionUser(event)
+  if (user.role === 'suspended') throw createError({ statusCode: 403, statusMessage: 'Account sospeso: non puoi creare liste.' })
   const body = await readBody(event)
   const name = String(body?.name || '').trim()
   if (!name) throw createError({ statusCode: 400, statusMessage: 'Nome lista richiesto' })

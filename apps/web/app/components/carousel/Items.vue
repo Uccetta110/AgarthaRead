@@ -24,14 +24,12 @@ const itemRoute = (item: any) => {
       <slot name="more" />
     </template>
 
-    <NuxtLink
+    <ItemCard
       v-for="item of items"
       :key="item.id ?? item.key ?? item.title"
+      :item="item"
       :to="itemRoute(item)"
       class="block w-40 flex-shrink-0 sm:w-48 md:w-56 lg:w-64"
-      :aria-label="`Apri ${item.title}`"
-    >
-      <ItemCard :item="item" />
-    </NuxtLink>
+    />
   </CarouselBase>
 </template>

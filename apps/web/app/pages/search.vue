@@ -21,14 +21,13 @@
     <div v-else-if="items.length === 0" class="mt-6 text-slate-500 dark:text-slate-400">Nessun risultato trovato.</div>
 
     <div v-else class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <NuxtLink
+      <ItemCard
         v-for="item in items"
         :key="item.id ?? item.key ?? item.title"
+        :item="item"
+        :catalog-type="type"
         :to="itemRoute(item)"
-        class="block"
-      >
-        <ItemCard :item="item" />
-      </NuxtLink>
+      />
     </div>
 
     <div ref="sentinel" class="h-10" />

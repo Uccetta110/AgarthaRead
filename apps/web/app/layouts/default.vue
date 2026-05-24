@@ -11,6 +11,9 @@ type SessionResponse = {
     username: string
     email: string
     avatar_dir: string
+    role: 'user' | 'unconfirmed' | 'artist' | 'manager' | 'admin' | 'editor' | 'suspended' | 'banned'
+    permissions?: string[]
+    suspended_until?: string | null
   }
 }
 
@@ -26,18 +29,27 @@ const sessionResult = await useFetch<SessionResponse>('/api/auth/me', {
 async function loadThemePreference() {
   if (!sessionData.value?.ok) {
     await themeManager.loadThemePreference('light')
+    if (import.meta.client) {
+      document.documentElement.style.fontSize = '16px'
+    }
     return
   }
 
   try {
-    const response = await $fetch<{ ok: true; preferences: { theme: string | null } }>('/api/profile/settings', {
+    const response = await $fetch<{ ok: true; preferences: { theme: string | null; font_size: number | null } }>('/api/profile/settings', {
       method: 'GET',
       credentials: 'include'
     })
 
     await themeManager.loadThemePreference(response.preferences?.theme)
+    if (import.meta.client) {
+      document.documentElement.style.fontSize = `${response.preferences?.font_size ?? 16}px`
+    }
   } catch {
     await themeManager.loadThemePreference('light')
+    if (import.meta.client) {
+      document.documentElement.style.fontSize = '16px'
+    }
   }
 }
 
@@ -97,7 +109,7 @@ function closeSidebar() {
   <div class="min-h-screen overflow-x-hidden bg-slate-100 text-slate-900 transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100">
     <AppHeader />
 
-    <div class="flex w-full min-h-screen">
+    <div class="flex w-full min-h-screen items-stretch">
       <SideNavBar :is-open="isSidebarOpen" @close="closeSidebar" />
 
       <main class="flex-1 min-w-0 px-3 py-4 sm:px-4 sm:py-5 lg:px-8 lg:py-8">

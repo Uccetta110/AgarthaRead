@@ -68,6 +68,11 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // Banned users cannot login
+  if (user.role === 'banned') {
+    throw createError({ statusCode: 403, statusMessage: 'Utente bannato. Contatta supporto@agartharead.local per ricorso.' })
+  }
+
   // Verifica che la password fornita corrisponda all'hash memorizzato
   // bcrypt.compare() effettua un confronto crittografico sicuro
   // Ritorna true se le password corrispondono, false altrimenti
@@ -81,10 +86,24 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  if (user.role === 'banned') {
+    throw createError({ statusCode: 403, statusMessage: 'Utente bannato. Contatta supporto@agartharead.local per ricorso.' })
+  }
+
+  let effectiveUser = user
+  if (user.role === 'suspended' && user.suspendedUntil && user.suspendedUntil <= new Date()) {
+    const restoredRole = user.emailVerifiedAt ? 'user' : 'unconfirmed'
+    await db.update(users).set({ role: restoredRole, suspendedUntil: null }).where(eq(users.id, user.id))
+    const refreshed = (await db.select().from(users).where(eq(users.id, user.id)).limit(1))[0]
+    if (refreshed) {
+      effectiveUser = refreshed
+    }
+  }
+
   // Genera un token di sessione casuale e sicuro (32 byte = 64 caratteri esadecimali)
   // crypto.randomBytes() usa l'RNG crittografico del sistema operativo
-  let twoFactorMethod = user.twoFactorMethod ?? 'none'
-  if (twoFactorMethod === 'totp' && !user.totpSecret) {
+  let twoFactorMethod = effectiveUser.twoFactorMethod ?? 'none'
+  if (twoFactorMethod === 'totp' && !effectiveUser.totpSecret) {
     twoFactorMethod = 'none'
   }
   if (twoFactorMethod !== 'none') {
@@ -105,7 +124,7 @@ export default defineEventHandler(async (event) => {
     const otpCodeHash = otpCode ? hashValue(otpCode) : null
 
     await db.insert(authChallenges).values({
-      userId: user.id,
+      userId: effectiveUser.id,
       purpose: 'login',
       channel: twoFactorMethod === 'email' ? 'email' : 'totp',
       challengeTokenHash,
@@ -115,7 +134,7 @@ export default defineEventHandler(async (event) => {
 
     if (otpCode) {
       await sendEmail({
-        to: user.email,
+        to: effectiveUser.email,
         subject: 'Codice di accesso AgarthaRead',
         text: `Il tuo codice di accesso è: ${otpCode}`,
       })
@@ -160,17 +179,19 @@ export default defineEventHandler(async (event) => {
   // Restituisce una risposta di successo con i dati dell'utente
   // Il token di sessione è già nel cookie, quindi non è necessario includerlo
   //output console se qualcuno ha fatto un login con successo, mostra l'username, l'id e l'email dell'utente che ha fatto login
-  console.log(`Login successful: userId=${user.id}, username=${user.username}, email=${user.email}`)
+    console.log(`Login successful: userId=${effectiveUser.id}, username=${effectiveUser.username}, email=${effectiveUser.email}`)
   return {
     ok: true,
     user: {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      avatar_dir: user.avatarDir,
-      email_verified_at: user.emailVerifiedAt,
-      two_factor_method: user.twoFactorMethod,
-      totp_enabled_at: user.totpEnabledAt
+      id: effectiveUser.id,
+      username: effectiveUser.username,
+      email: effectiveUser.email,
+      avatar_dir: effectiveUser.avatarDir,
+      role: effectiveUser.role,
+      email_verified_at: effectiveUser.emailVerifiedAt,
+      two_factor_method: effectiveUser.twoFactorMethod,
+      totp_enabled_at: effectiveUser.totpEnabledAt,
+      suspended_until: effectiveUser.suspendedUntil
     }
   }
 })

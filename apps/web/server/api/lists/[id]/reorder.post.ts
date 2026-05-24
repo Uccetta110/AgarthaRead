@@ -19,6 +19,8 @@ export default defineEventHandler(async (event) => {
   if (!list) throw createError({ statusCode: 404, statusMessage: 'Lista non trovata' })
   if (list.userId !== user.id) throw createError({ statusCode: 403, statusMessage: 'Forbidden' })
 
+  if (user.role === 'suspended') throw createError({ statusCode: 403, statusMessage: 'Account sospeso: non puoi modificare le tue liste.' })
+
   // Accept body as array of ids [itemId, ...] or array of objects [{itemId, position}]
   let order: Array<{ itemId: number; position: number }> = []
   if (Array.isArray(body)) {

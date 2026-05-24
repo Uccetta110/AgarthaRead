@@ -1,103 +1,68 @@
-### PROGETTO SCOLASTICO, DEV/TEST
+**Spiegazione del progetto attuale (detailed)**
 
-Nella valutazione del tuo progetto finale guarderò in particolare la presenza e l'uso corretto delle seguenti tecniche e tecnologie:
+Panoramica
+- `AgarthaRead` è una piattaforma web per fruire, gestire e condividere contenuti digitali (libri, manga, comics, news). L'app è organizzata come applicazione Nuxt 4 con server routes che fungono da backend leggero e proxy per API esterne; un servizio Socket.IO fornisce funzionalità realtime.
 
-Controllo e sanificazione input : Html5, JS, PHP (filter_var,...)
-Front end responsive
+Architettura e struttura (mantenuta e aggiornata)
+- apps/web/: front-end Nuxt 4 + server routes (API interne). Contiene `app/pages`, `app/components`, `server/api`, `utils`, `db client`.
+- apps/realtime/: servizio Socket.IO (events: comments, notifications, auth middleware).
+- packages/shared/: tipi e validatori condivisi.
+- database/: schema, migrations, seed e diagramma ER.
 
+Cosa fanno gli utenti (ruoli e permessi)
+- `user` (anonimo o autenticato): naviga catalogo, salva oggetti in liste, legge contenuti free, può aprire account e recuperare preferenze.
+- `author`: può pubblicare opere interne, modificare le proprie opere e rispondere ai commenti; ottiene un badge `artist` alla conferma.
+- `manager`: ruolo con permessi operativi (gestione richieste autore, moderazione parziale, revisione tag/opere a livello limitato).
+- `admin`: permessi completi (crea/elimina utenti, modifica opere, gestisce ruoli e configurazioni globali).
 
-Tecnica PostBack: unione della pagina html e dell'elaborazione php: uso $_SERVER['PHP_SELF'] o analoghi 
-https://www.docsity.com/it/docs/linguaggio-php-il-postback/9458752/
+Azioni utente principali
+- Registrazione/login (possibile MFA, sessione sicura). 
+- Esplorazione e ricerca catalogo.
+- Salvataggio in liste personali e gestione liste (crea, modifica, reorder, condivisione pubblica).
+- Like e commenti (commenti possono essere sottoposti a condizioni, es. percentuale di lettura minima).
+- Acquisto/checkout per contenuti a pagamento (transazione DB + lock).
 
-Uso delle SESSIONI sia per mantenimento stato dell'applicazione sia per protezione delle pagine interne, Uso dei cookie, Uso delle prepared statement per interrogazione DB, Uso delle transazioni per l'accesso condiviso al DB, Uso delle  select ... LOCK IN SHARE MODE o FOR UPDATE per accesso condiviso, Uso di ajax o di websocket
+API esterne utilizzate e come vengono impiegate
+- Open Library: metadata, copertine, ricerca. Usata per arricchire catalogo (no API key richiesta).
+- Google Books: preview, immagini, accessInfo (richiede API key per produzione). Utilizzata per arricchire schede libro e mostrare preview.
+- Gutendex: testi in public domain (full text) per libri gratuiti.
+- Jikan / AniList: metadata e rating per manga; usate per catalogo e suggerimenti.
+- MangaDex: capitoli e URL immagini (reader di immagini). Accesso via server proxy per gestire CORS e rate-limit.
+- The Guardian Open Platform: articoli/news con API key; usata per la sezione news.
+- GDELT: analisi e trend, non per articolo singolo ma per aggregazione/insight.
 
-DB: ER (tabelle e relazioni)
+Modalità di integrazione (principi)
+- Tutte le chiamate a servizi esterni passano dal backend (server routes) che normalizza le risposte in un formato comune (`id,type,source,title,...`) prima di restituirle al client.
+- Caching lato server (Redis consigliato) per limitare richieste upstream.
+- Rate limiting e strategia di retry per gestire 429/limiti.
 
-Tecnologie per invio email, pagamenti, ...
+Flussi principali (dettagli operativi)
+- Dettaglio oggetto: client → `/api/{type}/{id}` → normalizzazione → upsert `catalog_items` → return oggetto + user flags (isSaved/isPurchased/isLiked).
+- Like: richiesta idempotente che inserisce/rimuove riga in `item_likes`; risposta ottimistica al client.
+- Commento: validazione server-side, inserimento in DB, broadcast via Socket.IO se presente.
+- Checkout: operazione in transazione; lock su risorsa con `FOR UPDATE` e logica di rollback su errore.
 
-Certificazione a più fattori (php ed email, oauth,...)
+Componenti e mappatura server route (esempi)
+- `app/components/ItemCarousel.vue` → navigazione dinamica a `/{type}/{id}`.
+- `app/pages/books/[id].vue` → chiama `/api/books/[id]`.
+- `server/api/auth/*` → `login.post.ts`, `register.post.ts`, `logout.post.ts`, `mfa-verify.post.ts`.
+- `server/api/books/*`, `server/api/manga/*`, `server/api/comics/*`, `server/api/news/*` → ricerca, dettaglio, commenti.
 
-Pattern M(odel)V(iew)C(ontroller)
+Stato attuale (implementazioni rilevanti)
+- Funzionalità già attive: ricerca utenti pubblica, preferenze profilo (image_size, account_public, lists_public_by_default), campo `bio`, salvataggio oggetti in liste, badge artista nei commenti, moderazione con permessi granulari, pagina profilo pubblica, gestione sessioni aggiornata.
+- Parti principali ancora da finalizzare o testare: proxy e cache per API esterne (Google Books, MangaDex), suite di test per checkout e operazioni critiche, miglioramenti UX del reader immagini.
 
-Uso di API (Possibili API: sendgrid, postmarkapp per invio email, stripe per simulaz pagamenti, google maps per poi su mappa)
-Ricordo che puoi proporti per la presentazione di una di queste voci "stile esami di maturità"
+Note operative rapide per sviluppo
+- Verificare versione Node (usare `.nvmrc`) prima di avviare Nuxt 4.
+- Eseguire i test di integrazione in `apps/web/test/integration/` dopo aver configurato DB e variabili API.
 
-le informazion riguardo al mio progetto intanto sono:
-N.,COGNOME,NOME,TITOLO PROGETTO,"Analisi, DB diagramma ER",PRIMA CONSEGNA PUNTUALE (% AI),FRONT END (tecnologie),BACK END (tecnologie),POSTBACK,SESSIONI,COOKIE,PREPARED STATEMENT,TRANSAZIONI su   DB,SELECT in share mode,AJAX/WEBSOCKET,CERTIFICAZIONE A PIU' FATTORI,MVC,API,LINK GITHUB,TECNOLOGIE AGGIUNTIVE
-1,AGLIATI,FEDERICO,AgarthaRead,,,VUE | TailwindCss,Socket IO | NUXT 4,,,dati di accesso | preferenze dispositivo,,,,,,,google API per gli accesssi,,
+Prossimi passi suggeriti (se vuoi li eseguo)
+1. Documentare endpoint principali in `docs/api-spec.md`.
+2. Aggiungere caching Redis per le chiamate a Google Books e MangaDex.
+3. Creare test end-to-end per checkout e like/commenti.
 
-e sono anche la tabella delle valutazioni (per questo alcune cose sono vuote)
+---
 
-questo programma lo sviluppo sul mio computer a casa e su github codespace a scuola (i computer hanno node non aggiornato)
-node aggiornato mi serve per NUXT 4
-
-il mio progetto consiste in un sito, simile a kindle unlimited, dove gli utenti possono registrari e leggere, comprare, salvare, commentare libri (che possono essere presi sia tramite un API che salvati su un database o un opzione migliore), fumetti e manga (cosi integro anche una parte per le immagini), giornali ...
-
-linguaggi: HTML/VUE TailwindCss, JS/TP, SQL, 
-tecnologie: NUXT 4, Socket IO
-
-struttura:
-
- ||    ||    ||    ||    ||    ||    ||    ||    ||    ||   
- ||    ||    ||    ||    ||    ||    ||    ||    ||    ||   
-\||/  \||/  \||/  \||/  \||/  \||/  \||/  \||/  \||/  \||/  
- \/    \/    \/    \/    \/    \/    \/    \/    \/    \/   
-PRESA DA -> https://nuxt.com/docs/4.x/directory-structure
- /\    /\    /\    /\    /\    /\    /\    /\    /\    /\
-/||\  /||\  /||\  /||\  /||\  /||\  /||\  /||\  /||\  /||\
- ||    ||    ||    ||    ||    ||    ||    ||    ||    ||  
- ||    ||    ||    ||    ||    ||    ||    ||    ||    ||  
- 
-AgarthaRead/
-├─ apps/
-│  ├─ web/                                  # Nuxt 4 (frontend + server routes)
-│  │  ├─ app/
-│  │  │  ├─ pages/
-│  │  │  │  ├─ index.vue                    # home
-│  │  │  │  ├─ auth/
-│  │  │  │  │  ├─ login.vue
-│  │  │  │  │  └─ register.vue
-│  │  │  │  ├─ books/
-│  │  │  │  │  ├─ index.vue                 # catalogo
-│  │  │  │  │  └─ [id].vue                  # dettaglio/lettura
-│  │  │  │  ├─ comics/index.vue             # fumetti
-│  │  │  │  ├─ comics/[id].vue              # dettaglio/lettura fumetto
-│  │  │  │  ├─ manga/index.vue              # manga
-│  │  │  │  ├─ manga/[id].vue               # dettaglio/lettura manga
-│  │  │  │  ├─ newspapers/index.vue         # giornali
-│  │  │  │  ├─ newspapers/[id].vue          # dettaglio/lettura giornale
-│  │  │  │  └─ profile/index.vue
-│  │  │  ├─ components/
-│  │  │  │  ├─ ItemCarousel.vue            # carousel oggetti con NuxtLink
-│  │  │  │  ├─ ItemCard.vue
-│  │  │  │  └─ ObjectCard.vue              # singolo item nella carousel
-│  │  │  ├─ layouts/
-│  │  │  ├─ middleware/
-│  │  │  │  └─ auth.ts                      # protezione pagine interne
-│  │  │  ├─ composables/
-│  │  │  ├─ plugins/
-│  │  │  └─ assets/
-│  │  ├─ server/
-│  │  │  ├─ api/                            # controller (MVC)
-│  │  │  │  ├─ auth/
-│  │  │  │  │  ├─ login.post.ts
-│  │  │  │  │  ├─ register.post.ts
-│  │  │  │  │  ├─ logout.post.ts
-│  │  │  │  │  └─ mfa-verify.post.ts
-│  │  │  │  ├─ books/
-│  │  │  │  │  ├─ index.get.ts
-│  │  │  │  │  ├─ [id].get.ts
-│  │  │  │  │  └─ [id]/comments.post.ts
-│  │  │  │  ├─ library/
-│  │  │  │  │  ├─ index.get.ts
-│  │  │  │  │  └─ save.post.ts
-│  │  │  │  └─ purchases/
-│  │  │  │     └─ checkout.post.ts          # transazione + lock
-│  │  │  ├─ services/                       # logica applicativa
-│  │  │  ├─ repositories/                   # query DB prepared statement
-│  │  │  ├─ utils/
-│  │  │  │  ├─ validation.ts                # sanitizzazione input
-│  │  │  │  └─ session.ts                   # cookie/sessioni
 │  │  │  └─ db/
 │  │  │     └─ client.ts
 │  │  ├─ nuxt.config.ts
@@ -357,6 +322,20 @@ Oggetto normalizzato comune:
 - `isSaved`
 - `isPurchased`
 - `commentsCount`
+
+---
+IMPLEMENTAZIONI COMPLETATE (2026-05-24)
+
+- Ricerca utenti pubblica con filtro per profili visibili e supporto nella pagina search.
+- Preferenze profilo già integrate: `image_size`, `account_public`, `lists_public_by_default` e `bio`.
+- Pagina profilo pubblica con visualizzazione di bio e liste pubbliche.
+- Salvataggio oggetti in liste e indicatore di stato salvato nelle card.
+- Badge artista nei commenti.
+- Moderazione admin/manager con permessi granulari `VU`, `MU`, `EU`, `MI`, `EI`, `EC`.
+- Creazione utenti admin (`AU`) con email verificata subito e attributi principali configurabili.
+- Operazioni di moderazione e modifica item già coperte da transazioni nei path critici.
+- Sessioni e controlli di accesso già allineati al nuovo modello con utenti sospesi/bannati.
+- Preferenze profilo con tema e dimensione testo applicati globalmente.
 
 STRUTTURA API E PAGINA
 

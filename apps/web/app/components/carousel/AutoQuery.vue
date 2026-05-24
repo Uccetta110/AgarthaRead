@@ -26,6 +26,6 @@ const items = computed(() => {
       <NuxtLink :to="`/${props.query.type}/category/${props.query.query}`">{{ $t('Explore more') }}</NuxtLink>
     </template>
 
-    <ItemCard v-for="i of items" :key="i.id" :item="i" class="flex-1 w-40 md:w-60" />
+    <ItemCard v-for="i of items" :key="i.id" :item="i" :catalog-type="props.query.type" :to="`/${props.query.type}/${i.id}`" class="flex-1 w-40 md:w-60" />
   </CarouselBase>
 </template>

@@ -22,7 +22,7 @@ export const users = mysqlTable("users", {
   passwordHash: varchar("password_hash", { length: 255 }),
   fullName: varchar("full_name", { length: 120 }).notNull(),
   bio: text("bio"),
-  role: mysqlEnum("role", ["user", "unconfirmed", "artist", "manager", "admin", "editor"])
+  role: mysqlEnum("role", ["user", "unconfirmed", "artist", "manager", "admin", "editor", "suspended", "banned"])
     .notNull()
     .default("user"),
   countryCode: char("country_code", { length: 2 }).notNull(),
@@ -34,6 +34,7 @@ export const users = mysqlTable("users", {
     .default("none"),
   totpSecret: varchar("totp_secret", { length: 255 }),
   totpEnabledAt: datetime("totp_enabled_at", { mode: "date" }),
+  suspendedUntil: datetime("suspended_until", { mode: "date" }),
   createdAt: datetime("created_at", { mode: "date" })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),

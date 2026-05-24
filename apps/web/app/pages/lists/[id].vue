@@ -39,13 +39,14 @@
 
         <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <div v-for="item in items" :key="item.ulid" class="">
-            <NuxtLink :to="itemRoute(item)" class="block">
-              <ItemCard :item="{ title: item.title, cover: item.cover || item.storagePath, authors: [] }">
-                <template #actions>
-                  <button class="text-sm text-red-600 dark:text-red-300" @click.stop="remove(item)">Rimuovi</button>
-                </template>
-              </ItemCard>
-            </NuxtLink>
+            <ItemCard
+              :item="{ title: item.title, cover: item.cover || item.storagePath, authors: [] }"
+              :to="itemRoute(item)"
+            >
+              <template #actions>
+                <button class="text-sm text-red-600 dark:text-red-300" @click.stop="remove(item)">Rimuovi</button>
+              </template>
+            </ItemCard>
           </div>
         </div>
       </div>

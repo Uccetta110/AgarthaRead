@@ -15,13 +15,30 @@ const emit = defineEmits<{
 }>()
 
 const route = useRoute()
+const authUser = useAuthUser()
 
-const navItems: NavItem[] = [
-    { label: 'Libri', to: '/books' },
-    { label: 'Manga', to: '/mangas' },
-    { label: 'Giornali', to: '/newspapers' },
-    { label: 'Liste', to: '/lists' }
-]
+const moderationCodes = ['AA', 'VU', 'MU', 'EU', 'MI', 'EI', 'EC']
+
+const canOpenModeration = computed(() => {
+    if (authUser.value?.role === 'admin') return true
+    const permissions = authUser.value?.permissions ?? []
+    return moderationCodes.some((code) => permissions.includes(code))
+})
+
+const navItems = computed<NavItem[]>(() => {
+    const items: NavItem[] = [
+        { label: 'Libri', to: '/books' },
+        { label: 'Manga', to: '/mangas' },
+        { label: 'Giornali', to: '/newspapers' },
+        { label: 'Liste', to: '/lists' },
+    ]
+
+    if (canOpenModeration.value) {
+        items.push({ label: 'Moderazione', to: '/admin' })
+    }
+
+    return items
+})
 
 function isActive(path: string) {
     return route.path === path || route.path.startsWith(`${path}/`)
@@ -40,7 +57,7 @@ function closeSidebar() {
     />
 
     <aside
-        class="fixed left-0 top-[var(--app-header-height)] z-50 h-[calc(100vh-var(--app-header-height))] w-72 border-r border-slate-200 bg-white px-4 py-6 shadow-xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-950 lg:static lg:min-h-screen lg:w-64 lg:top-0 lg:translate-x-0 lg:py-8 lg:shadow-sm mobile-sidebar"
+        class="fixed left-0 top-[var(--app-header-height)] z-50 h-[calc(100vh-var(--app-header-height))] w-72 border-r border-slate-200 bg-white px-4 py-6 shadow-xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-950 lg:static lg:h-auto lg:self-stretch lg:w-64 lg:top-0 lg:translate-x-0 lg:py-8 lg:shadow-sm mobile-sidebar"
         :class="props.isOpen ? 'translate-x-0' : '-translate-x-full'"
         aria-label="Navigazione laterale"
     >

@@ -18,6 +18,8 @@ export default defineEventHandler(async (event) => {
   if (!list) throw createError({ statusCode: 404, statusMessage: 'Lista non trovata' })
   if (list.userId !== user.id) throw createError({ statusCode: 403, statusMessage: 'Forbidden' })
 
+  if (user.role === 'suspended') throw createError({ statusCode: 403, statusMessage: 'Account sospeso: non puoi modificare le tue liste.' })
+
   await db.delete(userListItems).where(eq(userListItems.listId, list.id), eq(userListItems.itemId, Number(itemId)))
   return { ok: true }
 })

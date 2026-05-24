@@ -18,6 +18,10 @@ export default defineEventHandler(async (event) => {
   if (!list) throw createError({ statusCode: 404, statusMessage: 'Lista non trovata' })
   if (list.userId !== user.id) throw createError({ statusCode: 403, statusMessage: 'Forbidden' })
 
+  if (user.role === 'suspended') {
+    throw createError({ statusCode: 403, statusMessage: 'Account sospeso: non puoi modificare le tue liste.' })
+  }
+
   await db.update(userLists).set({ name: body?.name || list.name, description: body?.description ?? list.description, coverImage: body?.coverImage ?? list.coverImage, isPublic: body?.isPublic ? 1 : 0, tags: Array.isArray(body?.tags) ? String(body.tags.join(',')) : (body?.tags ?? list.tags) }).where(eq(userLists.id, list.id))
 
   return { ok: true }

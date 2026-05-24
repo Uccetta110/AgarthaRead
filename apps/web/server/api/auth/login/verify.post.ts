@@ -61,20 +61,34 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  if (user.role === 'banned') {
+    throw createError({ statusCode: 403, statusMessage: 'Utente bannato. Contatta supporto@agartharead.local per ricorso.' })
+  }
+
+  let effectiveUser = user
+  if (user.role === 'suspended' && user.suspendedUntil && user.suspendedUntil <= new Date()) {
+    const restoredRole = user.emailVerifiedAt ? 'user' : 'unconfirmed'
+    await db.update(users).set({ role: restoredRole, suspendedUntil: null }).where(eq(users.id, user.id))
+    const refreshed = (await db.select().from(users).where(eq(users.id, user.id)).limit(1))[0]
+    if (refreshed) {
+      effectiveUser = refreshed
+    }
+  }
+
   let isValid = false
   if (challenge.channel === 'email') {
     if (challenge.otpCodeHash) {
       isValid = challenge.otpCodeHash === hashValue(code)
     }
   } else if (challenge.channel === 'totp') {
-    if (user.totpSecret) {
+    if (effectiveUser.totpSecret) {
       const totp = new OTPAuth.TOTP({
         issuer: 'AgarthaRead',
-        label: user.email,
+        label: effectiveUser.email,
         algorithm: 'SHA1',
         digits: 6,
         period: 30,
-        secret: OTPAuth.Secret.fromBase32(user.totpSecret)
+        secret: OTPAuth.Secret.fromBase32(effectiveUser.totpSecret)
       })
       isValid = totp.validate({ token: code, window: 1 }) !== null
     }
@@ -101,7 +115,7 @@ export default defineEventHandler(async (event) => {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
   await db.insert(userSessions).values({
-    userId: user.id,
+    userId: effectiveUser.id,
     sessionToken,
     ip: getRequestIP(event, { xForwardedFor: true }) || '0.0.0.0',
     userAgent: getHeader(event, 'user-agent') || 'unknown',
@@ -121,13 +135,15 @@ export default defineEventHandler(async (event) => {
   return {
     ok: true,
     user: {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      avatar_dir: user.avatarDir,
-      email_verified_at: user.emailVerifiedAt,
-      two_factor_method: user.twoFactorMethod,
-      totp_enabled_at: user.totpEnabledAt
+      id: effectiveUser.id,
+      username: effectiveUser.username,
+      email: effectiveUser.email,
+      avatar_dir: effectiveUser.avatarDir,
+      role: effectiveUser.role,
+      email_verified_at: effectiveUser.emailVerifiedAt,
+      two_factor_method: effectiveUser.twoFactorMethod,
+      totp_enabled_at: effectiveUser.totpEnabledAt,
+      suspended_until: effectiveUser.suspendedUntil
     }
   }
 })

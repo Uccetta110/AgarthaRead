@@ -29,7 +29,11 @@
                 <span v-for="tag in item.tags.slice(0, 6)" :key="tag" class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">{{ tag }}</span>
               </div>
               <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap">
-                <button class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white">Salva</button>
+                <SaveToListMenu :item="item" catalog-type="manga">
+                  <template #trigger="{ openSave }">
+                    <button type="button" class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white" @click.stop.prevent="openSave">Salva</button>
+                  </template>
+                </SaveToListMenu>
                 <button class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">Leggi</button>
                 <label class="relative">
                   <span class="sr-only">Lingua capitoli</span>
@@ -123,7 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 
 const LANGUAGE_LABELS: Record<string, string> = {
   ar: 'Arabic',
