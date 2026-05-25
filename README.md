@@ -1,101 +1,128 @@
 # AgarthaRead
 
-## Prerequisiti
+## Prima installazione
 
-Prima di fare `git pull` o di avviare il progetto, assicurati di avere installato:
+Questa è la sequenza da seguire quando scarichi il progetto per la prima volta.
 
-- Node.js 22.14.0, oppure una versione compatibile con Nuxt 4 (`^20.19.0 || >=22.12.0`)
-- Docker Desktop su Windows, oppure Docker Engine + Docker Compose se usi Linux
+### 1. Requisiti
 
-### Installare Docker su Windows
+Assicurati di avere installato:
 
-Se sei su Windows, la strada più semplice è installare Docker Desktop. Puoi farlo in uno di questi modi:
+- Node.js `^20.19.0 || >=22.12.0`  
+	La versione consigliata è Node.js 22.14.0.
+- Docker Engine + Docker Compose se usi Linux, oppure Docker Desktop se usi Windows.
 
-- Scaricandolo dal sito ufficiale:
-
-https://www.docker.com/products/docker-desktop/
-
-- Oppure con `winget`:
+Verifica tutto con:
 
 ```bash
-winget install -e --id Docker.DockerDesktop
-```
-
-Dopo l'installazione, avvia Docker Desktop e aspetta che finisca l'inizializzazione iniziale. Se richiesto, abilita WSL2 e riavvia il PC.
-
-Per controllare che sia tutto pronto, apri un terminale e verifica:
-
-```bash
+node -v
+npm -v
 docker --version
 docker compose version
 ```
 
-Il repository contiene già il file `docker-compose.yml`, quindi non devi creare Docker da zero: devi solo avere Docker installato e avviato sul sistema.
-
-## Dopo un `git pull`
-
-Segui questi passaggi prima di avviare il progetto in locale:
-
-1. Usa Node.js 22.14.0, oppure comunque una versione compatibile con Nuxt 4 (`^20.19.0 || >=22.12.0`). Se usi `nvm`, esegui:
+Se usi `nvm`, puoi passare alla versione consigliata con:
 
 ```bash
 nvm use 22.14.0
 ```
 
-2. Avvia il database MySQL con Docker dalla root del repository:
+### 2. Avvia il database MySQL
+
+Dalla root del repository avvia il container del database:
 
 ```bash
-docker compose cp apps\web\server\db\schema\schema.sql mysql:/tmp/schema.sql
-docker compose exec mysql mysql -u root -proot_dev agartharead `< /tmp/schema.sql
 docker compose up -d mysql
 ```
 
-3. Entra nell'app web e installa le dipendenze:
+Se vuoi controllare che sia pronto:
+
+```bash
+docker compose ps
+```
+
+### 3. Inizializza lo schema del database
+
+Importa lo schema SQL già presente nel repository:
+
+```bash
+docker compose exec -T mysql mysql -u root -proot_dev agartharead < apps/web/server/db/schema/schema.sql
+```
+
+Per verificare che le tabelle siano state create:
+
+```bash
+docker compose exec mysql mysql -u dev_user -pdev_password -Dagartharead -e "SHOW TABLES;"
+```
+
+### 4. Configura l'app web
+
+Entra nella cartella dell'app e installa le dipendenze:
 
 ```bash
 cd apps/web
 npm install
 ```
 
-4. Crea il file `apps/web/.env` con la stringa di connessione del database. Per il setup locale predefinito del `docker-compose.yml`, puoi usare:
+Crea il file `apps/web/.env.local` con la stringa di connessione del database:
 
 ```bash
 DATABASE_URL=mysql://dev_user:dev_password@localhost:3306/agartharead
 ```
 
-5. Avvia l'app web:
+Se vuoi crearlo con un comando unico:
+
+```bash
+printf 'DATABASE_URL=mysql://dev_user:dev_password@localhost:3306/agartharead\n' > .env.local
+```
+
+### 5. Avvia il frontend
+
+Sempre da `apps/web` avvia Nuxt:
 
 ```bash
 npm run dev
 ```
 
-## Note rapide
+L'app sarà disponibile su `http://localhost:3000`.
 
-- Il comando `npm install` in `apps/web` esegue `nuxt prepare` come postinstall, quindi fallisce se stai usando Node 18.
-- Se Docker non è ancora avviato, il frontend può partire ma le API che dipendono dal database non funzioneranno correttamente.
+### 6. Seed opzionali
 
-## comandi utili 
-comando di docker per vedere le tabelle 
+Se ti serve un utente amministratore di test, puoi eseguire il seed dedicato da `apps/web` dopo aver impostato `DATABASE_URL`:
+
 ```bash
-docker compose exec mysql mysql -u dev_user -p -e "SHOW TABLES IN agartharead;"
+npm run db:seed:admin
 ```
 
-comando docker per vedere i log del database
+Se vuoi assegnare ruoli o permessi esistenti, puoi usare anche:
+
+```bash
+npm run db:seed:permissions
+```
+
+## Comandi utili
+
+Vedere i log del database:
+
 ```bash
 docker compose logs mysql
 ```
 
-comando docker per vedere i dati all'interno di una tabella
+Vedere i dati di una tabella:
+
 ```bash
 docker compose exec mysql mysql -udev_user -pdev_password -Dagartharead -e "SELECT * FROM agartharead.nome_tabella;"
 ```
 
-comando per eliminare tutti i dati in una tabella
+Eliminare tutti i dati di una tabella:
+
 ```bash
 docker compose exec mysql mysql -udev_user -pdev_password -Dagartharead -e "DELETE FROM agartharead.nome_tabella;"
 ```
 
-comando per cambiare i dati all'interno di una tabella
+Aggiornare i dati di una tabella:
+
 ```bash
 docker compose exec mysql mysql -udev_user -pdev_password -Dagartharead -e "UPDATE agartharead.nome_tabella SET colonna='nuovo_valore' WHERE condizione;"
 ```
+

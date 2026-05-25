@@ -76,7 +76,7 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 
 ## Database setup
 
-Create `apps/web/.env` with:
+Create `apps/web/.env.local` with:
 
 ```bash
 DATABASE_URL=mysql://USER:PASSWORD@HOST:3306/DB_NAME
