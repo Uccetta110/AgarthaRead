@@ -17,9 +17,13 @@ type SessionResponse = {
   }
 }
 
-const publicRoutes = ['/auth/login', '/auth/register']
+const publicAuthRoutes = ['/auth/login', '/auth/register']
 const route = useRoute()
-const isPublicRoute = computed(() => publicRoutes.includes(route.path))
+const isPublicBookDetailRoute = computed(() => /^\/books\/[^/]+\/?$/.test(route.path))
+const isPublicReaderRoute = computed(() => /^\/books\/.+\/read\/?$/.test(route.path))
+const isPublicContentRoute = computed(() => isPublicBookDetailRoute.value || isPublicReaderRoute.value)
+const isPublicAuthRoute = computed(() => publicAuthRoutes.includes(route.path))
+const canAccessWithoutAuth = computed(() => isPublicAuthRoute.value || isPublicContentRoute.value)
 
 const sessionResult = await useFetch<SessionResponse>('/api/auth/me', {
   method: 'POST',
@@ -72,14 +76,13 @@ onMounted(() => {
 const isAuthenticated = computed(() => !!authUser.value)
 
 async function enforceRouteAccess() {
-  if (isPublicRoute.value) {
-    if (isAuthenticated.value) {
-      await navigateTo('/')
-    }
-  } else {
-    if (!isAuthenticated.value) {
-      await navigateTo('/auth/login')
-    }
+  if (isPublicAuthRoute.value && isAuthenticated.value) {
+    await navigateTo('/')
+    return
+  }
+
+  if (!canAccessWithoutAuth.value && !isAuthenticated.value) {
+    await navigateTo('/auth/login')
   }
 }
 
@@ -92,7 +95,7 @@ watch(sessionData, () => {
   }
 })
 
-watch([isPublicRoute, isAuthenticated], () => {
+watch([isPublicAuthRoute, canAccessWithoutAuth, isAuthenticated], () => {
   enforceRouteAccess()
 })
 

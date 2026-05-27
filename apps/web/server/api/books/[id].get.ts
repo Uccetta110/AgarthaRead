@@ -1,8 +1,10 @@
+import { and, eq } from 'drizzle-orm'
 import { getDb } from '../../db/client'
 import { getCache, setCache } from '../../utils/simpleCache'
 import { upsertExternalCatalogItem, incrementCatalogItemViews } from '../../utils/catalog'
 import { getItemEngagementState } from '../../utils/engagement'
 import { getSessionUser } from '../../utils/session'
+import { readingProgress } from '../../db/schema'
 
 function normalizePathId(paramsId: string | string[]) {
   const rawId = Array.isArray(paramsId) ? paramsId.join('/') : String(paramsId || '')
@@ -56,6 +58,8 @@ export default defineEventHandler(async (event) => {
       subtitle: workData.subtitle || '',
       authors,
       description,
+      // `bodyHtml` may be provided later by enrichment (Google Books snippet, Gutendex, etc.)
+      bodyHtml: null,
       coverUrl,
       contentUrl: `https://openlibrary.org${workKey}`,
       language: workData.languages?.[0]?.key?.replace('/languages/', '') || null,
@@ -70,6 +74,127 @@ export default defineEventHandler(async (event) => {
     }
 
     setCache(cacheKey, basePayload, 24 * 60 * 60 * 1000)
+  }
+
+  // Enrichment: if we don't have an inline body, try Google Books for a preview/snippet
+  // If the incoming id explicitly points to a Google Books volume (prefix `gb:` or contains books.google),
+  // prefer the Google Books normalized endpoint and return that payload.
+  const rawParams = event.context.params?.id
+  const rawIdStr = Array.isArray(rawParams) ? rawParams.join('/') : String(rawParams || '')
+  const looksLikeGoogle = rawIdStr.startsWith('gb:') || rawIdStr.includes('books.google') || rawIdStr.includes('/volumes/')
+  if (looksLikeGoogle) {
+    try {
+      // extract volume id
+      let volumeId = rawIdStr
+      if (volumeId.startsWith('gb:')) volumeId = volumeId.slice(3)
+      try {
+        const u = new URL(volumeId)
+        // if a full URL provided, try to extract last path segment
+        const parts = u.pathname.split('/')
+        if (parts.length) volumeId = parts[parts.length - 1] || volumeId
+      } catch {
+        // not a URL
+      }
+      const host = event.node?.req?.headers?.host || 'localhost:3000'
+      const proto = (event.node?.req?.headers['x-forwarded-proto'] || 'http').split(',')[0]
+      const proxyUrl = `${proto}://${host}/api/books/google/${encodeURIComponent(volumeId)}`
+      const proxyRes = await fetch(proxyUrl)
+      if (proxyRes.ok) {
+        const prox = await proxyRes.json()
+        // prefer proxy payload when available
+        basePayload = {
+          id: prox.id || basePayload.id,
+          type: prox.type || basePayload.type,
+          source: prox.source || basePayload.source,
+          title: prox.title || basePayload.title,
+          subtitle: prox.subtitle || basePayload.subtitle,
+          authors: prox.authors || basePayload.authors,
+          description: prox.description || basePayload.description,
+          bodyHtml: prox.bodyHtml || basePayload.bodyHtml,
+          coverUrl: prox.coverUrl || basePayload.coverUrl,
+          contentUrl: prox.contentUrl || basePayload.contentUrl,
+          language: prox.language || basePayload.language,
+          publishedAt: prox.publishedAt || basePayload.publishedAt,
+          tags: prox.tags || basePayload.tags,
+          rating: prox.rating || basePayload.rating,
+          price: prox.price || basePayload.price,
+          isFree: prox.isFree ?? basePayload.isFree,
+          isSaved: basePayload.isSaved,
+          isPurchased: basePayload.isPurchased,
+          commentsCount: prox.commentsCount || basePayload.commentsCount
+        }
+        setCache(cacheKey, basePayload, 24 * 60 * 60 * 1000)
+      }
+    } catch (e) {
+      // ignore and continue to other enrichment
+    }
+  }
+
+  if (!basePayload.bodyHtml) {
+    try {
+      const titleQuery = encodeURIComponent(basePayload.title || '')
+      const authorQuery = encodeURIComponent((basePayload.authors && basePayload.authors[0]) || '')
+      const qParts = []
+      if (titleQuery) qParts.push(`intitle:${titleQuery}`)
+      if (authorQuery) qParts.push(`inauthor:${authorQuery}`)
+      const q = qParts.length ? qParts.join('+') : titleQuery || authorQuery || ''
+      if (q) {
+        const gbRes = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1`)
+        if (gbRes.ok) {
+          const gbJson = await gbRes.json()
+          const vol = gbJson.items && gbJson.items[0]
+          if (vol) {
+            const volInfo = vol.volumeInfo || {}
+            const searchInfo = vol.searchInfo || {}
+            const gbPreview = vol.accessInfo?.webReaderLink || volInfo.previewLink || null
+            // prefer full description, fallback to search snippet
+            const gbSnippet = volInfo.description || searchInfo.textSnippet || volInfo.subtitle || null
+            if (gbSnippet) {
+              basePayload.bodyHtml = gbSnippet
+              // cache the enriched payload as well
+              setCache(cacheKey, basePayload, 24 * 60 * 60 * 1000)
+            }
+            if (gbPreview && !basePayload.contentUrl) {
+              basePayload.contentUrl = gbPreview
+              setCache(cacheKey, basePayload, 24 * 60 * 60 * 1000)
+            }
+          }
+        }
+      }
+    } catch (e) {
+      // ignore enrichment failures — not critical
+    }
+  }
+
+  // Gutendex fallback: try to find a public-domain full text and use it as bodyHtml
+  if (!basePayload.bodyHtml) {
+    try {
+      const search = encodeURIComponent(`${basePayload.title} ${basePayload.authors?.[0] || ''}`.trim())
+      if (search) {
+        const gutRes = await fetch(`https://gutendex.com/books?search=${search}`)
+        if (gutRes.ok) {
+          const gutJson = await gutRes.json()
+          const g = gutJson.results && gutJson.results[0]
+          if (g && g.formats) {
+            // prefer HTML or plain text
+            const fmt = g.formats['text/html; charset=utf-8'] || g.formats['text/plain; charset=utf-8'] || g.formats['text/plain']
+            if (fmt) {
+              try {
+                const textRes = await fetch(fmt)
+                if (textRes.ok) {
+                  const txt = await textRes.text()
+                  // use plain text wrapped in pre to preserve formatting
+                  basePayload.bodyHtml = txt ? `<pre>${txt}</pre>` : null
+                  setCache(cacheKey, basePayload, 24 * 60 * 60 * 1000)
+                }
+              } catch {}
+            }
+          }
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
   }
 
   const payload = { ...basePayload }
@@ -93,6 +218,18 @@ export default defineEventHandler(async (event) => {
 
   const user = await getSessionUser(event)
   const engagement = await getItemEngagementState(db, itemId, user?.id ?? null)
+  const progressRow = user
+    ? (await db
+        .select({
+          locator: readingProgress.locator,
+          percentage: readingProgress.percentage,
+          languageCode: readingProgress.languageCode,
+          lastReadAt: readingProgress.lastReadAt,
+        })
+        .from(readingProgress)
+        .where(and(eq(readingProgress.userId, user.id), eq(readingProgress.itemId, itemId)))
+        .limit(1))[0]
+    : null
 
   return {
     ...payload,
@@ -109,6 +246,14 @@ export default defineEventHandler(async (event) => {
     isSaved: engagement.isSaved,
     isPurchased: engagement.isPurchased,
     canLike: engagement.canLike,
-    canComment: engagement.canComment
+    canComment: engagement.canComment,
+    readingProgress: progressRow
+      ? {
+          locator: progressRow.locator,
+          percentage: Number(progressRow.percentage ?? 0),
+          languageCode: progressRow.languageCode,
+          lastReadAt: progressRow.lastReadAt,
+        }
+      : null
   }
 })

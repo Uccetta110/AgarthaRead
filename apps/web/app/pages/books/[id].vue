@@ -5,6 +5,50 @@
     <div v-if="error" class="text-red-600 dark:text-red-300">Errore: {{ error.message || error }}</div>
     <div v-else-if="pending" class="text-slate-500 dark:text-slate-400">Caricamento del libro...</div>
     <div v-else-if="!item" class="text-slate-500 dark:text-slate-400">Libro non trovato.</div>
+    <div v-else-if="isReadMode" class="space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4 dark:border-slate-700">
+        <div>
+          <p class="text-sm text-slate-500 dark:text-slate-400">Reader libro</p>
+          <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">{{ item.title }}</h1>
+        </div>
+        <NuxtLink
+          :to="detailLink"
+          class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+        >
+          Torna alla scheda
+        </NuxtLink>
+      </div>
+
+      <BookReader
+        v-if="readerContent"
+        :content="readerContent"
+        :title="item.title"
+        :authors="item.authors || []"
+        :item-id="readerItemId"
+        :save-url="saveUrl"
+        :language-code="item.language || 'und'"
+        :reading-progress="item.readingProgress || null"
+        :source-label="readerSourceLabel"
+      />
+
+      <div v-else-if="previewUrl" class="space-y-4">
+        <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200">
+          Testo completo non disponibile. Mostro la migliore anteprima disponibile dalla fonte esterna.
+        </div>
+        <div class="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700">
+          <iframe
+            :src="previewUrl"
+            class="h-[75vh] w-full border-0 bg-white"
+            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+          />
+        </div>
+      </div>
+
+      <div v-else class="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-500 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-400">
+        Nessun testo disponibile per questo libro.
+      </div>
+    </div>
+
     <div v-else class="space-y-6">
       <div class="grid gap-6 lg:grid-cols-[320px_1fr]">
         <div class="space-y-4">
@@ -36,6 +80,13 @@
                 :can-like="item.canLike"
               />
               <a v-if="item.contentUrl" :href="item.contentUrl" target="_blank" rel="noopener noreferrer" class="rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700">Vai alla fonte</a>
+              <NuxtLink
+                v-if="item.bodyHtml || item.contentUrl || item.webReaderLink"
+                :to="readLink"
+                class="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+              >
+                Leggi il libro
+              </NuxtLink>
             </div>
           </div>
 
@@ -47,7 +98,17 @@
 
           <div v-if="item.bodyHtml" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-950/60 sm:p-6">
             <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Contenuto</h2>
-            <div class="prose max-w-none mt-4 whitespace-pre-wrap text-slate-700 dark:prose-invert dark:text-slate-300">{{ item.bodyHtml }}</div>
+            <p class="mt-3 text-slate-700 dark:text-slate-300">
+              Il reader completo si apre in una pagina dedicata, con indice capitoli e ripresa dell'ultima lettura.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <NuxtLink
+                :to="readLink"
+                class="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+              >
+                Leggi il libro
+              </NuxtLink>
+            </div>
           </div>
 
           <CommentsPanel
@@ -58,17 +119,42 @@
           />
         </div>
       </div>
+
     </div>
   </section>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import BookReader from '../../components/BookReader.vue'
 
 const route = useRoute()
-const id = computed(() => String(route.params.id || ''))
-const { data, error, pending } = useFetch(() => id.value ? `/api/books/${encodeURIComponent(id.value)}` : null, { server: false })
+const rawId = computed(() => String(route.params.id || ''))
+const isReadMode = computed(() => /\/read\/?$/.test(route.path))
+const id = computed(() => rawId.value.replace(/\/read\/?$/, ''))
+const apiPath = computed(() => `/api/books/${encodeURIComponent(id.value)}`)
+const { data, error, pending } = useFetch(apiPath, { server: false })
 const item = computed(() => data.value || null)
 
-useHead(() => ({ title: item.value?.title ? `${item.value.title} • AgarthaRead` : 'Dettaglio libro' }))
+const readLink = computed(() => (id.value ? `/books/${encodeURIComponent(id.value)}/read` : '#'))
+const detailLink = computed(() => (id.value ? `/books/${encodeURIComponent(id.value)}` : '/books'))
+const readerItemId = computed(() => {
+  const value = item.value?.internalId
+  return typeof value === 'number' ? value : undefined
+})
+const readerContent = computed(() => String(item.value?.bodyHtml || '').trim())
+const previewUrl = computed(() => item.value?.webReaderLink || item.value?.contentUrl || '')
+const saveUrl = computed(() => `/api/books/${encodeURIComponent(id.value)}/progress`)
+const readerSourceLabel = computed(() => {
+  const source = String(item.value?.source || '').trim()
+  return source ? `Fonte: ${source}` : ''
+})
+
+useHead(() => ({
+  title: item.value?.title
+    ? `${item.value.title} • ${isReadMode.value ? 'Reader • ' : ''}AgarthaRead`
+    : isReadMode.value
+      ? 'Reader libro'
+      : 'Dettaglio libro'
+}))
 </script>
