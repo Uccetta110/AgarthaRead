@@ -53,6 +53,7 @@
             class="mx-auto block bg-black object-contain"
             loading="lazy"
             decoding="async"
+            @error="handleImageError"
           >
         </article>
       </div>
@@ -66,6 +67,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
+import { handleImageError } from '#shared/utils/image'
 
 definePageMeta({ scrollToTop: false })
 
@@ -89,6 +91,7 @@ watch(chapterId, async () => {
 }, { immediate: true })
 
 const reader = computed(() => data.value || null)
+
 const chapterLabel = computed(() => {
   if (route.query.number) return String(route.query.number)
   if (!reader.value) return ''
