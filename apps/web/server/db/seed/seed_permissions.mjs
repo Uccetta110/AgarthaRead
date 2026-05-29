@@ -15,28 +15,28 @@ if (!databaseUrl) {
 
 const pool = mysql.createPool(databaseUrl)
 
-async function setUserRole(email, role) {
+async function setUserRole(conn, email, role) {
   if (!email) return null
 
-  const [rows] = await pool.execute('SELECT id FROM users WHERE email = ? LIMIT 1', [email])
+  const [rows] = await conn.execute('SELECT id FROM users WHERE email = ? LIMIT 1', [email])
   if (!rows.length) {
     console.log(`User with email ${email} not found. Skipping ${role} seeding.`)
     return null
   }
 
   const userId = rows[0].id
-  await pool.execute('UPDATE users SET role = ? WHERE id = ?', [role, userId])
+  await conn.execute('UPDATE users SET role = ? WHERE id = ?', [role, userId])
   console.log(`Set user id=${userId} (${email}) to role=${role}`)
   return userId
 }
 
-async function seedManagerPermissions(userId, codes) {
-  await pool.execute('DELETE FROM manager_permissions WHERE user_id = ?', [userId])
+async function seedManagerPermissions(conn, userId, codes) {
+  await conn.execute('DELETE FROM manager_permissions WHERE user_id = ?', [userId])
 
   if (!codes.length) return
 
   const values = codes.map((code) => [userId, code, null])
-  await pool.query(
+  await conn.query(
     'INSERT INTO manager_permissions (user_id, permission_code, granted_by) VALUES ?',
     [values],
   )
@@ -44,15 +44,27 @@ async function seedManagerPermissions(userId, codes) {
 }
 
 try {
-  if (adminEmail) {
-    await setUserRole(adminEmail, 'admin')
-  }
+  const conn = await pool.getConnection()
+  try {
+    await conn.beginTransaction()
 
-  if (managerEmail) {
-    const managerUserId = await setUserRole(managerEmail, 'manager')
-    if (managerUserId) {
-      await seedManagerPermissions(managerUserId, managerPermissionCodes)
+    if (adminEmail) {
+      await setUserRole(conn, adminEmail, 'admin')
     }
+
+    if (managerEmail) {
+      const managerUserId = await setUserRole(conn, managerEmail, 'manager')
+      if (managerUserId) {
+        await seedManagerPermissions(conn, managerUserId, managerPermissionCodes)
+      }
+    }
+
+    await conn.commit()
+  } catch (error) {
+    await conn.rollback()
+    throw error
+  } finally {
+    conn.release()
   }
 
   console.log('Seeding completed')

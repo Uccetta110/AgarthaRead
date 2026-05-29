@@ -1,15 +1,107 @@
-html,
-body,
-#__nuxt {
-	min-height: 100%;
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--font-sans: "Space Grotesk";
+		--font-display: "Newsreader";
+		--radius-sm: 4px;
+		--radius-md: 6px;
+		--radius-lg: 10px;
+		--color-page: 245 243 238;
+		--color-surface: 255 255 255;
+		--color-surface-2: 248 246 242;
+		--color-ink: 16 20 24;
+		--color-muted: 88 97 108;
+		--color-line: 219 223 228;
+		--color-accent: 15 118 110;
+		--color-accent-strong: 11 88 82;
+		--color-accent-soft: 208 241 237;
+		--color-header: 255 255 255;
+		--color-header-border: 214 220 226;
+	}
+
+	.dark {
+		--color-page: 11 15 18;
+		--color-surface: 17 22 27;
+		--color-surface-2: 20 26 32;
+		--color-ink: 232 237 243;
+		--color-muted: 150 161 170;
+		--color-line: 35 45 55;
+		--color-accent: 44 184 168;
+		--color-accent-strong: 24 154 140;
+		--color-accent-soft: 21 64 60;
+		--color-header: 11 15 18;
+		--color-header-border: 32 40 48;
+	}
+
+	html,
+	body,
+	#__nuxt {
+		min-height: 100%;
+	}
+
+	body {
+		overflow-x: hidden;
+		background-color: rgb(var(--color-page));
+		color: rgb(var(--color-ink));
+		font-family: var(--font-sans);
+		line-height: 1.55;
+		background-image:
+			radial-gradient(900px 600px at 12% -10%, rgb(var(--color-accent-soft) / 0.4), transparent 55%),
+			radial-gradient(700px 500px at 88% 0%, rgb(var(--color-line) / 0.25), transparent 50%);
+		background-attachment: fixed;
+	}
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	::selection {
+		background: rgb(var(--color-accent) / 0.2);
+	}
+
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-family: var(--font-display);
+		letter-spacing: -0.02em;
+	}
 }
 
-body {
-	overflow-x: hidden;
-}
+@layer components {
+	.btn {
+		@apply inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-colors duration-200;
+	}
 
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
+	.btn:focus-visible {
+		outline: 2px solid rgb(var(--color-accent) / 0.45);
+		outline-offset: 2px;
+	}
+
+	.btn-outline {
+		@apply border border-line bg-surface text-ink hover:bg-surface2;
+	}
+
+	.btn-ghost {
+		@apply text-muted hover:text-ink hover:bg-surface2;
+	}
+
+	.btn-accent {
+		@apply bg-accent text-white hover:bg-accent-strong;
+	}
+
+	.search-shell {
+		@apply flex w-full overflow-hidden rounded-md border border-line bg-surface/80 shadow-sm backdrop-blur;
+	}
+
+	.search-shell:focus-within {
+		box-shadow: 0 0 0 2px rgb(var(--color-accent) / 0.3);
+	}
 }

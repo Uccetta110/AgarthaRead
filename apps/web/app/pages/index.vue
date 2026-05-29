@@ -1,8 +1,13 @@
 <template>
-  <div class="space-y-8">
-    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
-      <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Manga</h1>
-      <p class="mt-2 text-slate-600 dark:text-slate-300">Selezione in evidenza.</p>
+  <div class="space-y-10">
+    <section class="rounded-[var(--radius-lg)] border border-line bg-surface/80 p-6 shadow-sm backdrop-blur">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 class="font-display text-2xl font-semibold text-ink">Manga</h2>
+          <p class="mt-1 text-sm text-muted">Selezione in evidenza.</p>
+        </div>
+        <span class="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted">In evidenza</span>
+      </div>
       <div v-if="error" class="mt-4 text-red-600 dark:text-red-300">Errore: {{ error.message || error }}</div>
 
       <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
@@ -14,9 +19,14 @@
       </div>
     </section>
 
-    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
-      <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Libri</h1>
-      <p class="mt-2 text-slate-600 dark:text-slate-300">Catalogo libri in evidenza.</p>
+    <section class="rounded-[var(--radius-lg)] border border-line bg-surface/80 p-6 shadow-sm backdrop-blur">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 class="font-display text-2xl font-semibold text-ink">Libri</h2>
+          <p class="mt-1 text-sm text-muted">Catalogo libri in evidenza.</p>
+        </div>
+        <span class="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted">In evidenza</span>
+      </div>
       <div v-if="errorBooks" class="mt-4 text-red-600 dark:text-red-300">Errore: {{ errorBooks.message || errorBooks }}</div>
 
       <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">
@@ -28,9 +38,14 @@
       </div>
     </section>
 
-    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
-      <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Giornali</h1>
-      <p class="mt-2 text-slate-600 dark:text-slate-300">Notizie e articoli recenti.</p>
+    <section class="rounded-[var(--radius-lg)] border border-line bg-surface/80 p-6 shadow-sm backdrop-blur">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 class="font-display text-2xl font-semibold text-ink">Giornali</h2>
+          <p class="mt-1 text-sm text-muted">Notizie e articoli recenti.</p>
+        </div>
+        <span class="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted">In evidenza</span>
+      </div>
       <div v-if="errorNews" class="mt-4 text-red-600 dark:text-red-300">Errore: {{ errorNews.message || errorNews }}</div>
 
       <div v-else class="mt-6 space-y-6 max-w-full overflow-hidden">

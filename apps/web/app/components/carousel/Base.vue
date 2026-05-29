@@ -65,41 +65,43 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="flex items-center justify-between py-3 px-4 mt-5">
-    <div class="text-2xl">
+  <div class="mt-6 flex items-center justify-between px-4 py-3">
+    <div class="font-display text-xl font-semibold text-ink">
       <slot name="title" />
     </div>
     <div class="flex-1" />
-    <slot name="more" />
+    <div class="text-sm text-muted">
+      <slot name="more" />
+    </div>
   </div>
 
   <div class="relative">
-    <div ref="scrollEl" class="w-full box-border overflow-x-auto no-scrollbar py-2 px-4 snap-x snap-mandatory scroll-smooth">
-      <div class="flex gap-2 w-max carousel-items">
+    <div ref="scrollEl" class="w-full box-border overflow-x-auto no-scrollbar px-4 py-3 snap-x snap-mandatory scroll-smooth">
+      <div class="flex gap-3 w-max carousel-items">
         <slot />
       </div>
     </div>
 
-    <div ref="fakeScrollbar" class="mt-2 h-2 w-full relative">
-      <div ref="fakeThumb" class="absolute left-0 top-0 h-2 bg-slate-300 rounded-full transition-transform"></div>
+    <div ref="fakeScrollbar" class="relative mt-3 h-1.5 w-full">
+      <div ref="fakeThumb" class="absolute left-0 top-0 h-1.5 rounded-[var(--radius-md)] bg-accent/40 transition-transform"></div>
     </div>
 
     <button
       type="button"
-      class="absolute left-0 top-0 bottom-0 bg-black/50 p-3 flex items-center justify-center opacity-0 hover:opacity-100 transition z-20"
+      class="absolute left-0 top-0 bottom-0 z-20 flex items-center justify-center bg-ink/25 px-3 opacity-0 backdrop-blur-sm transition hover:opacity-100 focus-visible:opacity-100"
       title="Scroll left"
       @click="scrollLeft"
     >
-      <span class="text-white text-3xl">‹</span>
+      <span class="text-2xl text-white">‹</span>
     </button>
 
     <button
       type="button"
-      class="absolute right-0 top-0 bottom-0 bg-black/50 p-3 flex items-center justify-center opacity-0 hover:opacity-100 transition z-20"
+      class="absolute right-0 top-0 bottom-0 z-20 flex items-center justify-center bg-ink/25 px-3 opacity-0 backdrop-blur-sm transition hover:opacity-100 focus-visible:opacity-100"
       title="Scroll right"
       @click="scrollRight"
     >
-      <span class="text-white text-3xl">›</span>
+      <span class="text-2xl text-white">›</span>
     </button>
   </div>
 </template>

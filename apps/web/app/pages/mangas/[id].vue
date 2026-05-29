@@ -1,18 +1,18 @@
 <template>
   <div class="space-y-6">
-    <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 dark:border-slate-800 dark:bg-slate-900/80">
+    <section class="rounded-[var(--radius-lg)] border border-line bg-surface/85 p-4 shadow-sm backdrop-blur sm:p-6">
       <NuxtRouteAnnouncer />
 
       <div v-if="error" class="text-red-600 dark:text-red-300">Errore: {{ error.message || error }}</div>
-      <div v-else-if="pending" class="text-slate-500 dark:text-slate-400">Caricamento del manga...</div>
-      <div v-else-if="!item" class="text-slate-500 dark:text-slate-400">Manga non trovato.</div>
+      <div v-else-if="pending" class="text-muted">Caricamento del manga...</div>
+      <div v-else-if="!item" class="text-muted">Manga non trovato.</div>
       <div v-else class="space-y-6">
         <div class="grid gap-6 lg:grid-cols-[320px_1fr]">
           <div class="space-y-4">
-            <img v-if="item.coverUrl" :src="item.coverUrl" :alt="item.title" class="w-full rounded-2xl object-cover shadow-sm">
-            <div v-else class="flex h-72 items-center justify-center rounded-2xl bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">Nessuna copertina</div>
+            <img v-if="item.coverUrl" :src="item.coverUrl" :alt="item.title" class="w-full rounded-[var(--radius-lg)] border border-line object-cover shadow-sm">
+            <div v-else class="flex h-72 items-center justify-center rounded-[var(--radius-lg)] bg-surface2 text-sm text-muted">Nessuna copertina</div>
 
-            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-300">
+            <div class="rounded-[var(--radius-lg)] border border-line bg-surface2 p-4 text-sm text-muted">
               <p><strong>Autore:</strong> {{ item.authors.join(', ') || 'Sconosciuto' }}</p>
               <p><strong>Lingua:</strong> {{ item.language || 'N/A' }}</p>
               <p><strong>Pubblicato:</strong> {{ item.publishedAt || 'N/A' }}</p>
@@ -22,24 +22,24 @@
           </div>
 
           <div class="space-y-4">
-            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-950/60">
-              <h1 class="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-slate-100">{{ item.title }}</h1>
-              <p class="mt-2 text-slate-600 dark:text-slate-300">{{ item.subtitle }}</p>
+            <div class="rounded-[var(--radius-lg)] border border-line bg-surface/90 p-5 shadow-sm backdrop-blur sm:p-6">
+              <h1 class="font-display text-2xl font-semibold text-ink sm:text-3xl">{{ item.title }}</h1>
+              <p class="mt-2 text-sm text-muted">{{ item.subtitle }}</p>
               <div class="mt-4 flex flex-wrap gap-2">
-                <span v-for="tag in item.tags.slice(0, 6)" :key="tag" class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">{{ tag }}</span>
+                <span v-for="tag in item.tags.slice(0, 6)" :key="tag" class="rounded-[var(--radius-md)] border border-line bg-surface2 px-3 py-1 text-xs text-muted">{{ tag }}</span>
               </div>
               <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap">
                 <SaveToListMenu :item="item" catalog-type="manga">
                   <template #trigger="{ openSave }">
-                    <button type="button" class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white" @click.stop.prevent="openSave">Salva</button>
+                    <button type="button" class="btn btn-outline" @click.stop.prevent="openSave">Salva</button>
                   </template>
                 </SaveToListMenu>
-                <button class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">Leggi</button>
+                <button class="btn btn-accent">Leggi</button>
                 <label class="relative">
                   <span class="sr-only">Lingua capitoli</span>
                   <select
                     v-model="selectedLanguage"
-                    class="appearance-none rounded-full border border-slate-200 bg-white px-4 py-2 pr-10 text-sm font-semibold text-slate-700 shadow-sm outline-none transition hover:border-slate-300 focus:border-blue-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-slate-600"
+                    class="appearance-none rounded-md border border-line bg-surface px-4 py-2 pr-10 text-sm font-semibold text-ink shadow-sm outline-none transition hover:border-accent/40 focus:border-accent/60"
                   >
                     <option value="">Tutte le lingue</option>
                     <option
@@ -50,7 +50,7 @@
                       {{ language.label }}{{ language.count ? ` (${language.count})` : '' }}
                     </option>
                   </select>
-                  <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400 dark:text-slate-500">▾</span>
+                  <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-muted">▾</span>
                 </label>
                 <LikeButton
                   :item-id="item.internalId || null"
@@ -58,13 +58,13 @@
                   :initial-count="item.likesCount"
                   :can-like="item.canLike"
                 />
-                <a v-if="item.contentUrl" :href="item.contentUrl" target="_blank" rel="noopener noreferrer" class="rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700">Vai alla fonte</a>
+                <a v-if="item.contentUrl" :href="item.contentUrl" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Vai alla fonte</a>
               </div>
             </div>
 
-            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-950/60 sm:p-6">
-              <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Capitoli</h2>
-              <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Capitoli caricati: {{ item.chapterCount || chapters.length }}</p>
+            <div class="rounded-[var(--radius-lg)] border border-line bg-surface2 p-5 sm:p-6">
+              <h2 class="font-display text-xl font-semibold text-ink">Capitoli</h2>
+              <p class="mt-2 text-sm text-muted">Capitoli caricati: {{ item.chapterCount || chapters.length }}</p>
               <p v-if="item.chaptersNotice" class="mt-2 text-sm text-amber-600 dark:text-amber-400">{{ item.chaptersNotice }}</p>
 
               <div v-if="chapters.length" class="mt-4 space-y-3">
@@ -80,35 +80,35 @@
                       lang: selectedLanguage
                     }
                   }"
-                  class="flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+                  class="flex items-center justify-between gap-4 rounded-[var(--radius-md)] border border-line bg-surface p-4 transition hover:border-accent/40 hover:bg-surface2"
                 >
                   <div>
-                    <p class="font-medium text-slate-900 dark:text-slate-100">
+                    <p class="font-semibold text-ink">
                       Capitolo {{ chapter.chapter || 'N/D' }}
                       <span v-if="chapter.title"> - {{ chapter.title }}</span>
                     </p>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                    <p class="text-sm text-muted">
                       <span v-if="chapter.volume">Volume {{ chapter.volume }}</span>
                       <span v-if="chapter.language">{{ chapter.volume ? ' • ' : '' }}Lingua {{ chapter.language }}</span>
                       <span v-if="chapter.publishedAt">{{ (chapter.volume || chapter.language) ? ' • ' : '' }}{{ chapter.publishedAt }}</span>
                     </p>
                   </div>
-                  <span class="text-sm font-semibold text-blue-600 dark:text-sky-400">Apri</span>
+                  <span class="text-sm font-semibold text-accent">Apri</span>
                 </NuxtLink>
               </div>
 
-              <p v-else class="mt-4 text-sm text-slate-500 dark:text-slate-400">La lista dei capitoli non è disponibile per questo titolo.</p>
+              <p v-else class="mt-4 text-sm text-muted">La lista dei capitoli non è disponibile per questo titolo.</p>
             </div>
 
-            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-950/60 sm:p-6">
-              <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Descrizione</h2>
-              <p v-if="item.description" class="mt-3 text-slate-700 dark:text-slate-300">{{ item.description }}</p>
-              <p v-else class="mt-3 text-slate-500 dark:text-slate-400">Descrizione non disponibile.</p>
+            <div class="rounded-[var(--radius-lg)] border border-line bg-surface2 p-5 sm:p-6">
+              <h2 class="font-display text-xl font-semibold text-ink">Descrizione</h2>
+              <p v-if="item.description" class="mt-3 text-sm text-ink/90">{{ item.description }}</p>
+              <p v-else class="mt-3 text-sm text-muted">Descrizione non disponibile.</p>
             </div>
 
-            <div v-if="item.bodyHtml" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-950/60 sm:p-6">
-              <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Dettagli</h2>
-              <div class="prose max-w-none mt-4 whitespace-pre-wrap text-slate-700 dark:prose-invert dark:text-slate-300">{{ item.bodyHtml }}</div>
+            <div v-if="item.bodyHtml" class="rounded-[var(--radius-lg)] border border-line bg-surface2 p-5 sm:p-6">
+              <h2 class="font-display text-xl font-semibold text-ink">Dettagli</h2>
+              <div class="prose mt-4 max-w-none whitespace-pre-wrap text-ink/90 dark:prose-invert">{{ item.bodyHtml }}</div>
             </div>
 
             <CommentsPanel

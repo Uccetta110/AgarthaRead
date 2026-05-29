@@ -1,46 +1,70 @@
 <template>
-  <header class="border-b border-transparent bg-white text-slate-900 transition-colors duration-200 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100">
-    <div class="flex w-full flex-col gap-3 px-3 py-3 sm:px-4 md:grid md:grid-cols-[1fr_minmax(320px,560px)_1fr] md:items-center md:gap-6 md:px-2 md:py-4">
+  <header class="sticky top-0 z-50 border-b border-headerBorder bg-header/70 text-ink backdrop-blur-xl transition-colors duration-200">
+    <div class="relative flex w-full items-center gap-3 px-3 py-3 sm:px-4 md:px-6 lg:px-8">
       <NuxtLink
         to="/"
-        class="text-xl font-bold tracking-tight sm:text-2xl md:justify-self-start md:pl-2"
-        >AgarthaRead</NuxtLink
+        class="font-display text-xl font-semibold tracking-tight text-ink hover:text-accent sm:text-2xl"
       >
+        AgarthaRead
+      </NuxtLink>
 
-      <div class="w-full md:justify-self-center">
+      <div class="search-shell flex-1 flex-col sm:flex-row sm:items-stretch md:absolute md:left-1/2 md:top-1/2 md:w-[min(560px,calc(100%-4rem))] md:-translate-x-1/2 md:-translate-y-1/2 md:flex-row md:justify-center">
         <label for="header-search" class="sr-only">Cerca</label>
-        <div class="flex w-full flex-col sm:flex-row sm:items-stretch">
-          <select
-            v-model="searchScope"
-            aria-label="Tipo di ricerca"
-            class="w-full rounded-t-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 sm:w-auto sm:rounded-l-md sm:rounded-tr-none sm:border-b sm:border-r-0 sm:py-0"
-          >
-            <option value="books">Libri</option>
-            <option value="manga">Manga</option>
-            <option value="news">News</option>
-          </select>
-          <input
-            id="header-search"
-            type="text"
-            placeholder="Cerca libri, manga, giornali..."
-            @input="handleInput"
-            @keydown="handleKeyDown"
-            class="w-full min-w-0 rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-400 sm:rounded-r-md sm:rounded-bl-none sm:border-l-0"
-          />
-        </div>
+        <select
+          v-model="searchScope"
+          aria-label="Tipo di ricerca"
+          class="w-full border-b border-line bg-transparent px-3 py-2 text-sm text-ink focus:outline-none sm:w-auto sm:border-b-0 sm:border-r sm:py-0"
+        >
+          <option value="books">Libri</option>
+          <option value="manga">Manga</option>
+          <option value="news">News</option>
+        </select>
+        <input
+          id="header-search"
+          type="text"
+          placeholder="Cerca libri, manga, giornali..."
+          @input="handleInput"
+          @keydown="handleKeyDown"
+          class="w-full min-w-0 bg-transparent px-3 py-2 text-sm text-ink placeholder:text-muted focus:outline-none"
+        />
       </div>
 
-      <nav class="flex flex-wrap items-center gap-2 sm:gap-3 md:justify-self-end md:gap-4 md:pr-2">
+      <nav class="ml-auto flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4">
         <button
           type="button"
-          class="rounded-full border border-slate-300 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-slate-700 transition hover:bg-slate-200 sm:text-xs dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
-          :aria-label="themeManager.isDark ? 'Passa al tema chiaro' : 'Passa al tema scuro'"
+          class="btn btn-outline text-[11px] uppercase tracking-[0.22em] sm:text-xs"
+          :aria-label="themeButtonAriaLabel"
           @click="themeManager.toggleTheme"
         >
-          {{ themeManager.isDark ? 'Chiaro' : 'Scuro' }}
+          {{ themeButtonLabel }}
         </button>
 
-        <!-- Avatar -->
+        <NuxtLink
+          v-if="!username"
+          id="login-link"
+          to="/auth/login"
+          class="text-sm text-muted hover:text-ink"
+        >
+          Login
+        </NuxtLink>
+
+        <NuxtLink
+          v-if="!username"
+          id="register-link"
+          to="/auth/register"
+          class="btn btn-accent"
+        >
+          Sign Up
+        </NuxtLink>
+
+        <NuxtLink
+          v-if="username"
+          to="/profile"
+          class="hidden text-sm text-muted hover:text-ink sm:inline"
+        >
+          {{ username }}
+        </NuxtLink>
+
         <img
           v-if="username"
           :src="avatarSrc"
@@ -49,35 +73,8 @@
           height="80"
           @error="onAvatarError"
           @click="$router.push('/profile')"
-          class="h-9 w-9 rounded-full sm:h-10 sm:w-10"
+          class="h-9 w-9 cursor-pointer rounded-full ring-1 ring-line sm:h-10 sm:w-10"
         />
-        <!-- UserName-->
-        <NuxtLink
-          to="/profile"
-          v-if="username"
-          class="hidden text-sm text-slate-700 hover:text-slate-950 sm:inline dark:text-slate-200 dark:hover:text-white"
-        >
-          {{ username }}
-        </NuxtLink>
-
-        <NuxtLink to="/" class="text-sm text-slate-700 hover:text-slate-950 dark:text-slate-200 dark:hover:text-white"
-          >Home</NuxtLink
-        >
-        <NuxtLink
-          v-if="!username"
-          id="login-link"
-          to="/auth/login"
-          class="text-sm text-slate-700 hover:text-slate-950 dark:text-slate-200 dark:hover:text-white"
-          >Login</NuxtLink
-        >
-        <NuxtLink
-          v-if="!username"
-          id="register-link"
-          to="/auth/register"
-          class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
-        >
-          Sign Up
-        </NuxtLink>
       </nav>
     </div>
   </header>
@@ -89,6 +86,14 @@ import { getAvatarUrl, defaultAvatarUrl } from "~/composables/useAvatar";
 const route = useRoute();
 const authUser = useAuthUser();
 const themeManager = useThemePreference();
+const themeButtonLabel = computed(() =>
+  themeManager.theme.value === 'dark' ? 'Chiaro' : 'Scuro',
+);
+const themeButtonAriaLabel = computed(() =>
+  themeManager.theme.value === 'dark'
+    ? 'Passa al tema chiaro'
+    : 'Passa al tema scuro',
+);
 const username = computed(() => authUser.value?.username);
 const avatarSrc = ref<string>(defaultAvatarUrl);
 const searchScope = ref("books");

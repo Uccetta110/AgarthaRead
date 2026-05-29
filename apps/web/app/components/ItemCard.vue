@@ -1,19 +1,19 @@
 <template>
-  <div class="group flex-shrink-0 relative">
-    <div class="overflow-hidden rounded-md bg-slate-50 shadow-sm dark:bg-slate-900/80">
+  <div class="group relative flex-shrink-0 rounded-[var(--radius-md)] border border-line bg-surface/90 p-3 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <div class="overflow-hidden rounded-[var(--radius-md)] border border-line bg-surface2">
       <div class="w-full" style="aspect-ratio: 2/3;">
-        <img v-if="cover" :src="cover" :alt="item.title"             @error="handleImageError"
-          class="h-full w-full object-contain bg-white dark:bg-slate-950">
+        <img v-if="cover" :src="cover" :alt="item.title" @error="handleImageError"
+          class="h-full w-full object-contain bg-surface">
         <div v-else
-          class="flex h-full w-full items-center justify-center bg-gray-100 text-sm text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+          class="flex h-full w-full items-center justify-center bg-surface2 text-xs font-medium text-muted">
           No image</div>
       </div>
     </div>
 
-    <h3 class="mt-2 truncate text-sm font-medium text-slate-900 dark:text-slate-100">{{ item.title }}</h3>
-    <p class="truncate text-xs text-slate-500 dark:text-slate-400">{{ authors }}</p>
+    <h3 class="mt-3 truncate text-sm font-semibold text-ink">{{ item.title }}</h3>
+    <p class="truncate text-xs text-muted">{{ authors }}</p>
 
-    <div v-if="likeItemId !== null" class="mt-2">
+    <div v-if="likeItemId !== null" class="mt-3">
       <LikeButton :item-id="likeItemId" :initial-liked="item.isLiked" :initial-count="item.likesCount"
         :can-like="item.canLike" />
     </div>
@@ -22,9 +22,9 @@
       <slot name="actions" />
     </div>
 
-    <div v-if="to" class="mt-2">
+    <div v-if="to" class="mt-3">
       <NuxtLink :to="to"
-        class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
+        class="btn btn-outline px-2 py-1 text-xs">
         Apri
       </NuxtLink>
     </div>
@@ -32,13 +32,13 @@
     <SaveToListMenu :item="item" :catalog-type="props.catalogType">
       <template #trigger="{ openSave, savedInLists }">
         <button type="button" title="Salva"
-          class="absolute right-2 top-2 z-20 rounded-full bg-white p-1 shadow opacity-100 transition-opacity duration-150 dark:bg-slate-100 md:pointer-events-none md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100 md:group-focus-within:pointer-events-auto md:group-focus-within:opacity-100"
+          class="absolute right-2 top-2 z-20 rounded-[var(--radius-md)] bg-surface/90 p-1 shadow-sm ring-1 ring-line backdrop-blur opacity-100 transition-opacity duration-150 md:pointer-events-none md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100 md:group-focus-within:pointer-events-auto md:group-focus-within:opacity-100"
           @click.stop.prevent="openSave">
-          <svg v-if="savedInLists.length === 0" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-sky-600"
+          <svg v-if="savedInLists.length === 0" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent"
             viewBox="0 0 20 20" fill="currentColor">
             <path d="M5 3a1 1 0 00-1 1v12l6-3 6 3V4a1 1 0 00-1-1H5z" />
           </svg>
-          <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600" viewBox="0 0 20 20"
+          <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent-strong" viewBox="0 0 20 20"
             fill="currentColor">
             <path d="M5 3a1 1 0 00-1 1v12l6-3 6 3V4a1 1 0 00-1-1H5z" />
           </svg>

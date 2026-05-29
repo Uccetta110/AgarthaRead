@@ -23,6 +23,8 @@ function formatMysqlDate(d) {
   const pool = mysql.createPool({ uri: DATABASE_URL, waitForConnections: true, connectionLimit: 5 })
   const conn = await pool.getConnection()
   try {
+    await conn.beginTransaction()
+
     // Prefer existing test user, otherwise create one
     const [rows] = await conn.query('SELECT id FROM users WHERE username = ? LIMIT 1', ['test_integration'])
     let userId
@@ -54,6 +56,8 @@ function formatMysqlDate(d) {
       formatMysqlDate(expires)
     ])
 
+    await conn.commit()
+
     const envPath = resolve(process.cwd(), '.env.local')
     const line = `TEST_SESSION_TOKEN=${token}\nTEST_SESSION_USER=${userId}\n`
     fs.appendFileSync(envPath, line)
@@ -61,6 +65,7 @@ function formatMysqlDate(d) {
     console.log('Token:', token)
     console.log('User ID:', userId)
   } catch (err) {
+    try { await conn.rollback() } catch (e) {}
     console.error(err)
     process.exitCode = 1
   } finally {

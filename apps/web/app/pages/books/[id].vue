@@ -1,19 +1,19 @@
 <template>
-  <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 dark:border-slate-800 dark:bg-slate-900/80">
+  <section class="rounded-[var(--radius-lg)] border border-line bg-surface/85 p-4 shadow-sm backdrop-blur sm:p-6">
     <NuxtRouteAnnouncer />
 
     <div v-if="error" class="text-red-600 dark:text-red-300">Errore: {{ error.message || error }}</div>
-    <div v-else-if="pending" class="text-slate-500 dark:text-slate-400">Caricamento del libro...</div>
-    <div v-else-if="!item" class="text-slate-500 dark:text-slate-400">Libro non trovato.</div>
+    <div v-else-if="pending" class="text-muted">Caricamento del libro...</div>
+    <div v-else-if="!item" class="text-muted">Libro non trovato.</div>
     <div v-else-if="isReadMode" class="space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4 dark:border-slate-700">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
         <div>
-          <p class="text-sm text-slate-500 dark:text-slate-400">Reader libro</p>
-          <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">{{ item.title }}</h1>
+          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Reader libro</p>
+          <h1 class="font-display text-2xl font-semibold text-ink">{{ item.title }}</h1>
         </div>
         <NuxtLink
           :to="detailLink"
-          class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+          class="btn btn-outline"
         >
           Torna alla scheda
         </NuxtLink>
@@ -32,10 +32,10 @@
       />
 
       <div v-else-if="previewUrl" class="space-y-4">
-        <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200">
+        <div class="rounded-[var(--radius-lg)] border border-amber-200 bg-amber-50 p-4 text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200">
           Testo completo non disponibile. Mostro la migliore anteprima disponibile dalla fonte esterna.
         </div>
-        <div class="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700">
+        <div class="overflow-hidden rounded-[var(--radius-lg)] border border-line bg-surface">
           <iframe
             :src="previewUrl"
             class="h-[75vh] w-full border-0 bg-white"
@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <div v-else class="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-500 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-400">
+      <div v-else class="rounded-[var(--radius-lg)] border border-line bg-surface2 p-6 text-muted">
         Nessun testo disponibile per questo libro.
       </div>
     </div>
@@ -52,10 +52,10 @@
     <div v-else class="space-y-6">
       <div class="grid gap-6 lg:grid-cols-[320px_1fr]">
         <div class="space-y-4">
-          <img v-if="item.coverUrl" :src="item.coverUrl" :alt="item.title" class="w-full rounded-2xl object-cover shadow-sm">
-          <div v-else class="flex h-72 items-center justify-center rounded-2xl bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">Nessuna copertina</div>
+          <img v-if="item.coverUrl" :src="item.coverUrl" :alt="item.title" class="w-full rounded-[var(--radius-lg)] border border-line object-cover shadow-sm">
+          <div v-else class="flex h-72 items-center justify-center rounded-[var(--radius-lg)] bg-surface2 text-sm text-muted">Nessuna copertina</div>
 
-          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-300">
+          <div class="rounded-[var(--radius-lg)] border border-line bg-surface2 p-4 text-sm text-muted">
             <p><strong>Autore:</strong> {{ item.authors.join(', ') || 'Sconosciuto' }}</p>
             <p><strong>Lingua:</strong> {{ item.language || 'N/A' }}</p>
             <p><strong>Pubblicato:</strong> {{ item.publishedAt || 'N/A' }}</p>
@@ -64,47 +64,47 @@
         </div>
 
         <div class="space-y-4">
-          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-950/60">
-            <h1 class="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-slate-100">{{ item.title }}</h1>
-            <p class="mt-2 text-slate-600 dark:text-slate-300">{{ item.subtitle }}</p>
+          <div class="rounded-[var(--radius-lg)] border border-line bg-surface/90 p-5 shadow-sm backdrop-blur sm:p-6">
+            <h1 class="font-display text-2xl font-semibold text-ink sm:text-3xl">{{ item.title }}</h1>
+            <p class="mt-2 text-sm text-muted">{{ item.subtitle }}</p>
             <div class="mt-4 flex flex-wrap gap-2">
-              <span v-for="tag in item.tags.slice(0, 6)" :key="tag" class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">{{ tag }}</span>
+              <span v-for="tag in item.tags.slice(0, 6)" :key="tag" class="rounded-[var(--radius-md)] border border-line bg-surface2 px-3 py-1 text-xs text-muted">{{ tag }}</span>
             </div>
             <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap">
-              <button class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white">Salva</button>
-              <button class="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">Acquista</button>
+              <button class="btn btn-outline">Salva</button>
+              <button class="btn btn-ghost">Acquista</button>
               <LikeButton
                 :item-id="item.internalId || null"
                 :initial-liked="item.isLiked"
                 :initial-count="item.likesCount"
                 :can-like="item.canLike"
               />
-              <a v-if="item.contentUrl" :href="item.contentUrl" target="_blank" rel="noopener noreferrer" class="rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700">Vai alla fonte</a>
+              <a v-if="item.contentUrl" :href="item.contentUrl" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Vai alla fonte</a>
               <NuxtLink
                 v-if="item.bodyHtml || item.contentUrl || item.webReaderLink"
                 :to="readLink"
-                class="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+                class="btn btn-accent"
               >
                 Leggi il libro
               </NuxtLink>
             </div>
           </div>
 
-          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-950/60 sm:p-6">
-            <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Descrizione</h2>
-            <p v-if="item.description" class="mt-3 text-slate-700 dark:text-slate-300">{{ item.description }}</p>
-            <p v-else class="mt-3 text-slate-500 dark:text-slate-400">Descrizione non disponibile.</p>
+          <div class="rounded-[var(--radius-lg)] border border-line bg-surface2 p-5 sm:p-6">
+            <h2 class="font-display text-xl font-semibold text-ink">Descrizione</h2>
+            <p v-if="item.description" class="mt-3 text-sm text-ink/90">{{ item.description }}</p>
+            <p v-else class="mt-3 text-sm text-muted">Descrizione non disponibile.</p>
           </div>
 
-          <div v-if="item.bodyHtml" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-950/60 sm:p-6">
-            <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Contenuto</h2>
-            <p class="mt-3 text-slate-700 dark:text-slate-300">
+          <div v-if="item.bodyHtml" class="rounded-[var(--radius-lg)] border border-line bg-surface2 p-5 sm:p-6">
+            <h2 class="font-display text-xl font-semibold text-ink">Contenuto</h2>
+            <p class="mt-3 text-sm text-ink/90">
               Il reader completo si apre in una pagina dedicata, con indice capitoli e ripresa dell'ultima lettura.
             </p>
             <div class="mt-4 flex flex-wrap gap-3">
               <NuxtLink
                 :to="readLink"
-                class="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+                class="btn btn-accent"
               >
                 Leggi il libro
               </NuxtLink>
